@@ -103,8 +103,6 @@
     </div>
     <div class="col-md-9">
       <div id="diagram" style="height: 90vh; position: relative">
-        <div id="control1" class="control" style="left: 50px; top: 50px">Control 1</div>
-        <div id="control2" class="control" style="left: 300px; top: 200px">Control 2</div>
       </div>
     </div>
   </div>
@@ -127,20 +125,7 @@
         connector: "Flowchart"
       }
     });
-    instance.draggable("control1", {"containment": true});
-    instance.draggable("control2", {"containment": true})
-    instance.addEndpoint("control1", {
-      endpoint: "Dot",  // rectangle, blank, image
-      anchor: ["RightMiddle"],
-      isSource: true,
-      connectionType: "red-connection"
-    });
-    instance.addEndpoint("control2", {
-      endpoint: "Dot",
-      anchor: ["LeftMiddle"],
-      isTarget: true,
-      connectionType: "red-connection"
-    });
+
 
     instance.bind("contextmenu", function (component, event) {
       if (component.hasClass("jtk-connector")) {
