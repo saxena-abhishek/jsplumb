@@ -1,0 +1,59 @@
+#diagram, #toolbox {
+  margin: 20px 0;
+  border-width: 2px;
+  border-style: solid;
+  border-color: lightgrey;
+  height: 90vh;
+}
+
+#toolbox {
+  display: flex;
+  padding: 10px;
+  flex-flow: row wrap;
+  align-content: flex-start;
+}
+
+.control {
+  border-color: green;
+  border-radius: 10px;
+  border-width: 2px;
+  border-style: solid;
+  width: 120px;
+  text-align: center;
+  cursor: move;
+  height: fit-content;
+  height: -moz-max-content;
+  background-color: white;
+}
+
+#diagram .control {
+  position: absolute;
+}
+
+.window {
+  z-index: 20;
+}
+
+.jtk-connector {
+  z-index: 4;
+}
+
+.jtk-endpoint {
+  z-index: 5;
+}
+
+.jtk-overlay {
+  z-index: 6;
+}
+
+.custom-menu {
+  z-index: 1000;
+  position: absolute;
+  background-color: #C0C0C0;
+  border: 1px solid black;
+  padding: 2px;
+}
+
+#toolbox .control {
+  margin: 10px 5px;
+}
