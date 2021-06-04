@@ -6,8 +6,14 @@ export default class MyJsPlumb extends React.Component {
   
 constructor(props){
   super(props);
-  this.clonedEl=null;
  this.initialShow = this.initialShow.bind(this);
+ this.onDragStart = this.onDragStart.bind(this);
+ 
+}
+  onDragStart(event) {
+  event.dataTransfer.setData('text/plain', event.target.id);
+
+  console.log(event.currentTarget.id);
 }
   initialShow(){
     //let index = 0;
@@ -22,7 +28,6 @@ constructor(props){
     for (let i = 0; i < nodenames.length; i++) {
         var control = document.createElement("div");
         control.draggable=true;
-       
         var icon = document.createElement("i");
         let iconclass = nodenames[i].icon;
         icon.classList.add("fa", iconclass);
@@ -31,39 +36,12 @@ constructor(props){
         text.innerHTML = nodenames[i].name;
         control.append(text);
         control.classList.add('control');
-        control.id = nodenames[i].id;
-        control.onmouseup = this.drop;
+        control.id = nodenames[i].id; 
         box.append(control);
-        this.clonedEl = control.cloneNode(true);
-        
+        control.addEventListener("dragstart",e=>this.onDragStart(e),false);        
     }
   }
-  allowDrop(ev) {
-    ev.preventDefault();
-   
-  }
-  
-  drag(ev) {
-    //let elm=ev.cloneNode(true);
 
-    //ev.dataTransfer.setData("text", ev.target.id);
-    
-  }
-  
-  drop() {
-    console.log("dropped!")
-   // ev.preventDefault();
-    const box = document.getElementById("diagram");
-    box.append(this.clonedEl);
-    //var data = ev.dataTransfer.getData("text");
-    //ev.target.appendChild(document.getElementById(data));
-  }
- /* dragndrop(itm){
-    var cln = itm.cloneNode(true);
-
-  // Append the cloned <li> element to <ul> with id="myList1"
-    document.getElementById("myList1").appendChild(cln);
-  }*/
   componentDidMount() {
     this.initialShow();
     let canvas=document.getElementById("diagram");
@@ -74,8 +52,55 @@ constructor(props){
         Endpoint: ["Dot", { radius: 3 }],
         Anchor: "Center"
       }));
+//saloni
+j.registerConnectionTypes({
+  "red-connection": {
+      paintStyle: { stroke: "red", strokeWidth: 4 },
+      hoverPaintStyle: { stroke: "red", strokeWidth: 8 },
+      connector: "Flowchart"
+  }
+});
+var body = document.getElementsByTagName("body")[0];
+j.bind("contextmenu", function (component, event) {
+  if (component.hasClass("jtk-connector")) {
+      event.preventDefault();
+      window.selectedConnection = component;
+     /* $("<div class='custom-menu'><button class='delete-connection'>Delete connection</button></div>")
+          .appendTo("body")
+          .css({ top: event.pageY + "px", left: event.pageX + "px" });*/
+  }
+});
+j.on(body, "click", ".delete-connection", function(event) {
+//$("body").on("click", ".delete-connection", function (event) {
+  j.deleteConnection(window.selectedConnection);
+});
 
-      j.bind("connection", function(p) {
+/*$(document).bind("click", function (event) {
+  $("div.custom-menu").remove();
+});*/
+
+j.on(document, "click", "div.custom-menu", function() {
+       // var g = this.parentNode.getAttribute("group");
+       j.remove(this);
+        //j.removeGroup(g, this.getAttribute("delete-all") != null);
+      });
+
+/*$("body").on("contextmenu", "#diagram .control", function (event) {
+  event.preventDefault();
+  window.selectedControl = $(this).attr("id");
+  $("<div class='custom-menu'><button class='delete-control'>Delete control</button></div>")
+      .appendTo("body")
+      .css({ top: event.pageY + "px", left: event.pageX + "px" });
+});*/
+
+j.on(body, "click", ".delete-control", function(event) {
+//$("body").on("click", ".delete-control", function (event) {
+  j.remove(window.selectedControl);
+});
+
+
+
+      /*j.bind("connection", function(p) {
         p.connection.bind("click", function() {
           j.detach(this);
         });
@@ -192,15 +217,15 @@ let container4= document.getElementById("container4");
         var g = this.parentNode.getAttribute("group");
         j.removeGroup(g, this.getAttribute("delete-all") != null);
       });
-
+saloni*/
       // collapse/expand group button
-      j.on(canvas, "click", ".node-collapse", function() {
-        var g = this.parentNode.getAttribute("group"),
-          collapsed = j.hasClass(this.parentNode, "collapsed");
+      // j.on(canvas, "click", ".node-collapse", function() {
+      //   var g = this.parentNode.getAttribute("group"),
+      //     collapsed = j.hasClass(this.parentNode, "collapsed");
 
-        j[collapsed ? "removeClass" : "addClass"](this.parentNode, "collapsed");
-        j[collapsed ? "expandGroup" : "collapseGroup"](g);
-      });
+      //   j[collapsed ? "removeClass" : "addClass"](this.parentNode, "collapsed");
+      //   j[collapsed ? "expandGroup" : "collapseGroup"](g);
+      // });
 
       jsPlumb.jsPlumb.fire("jsPlumbDemoLoaded", j);
     });

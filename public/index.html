@@ -29,6 +29,21 @@
         console.log(event.currentTarget.id);
           // = 'yellow';
       }
+      function onDragOver(event) {
+        event.preventDefault();
+      }
+      function onDrop(event) {
+        const id = event
+          .dataTransfer
+          .getData('text'); 
+        //let box = document.getElementById("diagram");
+        const draggableElement = document.getElementById(id);
+        let cloneEl = draggableElement.cloneNode(true);
+        const dropzone = event.target;
+       // box.appendChild(draggableElement);
+        dropzone.appendChild(cloneEl);
+        event.dataTransfer.clearData();
+      }
       // function allowDrop(ev) {
       //   ev.preventDefault();
       // }
