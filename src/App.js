@@ -1,6 +1,8 @@
 import React from "react";
 import jsPlumb from "jsplumb/dist/js/jsplumb.min";
 import "./jsplumbdemo.css";
+import Header from "./Header";
+import Main from "./Main";
 
 export default class MyJsPlumb extends React.Component {
   
@@ -306,6 +308,8 @@ saloni*/
             <div id="events" />
           </div>
         </div>
+        <Header/>
+        <Main/>
       </div>
     );
   }
