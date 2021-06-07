@@ -28,13 +28,6 @@ onDrop(event) {
   if(draggableElement.classList.contains('cln')){
     let cloneEl = draggableElement.cloneNode(true);
     const dropzone = event.target;
-    // var isLeft = 'toolbox' == id || "diagram" == id;
-    // //var nodeCopy = document.getElementById(data).cloneNode(true);
-    // //nodeCopy.id = "img" + ev.target.id;
-    // if (!isLeft) {
-    //   let sourceNode = document.getElementById(id);
-    //   sourceNode.parentNode.removeChild(sourceNode);
-    // }
     var item = this.nodenames.findIndex(item => item.id === draggableElement.id);
     cloneEl.id=draggableElement.id+(++this.nodenames[item].vc);
     dropzone.appendChild(cloneEl);
@@ -178,24 +171,6 @@ j.on(body, "click", ".delete-control", function(event) {
         </div>
       </div>
     </div>
-
-      // <div className="jtk-demo-main">
-      //   <div
-      //     id="canvas"
-      //     ref={el => (this.el = el)}
-      //     className="jtk-demo-canvas canvas-wide flowchart-demo jtk-surface jtk-surface-nopan"
-      //     style={{ height: "600px" }}
-      //   >
-      //     <div
-      //       className="w"
-      //       id="standalone"
-      //       style={{ left: "455px", top: "280px" }}
-      //       title="drag me into a group. if you want to."
-      //     >
-      //       ?
-      //     </div>
-      //   </div>
-      // </div>
     );
   }
 }
