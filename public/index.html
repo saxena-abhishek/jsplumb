@@ -21,58 +21,10 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <script>
-      function onDragStart(event) {
-        event
-          .dataTransfer
-          .setData('text/plain', event.target.id);
 
-        console.log(event.currentTarget.id);
-          // = 'yellow';
-      }
-      function onDragOver(event) {
-        event.preventDefault();
-      }
-      function onDrop(event) {
-        const id = event
-          .dataTransfer
-          .getData('text'); 
-        //let box = document.getElementById("diagram");
-        const draggableElement = document.getElementById(id);
-        let cloneEl = draggableElement.cloneNode(true);
-        const dropzone = event.target;
-       // box.appendChild(draggableElement);
-        dropzone.appendChild(cloneEl);
-        event.dataTransfer.clearData();
-      }
-      // function allowDrop(ev) {
-      //   ev.preventDefault();
-      // }
 
-      // function drag(ev) {
-      //   ev.dataTransfer.setData("text", ev.target.id);
-      // }
-
-      // function drop(ev) {
-      //   ev.preventDefault();
-      //   var data = ev.dataTransfer.getData("text");
-      //   ev.target.appendChild(document.getElementById(data));
-      // }
     </script>
     <div id="root"></div>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-3">
-          <div id="toolbox" class="justify-content-center" >
-          </div>
-        </div>
-        <div class="col-md-9">
-          <div id="diagram" style="height: 90vh; position: relative" ondragover="onDragOver(event);"
-          ondrop="onDrop(event);" >
-            <button class="btn" onclick="saveNodeJson()">Save Connections</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
+    
   </body>
 </html>
