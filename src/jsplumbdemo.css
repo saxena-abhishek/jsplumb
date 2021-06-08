@@ -185,8 +185,15 @@ color: black;
 width: 100px;
 height: 100px;
 border-color: gainsboro;
+display: block;
+text-align: center;
 /* font-weight: 600; */
 font-family: intel-clear,tahoma,Helvetica,helvetica,Arial,sans-serif;
 box-shadow: 0 4px 8px 0 rgba(218, 213, 213, 0.2), 0 4px 8px 0 rgba(0, 0, 0, 0.19);
+  
+}
 
+span,i{
+  position: relative;
+  top: 32px;
 }

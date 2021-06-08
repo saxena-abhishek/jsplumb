@@ -32,6 +32,7 @@ class Header extends Component {
           <div style={{ flex: 1 }}></div>
         </div>
         <div style={{ flex: 2,backgroundColor:'#E7E7E7'}}>
+          <div style={{fontWeight:600 ,fontSize:'20px'}}>Benchmark Topology</div>
           <table>
             <thead>
               <tr><th>Configure Distribution Percentage</th></tr>
