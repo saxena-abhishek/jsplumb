@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import jsPlumb from "jsplumb/dist/js/jsplumb.min";
 import "./jsplumbdemo.css";
+import { findPosition } from './utils/domUtils';
 
 class Main extends Component {
     constructor(props){
@@ -27,6 +28,14 @@ class Main extends Component {
         if(draggableElement.classList.contains('cln')){
           let cloneEl = draggableElement.cloneNode(true);
           const dropzone = event.target;
+          let positionX;
+          let positionY;
+          const position= findPosition(dropzone);
+          positionX = event.clientX - position.x;
+          positionY = event.clientY - position.y;
+      
+          cloneEl.setAttribute("style","top:" + positionY + "px; left:" + positionX + "px;");
+
           var item = this.nodenames.findIndex(item => item.id === draggableElement.id);
           cloneEl.id=draggableElement.id+(++this.nodenames[item].vc);
           dropzone.appendChild(cloneEl);
