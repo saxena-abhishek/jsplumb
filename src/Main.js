@@ -8,9 +8,33 @@ class Main extends Component {
         super(props);
        this.initialShow = this.initialShow.bind(this);
        this.onDragStart = this.onDragStart.bind(this);
+       this.saveNodeJson = this.saveNodeJson.bind(this);
        this.nodenames = [];
+       this.instance ='';
       }
       
+      saveNodeJson() {
+        var testContainer = document.querySelector('#diagram');
+        var controls = testContainer.querySelectorAll('.control');
+        console.log(controls);
+        if (window.NodeList && !NodeList.prototype.map) {
+            NodeList.prototype.map = Array.prototype.map;
+          }
+       var nodes = controls.map(item=> {
+            return {
+                id: item.id,
+            }
+        });      
+        var connections = [];
+        this.instance.getConnections().forEach(function (id, connection) {
+            connections.push({
+                SourceId: connection.sourceId,
+                TargetId: connection.targetId
+            });
+        });
+        const json = JSON.stringify({ nodes, connections });
+        console.log(json);
+        }
       onDragStart(event) {
         event.dataTransfer.setData('text/plain', event.target.id);
       
@@ -88,6 +112,7 @@ class Main extends Component {
       
         componentDidMount() {
           this.initialShow();
+          let that=this;
           let canvas=document.getElementById("diagram");
           jsPlumb.jsPlumb.ready(function() {
             var j = (window.j = jsPlumb.jsPlumb.getInstance({
@@ -97,6 +122,7 @@ class Main extends Component {
               Anchor: "Center"
             }));
       //saloni
+      that.instance=j;
       jsPlumb.jsPlumb.registerConnectionTypes({
         "red-connection": {
             paintStyle: { stroke: "red", strokeWidth: 4 },
@@ -105,16 +131,28 @@ class Main extends Component {
         }
       });
       var body = document.getElementsByTagName("body")[0];
-      j.bind("contextmenu", function (component, event) {
+      that.instance.bind("contextmenu", function (component, event) {
         if (component.hasClass("jtk-connector")) {
             event.preventDefault();
             window.selectedConnection = component;
+            var dEl = document.createElement("div");
+            dEl.classList.add("custom-menu");
+            var bEl = document.createElement("button");
+            bEl.classList.add("delete-connection");
+            var t = document.createTextNode("Delete connection"); 
+            dEl.style.top=event.pageY + "px";
+            dEl.style.left=event.pageX + "px";
+            bEl.appendChild(t);
+            dEl.append(bEl);
+            dEl.append("body");
+           
+            //document.getElementById(id).setAttribute("style", "border:2px solid red; background-color: rgb(255, 125, 115);");
            /* $("<div class='custom-menu'><button class='delete-connection'>Delete connection</button></div>")
                 .appendTo("body")
                 .css({ top: event.pageY + "px", left: event.pageX + "px" });*/
         }
-      });
-      j.on(body, "click", ".delete-connection", function(event) {
+      });//var j=this.instance;
+      that.instance.on(body, "click", ".delete-connection", function(event) {
       //$("body").on("click", ".delete-connection", function (event) {
         j.deleteConnection(window.selectedConnection);
       });
@@ -123,42 +161,41 @@ class Main extends Component {
         $("div.custom-menu").remove();
       });*/
       
-      j.on(document, "click", "div.custom-menu", function() {
+      that.instance.on(document, "click", "div.custom-menu", function() {
              // var g = this.parentNode.getAttribute("group");
              j.remove(this);
               //j.removeGroup(g, this.getAttribute("delete-all") != null);
             });
-      
-      /*$("body").on("contextmenu", "#diagram .control", function (event) {
+      /*this.instance.on(body, "contextmenu", "#diagram .control", function(event) {
+     // $("body").on("contextmenu", "#diagram .control", function (event) {
         event.preventDefault();
-        window.selectedControl = $(this).attr("id");
-        $("<div class='custom-menu'><button class='delete-control'>Delete control</button></div>")
-            .appendTo("body")
-            .css({ top: event.pageY + "px", left: event.pageX + "px" });
-      });*/
+        window.selectedControl = document.getElementById("id");
+        var dEl = document.createElement("div");
+        dEl.classList.add("custom-menu");
+        var bEl = document.createElement("button");
+        bEl.classList.add("delete-connection");
+        var t = document.createTextNode("Delete connection"); 
+        dEl.style.top=event.pageY + "px";
+        dEl.style.left=event.pageX + "px";
+        bEl.appendChild(t);
+        dEl.append(bEl);
+        dEl.append("body");
+      })*/
+      //   $("<div class='custom-menu'><button class='delete-control'>Delete control</button></div>")
+      //       .appendTo("body")
+      //       .css({ top: event.pageY + "px", left: event.pageX + "px" });
+      // });
       
-      j.on(body, "click", ".delete-control", function(event) {
+      that.instance.on(body, "click", ".delete-control", function(event) {
       //$("body").on("click", ".delete-control", function (event) {
-        j.remove(window.selectedControl);
+        that.instance.remove(window.selectedControl);
       });
       
-            /*j.bind("connection", function(p) {
+            j.bind("connection", function(p) {
               p.connection.bind("click", function() {
                 j.detach(this);
               });
             });
-      
-            var evts = document.querySelector("#events");
-            var _appendEvent = function(name, detail) {
-              evts.innerHTML =
-                "<br/><strong>" +
-                name +
-                "</strong><br/> " +
-                detail +
-                "<br/>" +
-                evts.innerHTML;
-            };
-      */
             jsPlumb.jsPlumb.fire("jsPlumbDemoLoaded", j);
           });
         }
