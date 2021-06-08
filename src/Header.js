@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ReactTable from "react-table";
 import "./jsplumbdemo.css";
 import "./header.css";
 
