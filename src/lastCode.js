@@ -3,7 +3,7 @@ import jsPlumb from "jsplumb/dist/js/jsplumb.min";
 import "./jsplumbdemo.css";
 import { findPosition } from './utils/domUtils';
 
-class Main extends Component {
+class LastMain extends Component {
     constructor(props){
         super(props);
        this.initialShow = this.initialShow.bind(this);
@@ -113,41 +113,23 @@ class Main extends Component {
         componentDidMount() {
           this.initialShow();
           let that=this;
-          
-         // let canvas=document.getElementById("diagram");
+          let canvas=document.getElementById("diagram");
           jsPlumb.jsPlumb.ready(function() {
-            var j = jsPlumb.jsPlumb.getInstance({
-              Endpoint: ["Dot", {radius: 2}],
-              Connector:"StateMachine",
-              HoverPaintStyle: { stroke: "red", strokeWidth: 8 },
-              PaintStyle: { stroke: "red", strokeWidth: 4 },
-              ConnectionOverlays: [
-                  [ "Arrow", {
-                      location: 1,
-                      id: "arrow",
-                      length: 14,
-                      foldback: 0.8
-                  } ],
-                  [ "Label", { label: "FOO", id: "label", cssClass: "aLabel" }]
-              ],
-              Container: "diagram"
-
-              // Container: canvas,
-              // Connector: "StateMachine",
-              // Endpoint: ["Dot", { radius: 3 }],
-              // Anchor: "Center" 
-            });
-            j.registerConnectionType("basic", { anchor:"Continuous", connector:"StateMachine" });
+            var j = (window.j = jsPlumb.jsPlumb.getInstance({
+              Container: canvas,
+              Connector: "StateMachine",
+              Endpoint: ["Dot", { radius: 3 }],
+              Anchor: "Center"
+            }));
       //saloni
-      window.jsp = j;
-      that.instance=j; 
-      // jsPlumb.jsPlumb.registerConnectionTypes({
-      //   "red-connection": {
-      //       paintStyle: { stroke: "red", strokeWidth: 4 },
-      //       hoverPaintStyle: { stroke: "red", strokeWidth: 8 },
-      //       connector: "Flowchart"
-      //   }
-      // });
+      that.instance=j;
+      jsPlumb.jsPlumb.registerConnectionTypes({
+        "red-connection": {
+            paintStyle: { stroke: "red", strokeWidth: 4 },
+            hoverPaintStyle: { stroke: "red", strokeWidth: 8 },
+            connector: "Flowchart"
+        }
+      });
       var body = document.getElementsByTagName("body")[0];
       that.instance.bind("contextmenu", function (component, event) {
         if (component.hasClass("jtk-connector")) {
@@ -155,7 +137,6 @@ class Main extends Component {
             window.selectedConnection = component;
             var dEl = document.createElement("div");
             dEl.classList.add("custom-menu");
-            //dEl.id=
             var bEl = document.createElement("button");
             bEl.classList.add("delete-connection");
             var t = document.createTextNode("Delete connection"); 
@@ -164,28 +145,27 @@ class Main extends Component {
             bEl.appendChild(t);
             dEl.append(bEl);
             dEl.append("body");
-            bEl.addEventListener("onClick",()=>{j.deleteConnection(window.selectedConnection)},false);
-            dEl.addEventListener("onClick",(e)=>{ console.log(e.target);j.remove(document.getElementById(e.target));})
+           
             //document.getElementById(id).setAttribute("style", "border:2px solid red; background-color: rgb(255, 125, 115);");
            /* $("<div class='custom-menu'><button class='delete-connection'>Delete connection</button></div>")
                 .appendTo("body")
                 .css({ top: event.pageY + "px", left: event.pageX + "px" });*/
         }
       });//var j=this.instance;
-      // body.addEventListener("click", ".delete-connection", function(event) {
-      // //$("body").on("click", ".delete-connection", function (event) {
-      //   j.deleteConnection(window.selectedConnection);
-      // });
+      that.instance.on(body, "click", ".delete-connection", function(event) {
+      //$("body").on("click", ".delete-connection", function (event) {
+        j.deleteConnection(window.selectedConnection);
+      });
       
       /*$(document).bind("click", function (event) {
         $("div.custom-menu").remove();
       });*/
       
-      // that.instance.on(document, "click", "div.custom-menu", function() {
-      //        // var g = this.parentNode.getAttribute("group");
-      //        j.remove(this);
-      //         //j.removeGroup(g, this.getAttribute("delete-all") != null);
-      //       });
+      that.instance.on(document, "click", "div.custom-menu", function() {
+             // var g = this.parentNode.getAttribute("group");
+             j.remove(this);
+              //j.removeGroup(g, this.getAttribute("delete-all") != null);
+            });
       /*this.instance.on(body, "contextmenu", "#diagram .control", function(event) {
      // $("body").on("contextmenu", "#diagram .control", function (event) {
         event.preventDefault();
@@ -205,17 +185,17 @@ class Main extends Component {
       //       .appendTo("body")
       //       .css({ top: event.pageY + "px", left: event.pageX + "px" });
       // });
-    //uncomment this soon  
-      // that.instance.on(body, "click", ".delete-control", function(event) {
-      // //$("body").on("click", ".delete-control", function (event) {
-      //   that.instance.remove(window.selectedControl);
-      // });
       
-      //       j.bind("connection", function(p) {
-      //         p.connection.bind("click", function() {
-      //           j.detach(this);
-      //         });
-      //       }); //uncomment this soon  
+      that.instance.on(body, "click", ".delete-control", function(event) {
+      //$("body").on("click", ".delete-control", function (event) {
+        that.instance.remove(window.selectedControl);
+      });
+      
+            j.bind("connection", function(p) {
+              p.connection.bind("click", function() {
+                j.detach(this);
+              });
+            });
             jsPlumb.jsPlumb.fire("jsPlumbDemoLoaded", j);
           });
         }
@@ -240,4 +220,4 @@ class Main extends Component {
         }
 }
  
-export default Main;
+export default LastMain;
