@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./jsplumbdemo.css";
 import "./header.css";
-
+import logo from './intellogoo.png';
 class Header extends Component {
   constructor(props) {
     super(props);
@@ -14,9 +14,12 @@ class Header extends Component {
   }
   render() {
     return (
-      <div style={{ display: "flex", textAlign: "center" }}>
-        <div style={{ flex: 2 }}>
-          <div>Load Condition(RPS):{this.state.rps}</div>
+      <div style={{display:'flex' , flexDirection:'column'}}>
+      <div style={{flex:1 , borderBottomStyle:'groove', borderWidth: '1px'}}><img src={logo} alt="Logo" style={{width:'65px'}}/></div>
+      <div style={{ display: "flex", textAlign: "center",flex:3 , backgroundColor:'#E7E7E7'}}>
+        <div style={{ display: "flex", flexDirection: "column", flex: 2 }}>
+          <div style={{ flex: 2 }}></div>
+          <div style={{ flex: 1 , fontFamily:'Intel One Heading, Intel Clear'}}>Load Condition(RPS):{this.state.rps}</div>
           <input
             onChange={this.slidechanger}
             id="my"
@@ -26,11 +29,12 @@ class Header extends Component {
             min="0"
             max="1000"
           ></input>
+          <div style={{ flex: 1 }}></div>
         </div>
-        <div style={{ flex: 2 }}>
+        <div style={{ flex: 2,backgroundColor:'#E7E7E7'}}>
           <table>
             <thead>
-              <th>Configure Distribution Percentage</th>
+              <tr><th>Configure Distribution Percentage</th></tr>
             </thead>
           </table>
           <table>
@@ -79,6 +83,7 @@ class Header extends Component {
             </div>
           </div>
         </div>
+      </div>
       </div>
     );
   }
