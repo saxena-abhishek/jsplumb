@@ -1,4 +1,4 @@
-td,th{
+/* td,th{
     
    
     border-style: double;
@@ -10,7 +10,30 @@ table{
     border-style: double;
     text-align: center;
     border-radius: 20px;
+    color: #0071c5;
    
+} */
+table{
+  width: 100%;
+  text-align: center;
+}
+
+td,  th {
+  border: 1px solid rgb(133, 131, 241);
+  padding: 1px;
+  text-align: center;
+}
+tr:nth-child(even){background-color: #f2f2f2;}
+
+ tr:hover {background-color: #ddd;}
+
+th {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  text-align: left;
+  background-color: #0071c5;
+  color: white;
+  text-align: center;
 }
 scroll{
     overflow-y: scroll;
@@ -19,7 +42,7 @@ scroll{
 }
 
 button{
-    background-color: lightgreen;
+    background-color: #0071c5;
     border-color: white;
     color: white;
     padding: 8px 20px;
@@ -34,7 +57,7 @@ input{
   background-color: #e7e7e7;
 }
 
-.slider::-moz-range-thumb {
+/* .slider::-moz-range-thumb {
     width: 25px;
     height: 25px;
     background: #04AA6D;
@@ -60,4 +83,37 @@ input{
     -webkit-transition: .2s;
     transition: opacity .2s;
   }
-  
+   */
+
+   
+   .slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #04AA6D;
+    cursor: pointer;
+  }
+
+   
+
+   .slider::-webkit-slider-thumb {
+    -webkit-appearance :initial;
+    appearance: none;
+    width: 20px;
+    height: 30px;
+    background: #f0f2f3;
+    cursor: pointer;
+    border: inset;
+    border-color: #0071c5;
+  }
+
+  .slider {
+    -webkit-appearance: none;
+    width: 90%;
+    height: 15px;
+    background: #0071c5;
+    outline: none;
+    opacity: 1;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+
+  }

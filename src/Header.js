@@ -15,11 +15,11 @@ class Header extends Component {
   render() {
     return (
       <div style={{display:'flex' , flexDirection:'column'}}>
-      <div style={{flex:1 , borderBottomStyle:'groove', borderWidth: '1px'}}><img src={logo} alt="Logo" style={{width:'65px'}}/></div>
+      <div style={{flex:1 , borderBottomStyle:'groove', borderWidth: '1px' , color:'#0071c5' , fontSize:'22px'}}><img src={logo} alt="Logo" style={{width:'65px'}} />     Benchmark Topology</div>
       <div style={{ display: "flex", textAlign: "center",flex:3 , backgroundColor:'#E7E7E7'}}>
         <div style={{ display: "flex", flexDirection: "column", flex: 2 }}>
           <div style={{ flex: 2 }}></div>
-          <div style={{ flex: 1 , fontFamily:'Intel One Heading, Intel Clear'}}>Load Condition(RPS):{this.state.rps}</div>
+          <div style={{ flex: 1 ,color:'#0071c5', fontSize:'17px'}}>Load Condition(RPS):{this.state.rps}</div>
           <input
             onChange={this.slidechanger}
             id="my"
@@ -32,7 +32,7 @@ class Header extends Component {
           <div style={{ flex: 1 }}></div>
         </div>
         <div style={{ flex: 2,backgroundColor:'#E7E7E7'}}>
-          <div style={{fontWeight:600 ,fontSize:'20px'}}>Benchmark Topology</div>
+          <div style={{fontWeight:600 ,fontSize:'20px'}}></div>
           <table>
             <thead>
               <tr><th>Configure Distribution Percentage</th></tr>
