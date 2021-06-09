@@ -88,7 +88,6 @@ class Main extends Component {
           this.nodenames = [
               { id: 'nginx', name: 'Nginx', icon: 'fa-file',vc:0 },
               { id: 'wordpress', name: 'Wordpress', icon: 'fa-wordpress',vc:0 },
-              { id: 'static', name: 'StaticServer', icon: 'fa-server',vc:0 },
               { id: 'mysql', name: 'MySQL', icon: 'fa-database',vc:0 }
           ]
       
