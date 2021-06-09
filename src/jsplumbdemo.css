@@ -168,15 +168,19 @@
 }
 
 
-div.justify-content-center {
-  width: 280px;
+#toolbox{
+ width: 80%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   text-align: center;
+  position: relative;
+  bottom: 50;
+  
 }
 #diagram{
-  width: 250px;
+  width: '100%';
   box-shadow: 0 40px 80px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  width: 100%;
+  position: relative;
+  bottom: 50;
   
 }
 .cln{

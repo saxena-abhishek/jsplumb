@@ -19,7 +19,7 @@ table{
 }
 
 td,  th {
-  border: 1px solid rgb(133, 131, 241);
+  border: 1px solid rgb(212, 212, 218);
   padding: 1px;
   text-align: center;
 }
@@ -31,7 +31,7 @@ th {
   padding-top: 8px;
   padding-bottom: 8px;
   text-align: left;
-  background-color: #0071c5;
+  background-color: #169BD5;
   color: white;
   text-align: center;
 }
@@ -42,7 +42,7 @@ scroll{
 }
 
 button{
-    background-color: #0071c5;
+    background-color: #169BD5;
     border-color: white;
     color: white;
     padding: 8px 20px;
@@ -91,6 +91,7 @@ input{
     height: 25px;
     background: #04AA6D;
     cursor: pointer;
+    padding: 5px;
   }
 
    
@@ -103,17 +104,27 @@ input{
     background: #f0f2f3;
     cursor: pointer;
     border: inset;
-    border-color: #0071c5;
+    border-color: #169BD5;
+    padding: 5px;
   }
 
   .slider {
     -webkit-appearance: none;
     width: 90%;
     height: 15px;
-    background: #0071c5;
+    background: #169BD5;
     outline: none;
     opacity: 1;
     -webkit-transition: .2s;
     transition: opacity .2s;
+    padding: 5px;
+    border: 5px ;
+    position: relative;
 
+  }
+
+  #sliderbox{
+    width: 100%;
+    padding: 10px;
+    text-align: center;
   }

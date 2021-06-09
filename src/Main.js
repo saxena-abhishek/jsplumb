@@ -221,19 +221,20 @@ class Main extends Component {
       
         render() {
           return (
-        <div className="container-fluid">
-            <div className="row">
-              <div className="col-md-3">
+        <div className="container-fluid" >
+            <div style={{display:'flex'}}>
+              <div style={{flex:2}} >
                 <div id="toolbox" className="justify-content-center" >
                 </div>
               </div>
-              <div className="col-md-9">
+              <div style={{flex:7}} >
                 <div id="diagram" style={{height: "90vh", position: 'relative'}} onDragOver={(e)=>this.onDragOver(e)}
                 onDrop={(event)=>this.onDrop(event)} >
                   <button className="btn" onClick={this.saveNodeJson}>Save Connections</button>
                 </div>
               </div>
             </div>
+            <div style={{padding:'18px 18px'}}></div>
           </div>
           );
         }
