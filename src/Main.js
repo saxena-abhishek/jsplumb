@@ -11,6 +11,7 @@ class Main extends Component {
        this.saveNodeJson = this.saveNodeJson.bind(this);
        this.nodenames = [];
        this.instance ='';
+       this.connectorProperties={};
       }
       
       saveNodeJson() {
@@ -25,14 +26,16 @@ class Main extends Component {
                 id: item.id,
             }
         });      
-        var connections = [];
-        this.instance.getConnections().forEach(function (id, connection) {
-            connections.push({
+        var connections = jsPlumb.jsPlumb.getAllConnections();
+        var tryht = [];
+        console.log(connections);
+        connections.forEach(function (connection, id ) {
+          tryht.push({
                 SourceId: connection.sourceId,
                 TargetId: connection.targetId
             });
         });
-        const json = JSON.stringify({ nodes, connections });
+        const json = JSON.stringify({ nodes, tryht });
         console.log(json);
         }
       onDragStart(event) {
@@ -64,9 +67,10 @@ class Main extends Component {
           cloneEl.id=draggableElement.id+(++this.nodenames[item].vc);
           dropzone.appendChild(cloneEl);
           jsPlumb.jsPlumb.draggable(cloneEl.id, { containment: true });
+         // jsPlumb.jsPlumb.addEndpoint(cloneEl.id,this.connectorProperties)
           jsPlumb.jsPlumb.addEndpoint(cloneEl.id, {
             endpoint: "Dot",
-            anchor: ["RightMiddle"],
+            anchor: ["TopLeft"],
             isSource: true,
             connectionType: "red-connection",
             maxConnections: -1,
@@ -74,11 +78,11 @@ class Main extends Component {
       
           jsPlumb.jsPlumb.addEndpoint(cloneEl.id, {
             endpoint: "Dot",
-            anchor: ["LeftMiddle"],
+            anchor: ["TopRight"],
             isTarget: true,
             connectionType: "red-connection",
             maxConnections: -1,
-          });
+          });//*/
         }event.dataTransfer.clearData();
       }
       
@@ -112,34 +116,40 @@ class Main extends Component {
         componentDidMount() {
           this.initialShow();
           let that=this;
-          
-         // let canvas=document.getElementById("diagram");
+          let canvas=document.getElementById("diagram");
           jsPlumb.jsPlumb.ready(function() {
-            var j = jsPlumb.jsPlumb.getInstance({
-              Endpoint: ["Dot", {radius: 2}],
-              Connector:"StateMachine",
-              HoverPaintStyle: { stroke: "red", strokeWidth: 8 },
-              PaintStyle: { stroke: "red", strokeWidth: 4 },
-              ConnectionOverlays: [
-                  [ "Arrow", {
-                      location: 1,
-                      id: "arrow",
-                      length: 14,
-                      foldback: 0.8
-                  } ],
-                  [ "Label", { label: "FOO", id: "label", cssClass: "aLabel" }]
-              ],
-              Container: "diagram"
-
-              // Container: canvas,
-              // Connector: "StateMachine",
-              // Endpoint: ["Dot", { radius: 3 }],
-              // Anchor: "Center" 
-            });
-            j.registerConnectionType("basic", { anchor:"Continuous", connector:"StateMachine" });
+            jsPlumb.jsPlumb.setContainer(canvas);
+            // var j = (window.j = jsPlumb.jsPlumb.getInstance({
+            //   container: canvas,
+            //   connector: "StateMachine",
+            //   endpoint: ["Dot", { radius: 3 }],
+            //   anchor: "Center"
+            // }));
       //saloni
-      window.jsp = j;
-      that.instance=j; 
+     /* that.connectorProperties = {
+        paintStyle: { stroke: "red", strokeWidth: 4 },
+        hoverPaintStyle: { stroke: "red", strokeWidth: 8 },
+        connector: "Flowchart",
+        endpoint: ["Dot", { radius: 3 }],
+      };*/
+      jsPlumb.jsPlumb.registerConnectionTypes({
+          "red-connection": {
+            paintStyle: { stroke: "red", strokeWidth: 4 },
+            hoverPaintStyle: { stroke: "red", strokeWidth: 8 },
+            connector: ["StateMachine", {curviness:0.001}],
+            connectorOverlays:
+              [ 
+                "Arrow", 
+                { location: [0.5, 0.5], width: 40, length: 40 } 
+              
+            ],
+           // connector: "Flowchart",
+            //connectorOverlays:[["Arrow", { location:0.99, width:70, length:70 } ]],
+            endpoint: ["Dot", { radius: 1 }],
+          }
+            })
+    //  that.instance=j;
+   //   jsPlumb.jsPlumb.deleteConnectionsForElement()
       // jsPlumb.jsPlumb.registerConnectionTypes({
       //   "red-connection": {
       //       paintStyle: { stroke: "red", strokeWidth: 4 },
@@ -147,14 +157,13 @@ class Main extends Component {
       //       connector: "Flowchart"
       //   }
       // });
-      var body = document.getElementsByTagName("body")[0];
+      /*var body = document.getElementsByTagName("body")[0];
       that.instance.bind("contextmenu", function (component, event) {
         if (component.hasClass("jtk-connector")) {
             event.preventDefault();
             window.selectedConnection = component;
             var dEl = document.createElement("div");
             dEl.classList.add("custom-menu");
-            //dEl.id=
             var bEl = document.createElement("button");
             bEl.classList.add("delete-connection");
             var t = document.createTextNode("Delete connection"); 
@@ -163,59 +172,33 @@ class Main extends Component {
             bEl.appendChild(t);
             dEl.append(bEl);
             dEl.append("body");
-            bEl.addEventListener("onClick",()=>{j.deleteConnection(window.selectedConnection)},false);
-            dEl.addEventListener("onClick",(e)=>{ console.log(e.target);j.remove(document.getElementById(e.target));})
+           
             //document.getElementById(id).setAttribute("style", "border:2px solid red; background-color: rgb(255, 125, 115);");
-           /* $("<div class='custom-menu'><button class='delete-connection'>Delete connection</button></div>")
-                .appendTo("body")
-                .css({ top: event.pageY + "px", left: event.pageX + "px" });*/
+ 
         }
       });//var j=this.instance;
-      // body.addEventListener("click", ".delete-connection", function(event) {
-      // //$("body").on("click", ".delete-connection", function (event) {
-      //   j.deleteConnection(window.selectedConnection);
-      // });
+      that.instance.on(body, "click", ".delete-connection", function(event) {
+      //$("body").on("click", ".delete-connection", function (event) {
+        j.deleteConnection(window.selectedConnection);
+      });
       
-      /*$(document).bind("click", function (event) {
-        $("div.custom-menu").remove();
-      });*/
       
-      // that.instance.on(document, "click", "div.custom-menu", function() {
-      //        // var g = this.parentNode.getAttribute("group");
-      //        j.remove(this);
-      //         //j.removeGroup(g, this.getAttribute("delete-all") != null);
-      //       });
-      /*this.instance.on(body, "contextmenu", "#diagram .control", function(event) {
-     // $("body").on("contextmenu", "#diagram .control", function (event) {
-        event.preventDefault();
-        window.selectedControl = document.getElementById("id");
-        var dEl = document.createElement("div");
-        dEl.classList.add("custom-menu");
-        var bEl = document.createElement("button");
-        bEl.classList.add("delete-connection");
-        var t = document.createTextNode("Delete connection"); 
-        dEl.style.top=event.pageY + "px";
-        dEl.style.left=event.pageX + "px";
-        bEl.appendChild(t);
-        dEl.append(bEl);
-        dEl.append("body");
-      })*/
-      //   $("<div class='custom-menu'><button class='delete-control'>Delete control</button></div>")
-      //       .appendTo("body")
-      //       .css({ top: event.pageY + "px", left: event.pageX + "px" });
-      // });
-    //uncomment this soon  
-      // that.instance.on(body, "click", ".delete-control", function(event) {
-      // //$("body").on("click", ".delete-control", function (event) {
-      //   that.instance.remove(window.selectedControl);
-      // });
+      that.instance.on(document, "click", "div.custom-menu", function() {
+             // var g = this.parentNode.getAttribute("group");
+             j.remove(this);
+              //j.removeGroup(g, this.getAttribute("delete-all") != null);
+            });
+      that.instance.on(body, "click", ".delete-control", function(event) {
+      //$("body").on("click", ".delete-control", function (event) {
+        that.instance.remove(window.selectedControl);
+      });
       
-      //       j.bind("connection", function(p) {
-      //         p.connection.bind("click", function() {
-      //           j.detach(this);
-      //         });
-      //       }); //uncomment this soon  
-            jsPlumb.jsPlumb.fire("jsPlumbDemoLoaded", j);
+            j.bind("connection", function(p) {
+              p.connection.bind("click", function() {
+                j.detach(this);
+              });
+            });*/
+      //      jsPlumb.jsPlumb.fire("jsPlumbDemoLoaded", j);
           });
         }
       
