@@ -1,8 +1,11 @@
 .footer{
-    background-color: #e7e7e7;
+    background-color: white;
     padding: 15px 15px;
     font-size: 17px;
     width: 100%;
     position: fixed;
     bottom: 0;
+    border: thin;
+    border-color: burlywood;
+    color: #0071c5;
 }

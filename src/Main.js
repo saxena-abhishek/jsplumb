@@ -70,17 +70,18 @@ class Main extends Component {
          // jsPlumb.jsPlumb.addEndpoint(cloneEl.id,this.connectorProperties)
           jsPlumb.jsPlumb.addEndpoint(cloneEl.id, {
             endpoint: "Dot",
-            anchor: ["TopLeft"],
+            
+            anchor: ["RightMiddle"],
             isSource: true,
-            connectionType: "red-connection",
+            connectionType: "black-connection",
             maxConnections: -1,
           });
       
           jsPlumb.jsPlumb.addEndpoint(cloneEl.id, {
             endpoint: "Dot",
-            anchor: ["TopRight"],
+            anchor: ["LeftMiddle"],
             isTarget: true,
-            connectionType: "red-connection",
+            connectionType: "black-connection",
             maxConnections: -1,
           });//*/
         }event.dataTransfer.clearData();
