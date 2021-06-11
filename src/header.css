@@ -19,7 +19,7 @@ table{
 }
 
 td,  th {
-  border: 1px solid rgb(133, 131, 241);
+  border: 1px solid rgb(212, 212, 218);
   padding: 1px;
   text-align: center;
 }
@@ -91,6 +91,7 @@ input{
     height: 25px;
     background: #04AA6D;
     cursor: pointer;
+    padding: 5px;
   }
 
    
@@ -104,6 +105,7 @@ input{
     cursor: pointer;
     border: inset;
     border-color: #0071c5;
+    padding: 5px;
   }
 
   .slider {
@@ -115,5 +117,14 @@ input{
     opacity: 1;
     -webkit-transition: .2s;
     transition: opacity .2s;
+    padding: 5px;
+    border: 5px ;
+    position: relative;
 
+  }
+
+  #sliderbox{
+    width: 100%;
+    padding: 10px;
+    text-align: center;
   }

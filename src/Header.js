@@ -20,6 +20,7 @@ class Header extends Component {
         <div style={{ display: "flex", flexDirection: "column", flex: 2 }}>
           <div style={{ flex: 2 }}></div>
           <div style={{ flex: 1 ,color:'#0071c5', fontSize:'17px'}}>Load Condition(RPS):{this.state.rps}</div>
+          <div id="sliderbox" >
           <input
             onChange={this.slidechanger}
             id="my"
@@ -29,6 +30,7 @@ class Header extends Component {
             min="0"
             max="1000"
           ></input>
+          </div>
           <div style={{ flex: 1 }}></div>
         </div>
         <div style={{ flex: 2,backgroundColor:'#E7E7E7'}}>
