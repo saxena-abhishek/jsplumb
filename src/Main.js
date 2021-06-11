@@ -113,42 +113,63 @@ class Main extends Component {
           }
         }
       
-        componentDidMount() {
-          this.initialShow();
-          let that=this;
-          let canvas=document.getElementById("diagram");
-          jsPlumb.jsPlumb.ready(function() {
-            jsPlumb.jsPlumb.setContainer(canvas);
-            // var j = (window.j = jsPlumb.jsPlumb.getInstance({
-            //   container: canvas,
-            //   connector: "StateMachine",
-            //   endpoint: ["Dot", { radius: 3 }],
-            //   anchor: "Center"
-            // }));
+  componentDidMount() {
+      this.initialShow();
+      let canvas=document.getElementById("diagram");
+      jsPlumb.jsPlumb.ready(function() {
+      jsPlumb.jsPlumb.setContainer(canvas);
       //saloni
-     /* that.connectorProperties = {
-        paintStyle: { stroke: "red", strokeWidth: 4 },
-        hoverPaintStyle: { stroke: "red", strokeWidth: 8 },
-        connector: "Flowchart",
-        endpoint: ["Dot", { radius: 3 }],
-      };*/
       jsPlumb.jsPlumb.registerConnectionTypes({
           "red-connection": {
             paintStyle: { stroke: "red", strokeWidth: 4 },
             hoverPaintStyle: { stroke: "red", strokeWidth: 8 },
-            connector: ["StateMachine", {curviness:0.001}],
-            connectorOverlays:
+            connector:"Flowchart",// ["StateMachine", {curviness:0.001}],
+            /*connectorOverlays:
               [ 
                 "Arrow", 
                 { location: [0.5, 0.5], width: 40, length: 40 } 
               
-            ],
+            ],*/
            // connector: "Flowchart",
             //connectorOverlays:[["Arrow", { location:0.99, width:70, length:70 } ]],
             endpoint: ["Dot", { radius: 1 }],
           }
             })
-    //  that.instance=j;
+     jsPlumb.jsPlumb.bind("connection",(info)=>{
+        console.log("connection h")//+info)
+        let el =info.connection.id;
+        console.log(el);
+     });
+     jsPlumb.jsPlumb.bind("contextmenu", (component, event) => {
+        if(component.hasClass("jtk-connector")){
+          event.preventDefault();
+          var conn = jsPlumb.jsPlumb.getConnections({
+            source: component.sourceId,
+            target: component.targetId
+          });
+        if (conn[0]) {
+          jsPlumb.jsPlumb.deleteConnection(conn[0]);
+        }
+          //window.selectedConnection = component;
+          // var innerhtml = `<div class="custom-menu" style="top":${event.pageY+"px"};"left":${event.pageX+"px"}>
+          //     <button class="delete-connection">Delete Connection</button>
+          //     </div>`;
+          // (document.getElementById(component.id)).append(innerhtml);
+          // this.forceUpdate();
+          /*var dEl = document.createElement("div");
+          dEl.classList.add("custom-menu");
+          var bEl = document.createElement("button");
+          bEl.classList.add("delete-connection");
+          var t = document.createTextNode("Delete connection"); 
+          dEl.setAttribute("style","top:" + event.pageY + "px; left:" + event.pageX + "px;");
+          bEl.appendChild(t);
+          dEl.append(bEl);
+          dEl.append("body");*/
+        }
+     })
+    //  that.instance=j;//instance.bind("connection", function(info) {
+   //.. update your model in here, maybe.
+ // });
    //   jsPlumb.jsPlumb.deleteConnectionsForElement()
       // jsPlumb.jsPlumb.registerConnectionTypes({
       //   "red-connection": {
