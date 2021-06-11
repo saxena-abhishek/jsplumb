@@ -13,7 +13,7 @@ class Main extends Component {
        this.instance ='';
        this.connectorProperties={};
       }
-      
+     
       saveNodeJson() {
         var testContainer = document.querySelector('#diagram');
         var controls = testContainer.querySelectorAll('.control');
@@ -107,8 +107,9 @@ class Main extends Component {
               control.append(icon);
               var text = document.createElement("span");
               text.innerHTML = this.nodenames[i].name;
+              control.append("  ");
               control.append(text);
-              control.classList.add('control');
+              control.classList.add('control');                   
               control.id = this.nodenames[i].id; 
               box.append(control);
               control.addEventListener("dragstart",e=>this.onDragStart(e),false);        
@@ -214,7 +215,8 @@ class Main extends Component {
               </div>
               <div style={{flex:7}} >
                 <div id="diagram" style={{height: "90vh", position: 'relative'}} onDragOver={(e)=>this.onDragOver(e)}
-                onDrop={(event)=>this.onDrop(event)} >
+                onDrop={(event)=>this.onDrop(event)}  >
+                 
                   <button className="btn" onClick={this.saveNodeJson}>Save Connections</button>
                 </div>
               </div>
