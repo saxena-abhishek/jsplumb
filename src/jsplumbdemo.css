@@ -174,7 +174,7 @@
   text-align: center;
   position: relative;
   bottom: 50;
-  background-color: #e6e6e6;
+  background-color: white;
   
 }
 #diagram{
@@ -182,14 +182,14 @@
   box-shadow: 0 40px 80px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   position: relative;
   bottom: 50;
-  background-color: #e6e6e6;
+  background-color: white;
   
 }
 .cln{
 background-color: whitesmoke;
 color: black;
-width: 100px;
-height: 100px;
+width: 120px;
+height: 90px;
 border-color: gainsboro;
 display: block;
 text-align: center;

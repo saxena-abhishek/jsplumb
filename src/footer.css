@@ -1,11 +1,11 @@
 .footer{
-    background-color: white;
+    background-color: #e6e6e6;
     padding: 15px 15px;
     font-size: 17px;
     width: 100%;
     position: fixed;
     bottom: 0;
     border: thin;
-    border-color: burlywood;
-    color: #0071c5;
+    color: black;
+    border-top-style: groove;
 }

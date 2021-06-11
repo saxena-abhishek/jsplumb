@@ -69,7 +69,8 @@ class Main extends Component {
           jsPlumb.jsPlumb.draggable(cloneEl.id, { containment: true });
          // jsPlumb.jsPlumb.addEndpoint(cloneEl.id,this.connectorProperties)
           jsPlumb.jsPlumb.addEndpoint(cloneEl.id, {
-            endpoint: "Dot",
+            
+            endpoint: ["Dot", {width:13, height:13,color:'red'}],  
             
             anchor: ["RightMiddle"],
             isSource: true,
@@ -78,7 +79,8 @@ class Main extends Component {
           });
       
           jsPlumb.jsPlumb.addEndpoint(cloneEl.id, {
-            endpoint: "Dot",
+           
+            endpoint: ["Dot", {width:13, height:13,color:'red'}],  
             anchor: ["LeftMiddle"],
             isTarget: true,
             connectionType: "black-connection",
@@ -146,7 +148,7 @@ class Main extends Component {
             ],
            // connector: "Flowchart",
             //connectorOverlays:[["Arrow", { location:0.99, width:70, length:70 } ]],
-            endpoint: ["Dot", { radius: 1 }],
+            endpoint: ["Dot", { radius: 1 ,color:'red'}],
           }
             })
     //  that.instance=j;
