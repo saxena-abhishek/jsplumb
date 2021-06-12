@@ -189,7 +189,7 @@
 background-color: whitesmoke;
 color: black;
 width: 120px;
-height: 90px;
+height: 70px;
 border-color: gainsboro;
 display: block;
 text-align: center;
@@ -199,7 +199,16 @@ box-shadow: 0 4px 8px 0 rgba(218, 213, 213, 0.2), 0 4px 8px 0 rgba(0, 0, 0, 0.19
   
 }
 
-span,i{
+i{
   position: relative;
-  top: 32px;
+  top: 20px;
+  font-size: 15px;
+}
+
+
+span{
+  position: relative;
+  top: 20px;
+  color: #212529;
+ font-size: 15px;
 }
