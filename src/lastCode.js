@@ -3,7 +3,7 @@ import jsPlumb from "jsplumb/dist/js/jsplumb.min";
 import "./jsplumbdemo.css";
 import { findPosition } from './utils/domUtils';
 
-class LastMain extends Component {
+class Main extends Component {
     constructor(props){
         super(props);
        this.initialShow = this.initialShow.bind(this);
@@ -11,6 +11,7 @@ class LastMain extends Component {
        this.saveNodeJson = this.saveNodeJson.bind(this);
        this.nodenames = [];
        this.instance ='';
+       this.connectorProperties={};
       }
       
       saveNodeJson() {
@@ -25,14 +26,16 @@ class LastMain extends Component {
                 id: item.id,
             }
         });      
-        var connections = [];
-        this.instance.getConnections().forEach(function (id, connection) {
-            connections.push({
+        var connections = jsPlumb.jsPlumb.getAllConnections();
+        var tryht = [];
+        console.log(connections);
+        connections.forEach(function (connection, id ) {
+          tryht.push({
                 SourceId: connection.sourceId,
                 TargetId: connection.targetId
             });
         });
-        const json = JSON.stringify({ nodes, connections });
+        const json = JSON.stringify({ nodes, tryht });
         console.log(json);
         }
       onDragStart(event) {
@@ -59,36 +62,53 @@ class LastMain extends Component {
           positionY = event.clientY - position.y;
       
           cloneEl.setAttribute("style","top:" + positionY + "px; left:" + positionX + "px;");
-
+         
+         // cloneEl.classList.add("");
           var item = this.nodenames.findIndex(item => item.id === draggableElement.id);
           cloneEl.id=draggableElement.id+(++this.nodenames[item].vc);
+          let iel = document.createElement("i");
+          iel.setAttribute("class","fa fa-times"); 
+          cloneEl.appendChild(iel);
           dropzone.appendChild(cloneEl);
+          /*cloneEl.dblclick(function(e) {
+            jsPlumb.jsPlumb.detachAllConnections($(this));
+            $(this).remove();
+            e.stopPropagation();
+          }); */        
+          cloneEl.addEventListener("click",this.removeNode(iel.id),false);
           jsPlumb.jsPlumb.draggable(cloneEl.id, { containment: true });
+         // jsPlumb.jsPlumb.addEndpoint(cloneEl.id,this.connectorProperties)
           jsPlumb.jsPlumb.addEndpoint(cloneEl.id, {
             endpoint: "Dot",
+            paintStyle:{ fill:"#0071c5", outlineStroke:"white", outlineWidth:1 },
             anchor: ["RightMiddle"],
             isSource: true,
-            connectionType: "red-connection",
+            connectionType: "black-connection",
             maxConnections: -1,
           });
       
           jsPlumb.jsPlumb.addEndpoint(cloneEl.id, {
             endpoint: "Dot",
+            paintStyle:{ fill:"#0071c5", outlineStroke:"white", outlineWidth:1 },
             anchor: ["LeftMiddle"],
             isTarget: true,
-            connectionType: "red-connection",
+            connectionType: "black-connection",
             maxConnections: -1,
-          });
+          });//*/
         }event.dataTransfer.clearData();
       }
-      
+        removeNode(e){
+          console.log("remove node clicked"+e);
+          jsPlumb.jsPlumb.removeAllEndpoints(e);
+          //jsPlumb.jsPlumb.detachAllConnections(e);//document.getElementById(e));
+          jsPlumb.jsPlumb.remove(e);
+        }
         initialShow(){
           //let index = 0;
           const box = document.getElementById("toolbox");
           this.nodenames = [
               { id: 'nginx', name: 'Nginx', icon: 'fa-file',vc:0 },
               { id: 'wordpress', name: 'Wordpress', icon: 'fa-wordpress',vc:0 },
-              { id: 'static', name: 'StaticServer', icon: 'fa-server',vc:0 },
               { id: 'mysql', name: 'MySQL', icon: 'fa-database',vc:0 }
           ]
       
@@ -110,114 +130,68 @@ class LastMain extends Component {
           }
         }
       
-        componentDidMount() {
-          this.initialShow();
-          let that=this;
-          let canvas=document.getElementById("diagram");
-          jsPlumb.jsPlumb.ready(function() {
-            var j = (window.j = jsPlumb.jsPlumb.getInstance({
-              Container: canvas,
-              Connector: "StateMachine",
-              Endpoint: ["Dot", { radius: 3 }],
-              Anchor: "Center"
-            }));
+  componentDidMount() {
+      this.initialShow();
+      let canvas=document.getElementById("diagram");
+      jsPlumb.jsPlumb.ready(function() {
+      jsPlumb.jsPlumb.setContainer(canvas);
       //saloni
-      that.instance=j;
       jsPlumb.jsPlumb.registerConnectionTypes({
-        "red-connection": {
+          "red-connection": {
             paintStyle: { stroke: "red", strokeWidth: 4 },
             hoverPaintStyle: { stroke: "red", strokeWidth: 8 },
-            connector: "Flowchart"
+            connector:"Flowchart",// ["StateMachine", {curviness:0.001}],
+            /*connectorOverlays:
+              [ 
+                "Arrow", 
+                { location: [0.5, 0.5], width: 40, length: 40 } 
+              
+            ],*/
+           // connector: "Flowchart",
+            //connectorOverlays:[["Arrow", { location:0.99, width:70, length:70 } ]],
+            endpoint: ["Dot", { radius: 1 }],
+          }
+            })
+     jsPlumb.jsPlumb.bind("connection",(info)=>{
+        console.log("connection h")//+info)
+        let el =info.connection.id;
+        console.log(el);
+     });
+     jsPlumb.jsPlumb.bind("contextmenu", (component, event) => {
+        if(component.hasClass("jtk-connector")){
+          event.preventDefault();
+          var conn = jsPlumb.jsPlumb.getConnections({
+            source: component.sourceId,
+            target: component.targetId
+          });
+        if (conn[0]) {
+          jsPlumb.jsPlumb.deleteConnection(conn[0]);
         }
-      });
-      var body = document.getElementsByTagName("body")[0];
-      that.instance.bind("contextmenu", function (component, event) {
-        if (component.hasClass("jtk-connector")) {
-            event.preventDefault();
-            window.selectedConnection = component;
-            var dEl = document.createElement("div");
-            dEl.classList.add("custom-menu");
-            var bEl = document.createElement("button");
-            bEl.classList.add("delete-connection");
-            var t = document.createTextNode("Delete connection"); 
-            dEl.style.top=event.pageY + "px";
-            dEl.style.left=event.pageX + "px";
-            bEl.appendChild(t);
-            dEl.append(bEl);
-            dEl.append("body");
-           
-            //document.getElementById(id).setAttribute("style", "border:2px solid red; background-color: rgb(255, 125, 115);");
-           /* $("<div class='custom-menu'><button class='delete-connection'>Delete connection</button></div>")
-                .appendTo("body")
-                .css({ top: event.pageY + "px", left: event.pageX + "px" });*/
         }
-      });//var j=this.instance;
-      that.instance.on(body, "click", ".delete-connection", function(event) {
-      //$("body").on("click", ".delete-connection", function (event) {
-        j.deleteConnection(window.selectedConnection);
-      });
-      
-      /*$(document).bind("click", function (event) {
-        $("div.custom-menu").remove();
-      });*/
-      
-      that.instance.on(document, "click", "div.custom-menu", function() {
-             // var g = this.parentNode.getAttribute("group");
-             j.remove(this);
-              //j.removeGroup(g, this.getAttribute("delete-all") != null);
-            });
-      /*this.instance.on(body, "contextmenu", "#diagram .control", function(event) {
-     // $("body").on("contextmenu", "#diagram .control", function (event) {
-        event.preventDefault();
-        window.selectedControl = document.getElementById("id");
-        var dEl = document.createElement("div");
-        dEl.classList.add("custom-menu");
-        var bEl = document.createElement("button");
-        bEl.classList.add("delete-connection");
-        var t = document.createTextNode("Delete connection"); 
-        dEl.style.top=event.pageY + "px";
-        dEl.style.left=event.pageX + "px";
-        bEl.appendChild(t);
-        dEl.append(bEl);
-        dEl.append("body");
-      })*/
-      //   $("<div class='custom-menu'><button class='delete-control'>Delete control</button></div>")
-      //       .appendTo("body")
-      //       .css({ top: event.pageY + "px", left: event.pageX + "px" });
-      // });
-      
-      that.instance.on(body, "click", ".delete-control", function(event) {
-      //$("body").on("click", ".delete-control", function (event) {
-        that.instance.remove(window.selectedControl);
-      });
-      
-            j.bind("connection", function(p) {
-              p.connection.bind("click", function() {
-                j.detach(this);
-              });
-            });
-            jsPlumb.jsPlumb.fire("jsPlumbDemoLoaded", j);
+     })
+    //      jsPlumb.jsPlumb.fire("jsPlumbDemoLoaded", j);
           });
         }
       
         render() {
           return (
-        <div className="container-fluid">
-            <div className="row">
-              <div className="col-md-3">
+        <div className="container-fluid" >
+            <div style={{display:'flex'}}>
+              <div style={{flex:2}} >
                 <div id="toolbox" className="justify-content-center" >
                 </div>
               </div>
-              <div className="col-md-9">
+              <div style={{flex:7}} >
                 <div id="diagram" style={{height: "90vh", position: 'relative'}} onDragOver={(e)=>this.onDragOver(e)}
                 onDrop={(event)=>this.onDrop(event)} >
                   <button className="btn" onClick={this.saveNodeJson}>Save Connections</button>
                 </div>
               </div>
             </div>
+            <div style={{padding:'18px 18px'}}></div>
           </div>
           );
         }
 }
  
-export default LastMain;
+export default Main;
