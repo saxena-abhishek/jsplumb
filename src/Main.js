@@ -13,7 +13,9 @@ class Main extends Component {
        this.instance ='';
        this.connectorProperties={};
       }
-     
+      doubleClick(){
+        console.log("clicked");
+      }
       saveNodeJson() {
         var testContainer = document.querySelector('#diagram');
         var controls = testContainer.querySelectorAll('.control');
@@ -90,11 +92,13 @@ class Main extends Component {
       
         initialShow(){
           //let index = 0;
+          
           const box = document.getElementById("toolbox");
           this.nodenames = [
-              { id: 'nginx', name: 'Nginx', icon: 'fa-file',vc:0 },
-              { id: 'wordpress', name: 'Wordpress', icon: 'fa-wordpress',vc:0 },
-              { id: 'mysql', name: 'MySQL', icon: 'fa-database',vc:0 }
+              { id: 'nginx', name: 'Nginx', icon: 'fa-file',vc:0 ,stat:true },
+              { id: 'wordpress', name: 'Wordpress', icon: 'fa-wordpress',vc:0 ,stat:true },
+              { id: 'mysql', name: 'MySQL', icon: 'fa-database',vc:0 ,stat:true },
+              { id: 'locust', name: 'Locust', icon: 'fa',vc:0 ,stat:false ,}
           ]
       
           for (let i = 0; i < this.nodenames.length; i++) {
@@ -104,7 +108,17 @@ class Main extends Component {
               var icon = document.createElement("i");
               let iconclass = this.nodenames[i].icon;
               icon.classList.add("fa", iconclass);
+
+              var img1 = document.createElement("img");
+              img1.src = "https://img.icons8.com/metro/20/0071c5/grasshopper.png";
+             
+              if(this.nodenames[i].stat){
               control.append(icon);
+              }
+          
+              else{
+              control.append(img1)
+              }
               var text = document.createElement("span");
               text.innerHTML = this.nodenames[i].name;
               control.append("  ");
@@ -112,67 +126,44 @@ class Main extends Component {
               control.classList.add('control');                   
               control.id = this.nodenames[i].id; 
               box.append(control);
-              control.addEventListener("dragstart",e=>this.onDragStart(e),false);        
+              control.addEventListener("dragstart",e=>this.onDragStart(e),false); 
+               
           }
         }
       
-  componentDidMount() {
-      this.initialShow();
-      let canvas=document.getElementById("diagram");
-      jsPlumb.jsPlumb.ready(function() {
-      jsPlumb.jsPlumb.setContainer(canvas);
+        componentDidMount() {
+          this.initialShow();
+          let that=this;
+          let canvas=document.getElementById("diagram");
+          jsPlumb.jsPlumb.ready(function() {
+            jsPlumb.jsPlumb.setContainer(canvas);
+            // var j = (window.j = jsPlumb.jsPlumb.getInstance({
+            //   container: canvas,
+            //   connector: "StateMachine",
+            //   endpoint: ["Dot", { radius: 3 }],
+            //   anchor: "Center"
+            // }));
       //saloni
+     /* that.connectorProperties = {
+        paintStyle: { stroke: "red", strokeWidth: 4 },
+        hoverPaintStyle: { stroke: "red", strokeWidth: 8 },
+        connector: "Flowchart",
+        endpoint: ["Dot", { radius: 3 }],
+      };*/
       jsPlumb.jsPlumb.registerConnectionTypes({
-          "red-connection": {
-            paintStyle: { stroke: "red", strokeWidth: 4 },
-            hoverPaintStyle: { stroke: "red", strokeWidth: 8 },
-            connector:"Flowchart",// ["StateMachine", {curviness:0.001}],
-            /*connectorOverlays:
-              [ 
-                "Arrow", 
-                { location: [0.5, 0.5], width: 40, length: 40 } 
-              
-            ],*/
-           // connector: "Flowchart",
-            //connectorOverlays:[["Arrow", { location:0.99, width:70, length:70 } ]],
+          "black-connection": {
+            paintStyle: { stroke: "#0071c5" },
+            hoverPaintStyle: { stroke: "red"  },
+            connector: ["StateMachine", {curviness:0.7}],
+            overlays:[ 
+              "Arrow", 
+                [ "Label", { location:0.25, id:"myLabel" ,color:'blue'} ]
+              ],
             endpoint: ["Dot", { radius: 1 }],
           }
             })
-     jsPlumb.jsPlumb.bind("connection",(info)=>{
-        console.log("connection h")//+info)
-        let el =info.connection.id;
-        console.log(el);
-     });
-     jsPlumb.jsPlumb.bind("contextmenu", (component, event) => {
-        if(component.hasClass("jtk-connector")){
-          event.preventDefault();
-          var conn = jsPlumb.jsPlumb.getConnections({
-            source: component.sourceId,
-            target: component.targetId
-          });
-        if (conn[0]) {
-          jsPlumb.jsPlumb.deleteConnection(conn[0]);
-        }
-          //window.selectedConnection = component;
-          // var innerhtml = `<div class="custom-menu" style="top":${event.pageY+"px"};"left":${event.pageX+"px"}>
-          //     <button class="delete-connection">Delete Connection</button>
-          //     </div>`;
-          // (document.getElementById(component.id)).append(innerhtml);
-          // this.forceUpdate();
-          /*var dEl = document.createElement("div");
-          dEl.classList.add("custom-menu");
-          var bEl = document.createElement("button");
-          bEl.classList.add("delete-connection");
-          var t = document.createTextNode("Delete connection"); 
-          dEl.setAttribute("style","top:" + event.pageY + "px; left:" + event.pageX + "px;");
-          bEl.appendChild(t);
-          dEl.append(bEl);
-          dEl.append("body");*/
-        }
-     })
-    //  that.instance=j;//instance.bind("connection", function(info) {
-   //.. update your model in here, maybe.
- // });
+            
+    //  that.instance=j;
    //   jsPlumb.jsPlumb.deleteConnectionsForElement()
       // jsPlumb.jsPlumb.registerConnectionTypes({
       //   "red-connection": {
@@ -223,6 +214,7 @@ class Main extends Component {
               });
             });*/
       //      jsPlumb.jsPlumb.fire("jsPlumbDemoLoaded", j);
+      
           });
         }
       
@@ -237,12 +229,11 @@ class Main extends Component {
               <div style={{flex:7}} >
                 <div id="diagram" style={{height: "90vh", position: 'relative'}} onDragOver={(e)=>this.onDragOver(e)}
                 onDrop={(event)=>this.onDrop(event)}  >
-                 
                   <button className="btn" onClick={this.saveNodeJson}>Save Connections</button>
                 </div>
               </div>
             </div>
-            <div style={{padding:'18px 18px'}}></div>
+            <div style={{padding:'20px 20px'}}></div>
           </div>
           );
         }

@@ -203,6 +203,14 @@ i{
   position: relative;
   top: 20px;
   font-size: 15px;
+  color: #0071c5;
+}
+img{
+  position: relative;
+  top: 18px;
+  font-size: 12px;
+  color: #0071c5;
+ 
 }
 
 
@@ -211,4 +219,8 @@ span{
   top: 20px;
   color: #212529;
  font-size: 15px;
+}
+#mylabel{
+  width: 50px;
+  color: aqua;
 }
