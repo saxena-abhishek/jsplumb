@@ -60,8 +60,8 @@ class Main extends Component {
           let positionX;
           let positionY;
           const position= findPosition(dropzone);
-          positionX = event.clientX - position.x;
-          positionY = event.clientY - position.y;
+          positionX = event.pageX - position.x;
+          positionY = event.pageY - position.y;
       
           cloneEl.setAttribute("style","top:" + positionY + "px; left:" + positionX + "px;");
 
