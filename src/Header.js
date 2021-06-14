@@ -15,7 +15,7 @@ class Header extends Component {
   render() {
     return (
       <div style={{display:'flex' , flexDirection:'column'}}>
-      <div style={{flex:1 , borderBottomStyle:'groove', borderWidth: '1px' , color:'#0071c5' , fontSize:'22px'}}><img src={logo} alt="Logo" style={{width:'65px'}} />     Benchmark Topology</div>
+      <div style={{flex:1 , borderBottomStyle:'groove', borderWidth: '1px' , color:'#0071c5' , fontSize:'22px'}}><img src={logo} alt="Logo" style={{width:'65px',top:'0px'}} />     Benchmark Topology</div>
       <div style={{ display: "flex", textAlign: "center",flex:3 , backgroundColor:'#E7E7E7'}}>
         <div style={{ display: "flex", flexDirection: "column", flex: 2 }}>
           <div style={{ flex: 2 }}></div>
