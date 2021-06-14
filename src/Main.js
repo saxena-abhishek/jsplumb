@@ -75,7 +75,7 @@ class Main extends Component {
           let control=document.getElementById(cloneEl.id);
           //icon2.classList.add("cross-button")
           control.append(icon2);
-          document.getElementById(icon2.id).setAttribute("style", "top:-14px;right:-30px;position:absolute");
+          document.getElementById(icon2.id).setAttribute("style", "top:-8px;right:-8px;position:absolute");
           
 
           jsPlumb.jsPlumb.draggable(cloneEl.id, { containment: true });
