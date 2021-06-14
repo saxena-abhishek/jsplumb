@@ -72,15 +72,14 @@ class Main extends Component {
           cloneEl.id=draggableElement.id+(++this.nodenames[item].vc);
           icon2.id=draggableElement.id+"_cross_"+this.nodenames[item].vc;
           dropzone.appendChild(cloneEl);
-          let control=document.getElementById(cloneEl.id);
-          //icon2.classList.add("cross-button")
+          let control=document.getElementById(cloneEl.id);icon2.addEventListener("click",e=>this.removeNode(e,control.id),false);
           control.append(icon2);
           document.getElementById(icon2.id).setAttribute("style", "top:-8px;right:-8px;position:absolute");
           
 
           jsPlumb.jsPlumb.draggable(cloneEl.id, { containment: true });
           
-          icon2.addEventListener("click",this.removeNode(control.id),false);
+          
          // jsPlumb.jsPlumb.addEndpoint(cloneEl.id,this.connectorProperties)
           jsPlumb.jsPlumb.addEndpoint(cloneEl.id, {
             endpoint: "Dot",
@@ -126,7 +125,6 @@ class Main extends Component {
               else{
               control.append(img1)
               }
-              // control.append(button1)
               var text = document.createElement("span");
               text.innerHTML = this.nodenames[i].name;
               control.append("  ");
@@ -139,16 +137,14 @@ class Main extends Component {
           }
         }
 
-        removeNode(e){
-          console.log("remove node clicked"+e);
-         // jsPlumb.jsPlumb.removeAllEndpoints(e);
-          //jsPlumb.jsPlumb.detachAllConnections(e);//document.getElementById(e));
-         // jsPlumb.jsPlumb.remove(e);
+        removeNode(e,id){
+          let el=document.getElementById(id);
+          jsPlumb.jsPlumb.removeAllEndpoints(el);
+          jsPlumb.jsPlumb.remove(el);
         }
       
         componentDidMount() {
           this.initialShow();
-         // let that=this;
           let canvas=document.getElementById("diagram");
           jsPlumb.jsPlumb.ready(function() {
             jsPlumb.jsPlumb.setContainer(canvas);
@@ -182,60 +178,7 @@ class Main extends Component {
                 jsPlumb.jsPlumb.deleteConnection(conn[0]);
               }
               }
-           })
-    //  that.instance=j;
-   //   jsPlumb.jsPlumb.deleteConnectionsForElement()
-      // jsPlumb.jsPlumb.registerConnectionTypes({
-      //   "red-connection": {
-      //       paintStyle: { stroke: "red", strokeWidth: 4 },
-      //       hoverPaintStyle: { stroke: "red", strokeWidth: 8 },
-      //       connector: "Flowchart"
-      //   }
-      // });
-      /*var body = document.getElementsByTagName("body")[0];
-      that.instance.bind("contextmenu", function (component, event) {
-        if (component.hasClass("jtk-connector")) {
-            event.preventDefault();
-            window.selectedConnection = component;
-            var dEl = document.createElement("div");
-            dEl.classList.add("custom-menu");
-            var bEl = document.createElement("button");
-            bEl.classList.add("delete-connection");
-            var t = document.createTextNode("Delete connection"); 
-            dEl.style.top=event.pageY + "px";
-            dEl.style.left=event.pageX + "px";
-            bEl.appendChild(t);
-            dEl.append(bEl);
-            dEl.append("body");
-               top: -14px;
-    right: -30px;
-            //document.getElementById(id).setAttribute("style", "top:-14px;right:-30px");
- 
-        }
-      });//var j=this.instance;
-      that.instance.on(body, "click", ".delete-connection", function(event) {
-      //$("body").on("click", ".delete-connection", function (event) {
-        j.deleteConnection(window.selectedConnection);
-      });
-      
-      
-      that.instance.on(document, "click", "div.custom-menu", function() {
-             // var g = this.parentNode.getAttribute("group");
-             j.remove(this);
-              //j.removeGroup(g, this.getAttribute("delete-all") != null);
-            });
-      that.instance.on(body, "click", ".delete-control", function(event) {
-      //$("body").on("click", ".delete-control", function (event) {
-        that.instance.remove(window.selectedControl);
-      });
-      
-            j.bind("connection", function(p) {
-              p.connection.bind("click", function() {
-                j.detach(this);
-              });
-            });*/
-      //      jsPlumb.jsPlumb.fire("jsPlumbDemoLoaded", j);
-      
+           })  
           });
         }
       
