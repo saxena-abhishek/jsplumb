@@ -66,20 +66,16 @@ class Main extends Component {
           cloneEl.setAttribute("style","top:" + positionY + "px; left:" + positionX + "px;");
           var icon2 = document.createElement("i");
           icon2.type="button";
-          let icon2class="fa-times";
-          icon2.classList.add("fa",icon2class);
+          icon2.classList.add("fa","fa-times");
 
           var item = this.nodenames.findIndex(item => item.id === draggableElement.id);
           cloneEl.id=draggableElement.id+(++this.nodenames[item].vc);
           icon2.id=draggableElement.id+"_cross_"+this.nodenames[item].vc;
           dropzone.appendChild(cloneEl);
           let control=document.getElementById(cloneEl.id);
-
-          
-
           //icon2.classList.add("cross-button")
           control.append(icon2);
-          document.getElementById(icon2.id).setAttribute("style", "top:-14px;right:-30px;position:'relative'");
+          document.getElementById(icon2.id).setAttribute("style", "top:-14px;right:-30px;position:absolute");
           
 
           jsPlumb.jsPlumb.draggable(cloneEl.id, { containment: true });
@@ -106,9 +102,7 @@ class Main extends Component {
         }event.dataTransfer.clearData();
       }
       
-        initialShow(){
-          //let index = 0;
-          
+        initialShow(){          
           const box = document.getElementById("toolbox");
           this.nodenames = [
               { id: 'nginx', name: 'Nginx', icon: 'fa-file',vc:0 ,stat:true},
@@ -124,22 +118,11 @@ class Main extends Component {
               var icon = document.createElement("i");
               let iconclass = this.nodenames[i].icon;
               icon.classList.add("fa", iconclass);
-              
-             
               var img1 = document.createElement("img");
               img1.src = "https://img.icons8.com/metro/20/0071c5/grasshopper.png";
-
-
-           /*   var icon2 = document.createElement("i");
-              icon2.type="button";
-              let icon2class=this.nodenames[i].icon2;
-              icon2.classList.add("fa",icon2class)
-              //icon2.classList.add("cross-button")
-              control.append(icon2)*/
               if(this.nodenames[i].stat){
               control.append(icon);
-              }
-          
+              }          
               else{
               control.append(img1)
               }
@@ -150,8 +133,7 @@ class Main extends Component {
               control.append(text);
               control.classList.add('control');                   
               control.id = this.nodenames[i].id; 
-              box.append(control);
-             
+              box.append(control);             
               control.addEventListener("dragstart",e=>this.onDragStart(e),false); 
                
           }
