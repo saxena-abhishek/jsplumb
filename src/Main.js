@@ -133,7 +133,7 @@ class Main extends Component {
       
         componentDidMount() {
           this.initialShow();
-          let that=this;
+         // let that=this;
           let canvas=document.getElementById("diagram");
           jsPlumb.jsPlumb.ready(function() {
             jsPlumb.jsPlumb.setContainer(canvas);
@@ -150,19 +150,41 @@ class Main extends Component {
         connector: "Flowchart",
         endpoint: ["Dot", { radius: 3 }],
       };*/
-      jsPlumb.jsPlumb.registerConnectionTypes({
-          "black-connection": {
-            paintStyle: { stroke: "#0071c5" },
-            hoverPaintStyle: { stroke: "red"  },
-            connector: ["StateMachine", {curviness:0.7}],
-            overlays:[ 
-              "Arrow", 
-                [ "Label", { location:0.25, id:"myLabel" ,color:'blue'} ]
-              ],
-            endpoint: ["Dot", { radius: 1 }],
-          }
-            })
-            
+        jsPlumb.jsPlumb.registerConnectionTypes({
+              "black-connection": {
+                paintStyle: { stroke: "#0071c5" },
+                hoverPaintStyle: { stroke: "red"  },
+                connector: ["StateMachine", {curviness:0.7}],
+                overlays:[ 
+                  "Arrow", 
+                    [ "Label", { location:0.25, id:"myLabel" ,color:'blue'} ]
+                  ],
+                endpoint: ["Dot", { radius: 1 }],
+              }
+                })
+
+            jsPlumb.jsPlumb.bind("connection",(info)=>{
+              console.log("connection h")//+info)
+              let el =info.connection.id;
+              console.log(el);
+           });
+           jsPlumb.jsPlumb.bind("contextmenu", (component, event) => {
+            if(component.hasClass("jtk-managed")){
+              event.preventDefault();
+              jsPlumb.jsPlumb.removeAllEndpoints(event);
+              jsPlumb.jsPlumb.remove(event);
+            }
+              if(component.hasClass("jtk-connector")){
+                event.preventDefault();
+                var conn = jsPlumb.jsPlumb.getConnections({
+                  source: component.sourceId,
+                  target: component.targetId
+                });
+              if (conn[0]) {
+                jsPlumb.jsPlumb.deleteConnection(conn[0]);
+              }
+              }
+           })
     //  that.instance=j;
    //   jsPlumb.jsPlumb.deleteConnectionsForElement()
       // jsPlumb.jsPlumb.registerConnectionTypes({
