@@ -74,7 +74,7 @@ class Main extends Component {
           dropzone.appendChild(cloneEl);
           let control=document.getElementById(cloneEl.id);icon2.addEventListener("click",e=>this.removeNode(e,control.id),false);
           control.append(icon2);
-          document.getElementById(icon2.id).setAttribute("style", "top:-8px;right:-8px;position:absolute");
+          document.getElementById(icon2.id).setAttribute("style", "top:-8px;right:-8px;position:absolute;cursor:pointer;color:red");
           
 
           jsPlumb.jsPlumb.draggable(cloneEl.id, { containment: true });
