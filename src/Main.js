@@ -64,11 +64,27 @@ class Main extends Component {
           positionY = event.pageY - position.y;
       
           cloneEl.setAttribute("style","top:" + positionY + "px; left:" + positionX + "px;");
+          var icon2 = document.createElement("i");
+          icon2.type="button";
+          let icon2class="fa-times";
+          icon2.classList.add("fa",icon2class);
 
           var item = this.nodenames.findIndex(item => item.id === draggableElement.id);
           cloneEl.id=draggableElement.id+(++this.nodenames[item].vc);
+          icon2.id=draggableElement.id+"_cross_"+this.nodenames[item].vc;
           dropzone.appendChild(cloneEl);
+          let control=document.getElementById(cloneEl.id);
+
+          
+
+          //icon2.classList.add("cross-button")
+          control.append(icon2);
+          document.getElementById(icon2.id).setAttribute("style", "top:-14px;right:-30px;position:'relative'");
+          
+
           jsPlumb.jsPlumb.draggable(cloneEl.id, { containment: true });
+          
+          icon2.addEventListener("click",this.removeNode(control.id),false);
          // jsPlumb.jsPlumb.addEndpoint(cloneEl.id,this.connectorProperties)
           jsPlumb.jsPlumb.addEndpoint(cloneEl.id, {
             endpoint: "Dot",
@@ -95,10 +111,10 @@ class Main extends Component {
           
           const box = document.getElementById("toolbox");
           this.nodenames = [
-              { id: 'nginx', name: 'Nginx', icon: 'fa-file',vc:0 ,stat:true },
+              { id: 'nginx', name: 'Nginx', icon: 'fa-file',vc:0 ,stat:true},
               { id: 'wordpress', name: 'Wordpress', icon: 'fa-wordpress',vc:0 ,stat:true },
               { id: 'mysql', name: 'MySQL', icon: 'fa-database',vc:0 ,stat:true },
-              { id: 'locust', name: 'Locust', icon: 'fa',vc:0 ,stat:false ,}
+              { id: 'locust', name: 'Locust', icon: 'fa',vc:0 ,stat:false}
           ]
       
           for (let i = 0; i < this.nodenames.length; i++) {
@@ -108,10 +124,18 @@ class Main extends Component {
               var icon = document.createElement("i");
               let iconclass = this.nodenames[i].icon;
               icon.classList.add("fa", iconclass);
-
+              
+             
               var img1 = document.createElement("img");
               img1.src = "https://img.icons8.com/metro/20/0071c5/grasshopper.png";
-             
+
+
+           /*   var icon2 = document.createElement("i");
+              icon2.type="button";
+              let icon2class=this.nodenames[i].icon2;
+              icon2.classList.add("fa",icon2class)
+              //icon2.classList.add("cross-button")
+              control.append(icon2)*/
               if(this.nodenames[i].stat){
               control.append(icon);
               }
@@ -119,6 +143,7 @@ class Main extends Component {
               else{
               control.append(img1)
               }
+              // control.append(button1)
               var text = document.createElement("span");
               text.innerHTML = this.nodenames[i].name;
               control.append("  ");
@@ -126,9 +151,17 @@ class Main extends Component {
               control.classList.add('control');                   
               control.id = this.nodenames[i].id; 
               box.append(control);
+             
               control.addEventListener("dragstart",e=>this.onDragStart(e),false); 
                
           }
+        }
+
+        removeNode(e){
+          console.log("remove node clicked"+e);
+         // jsPlumb.jsPlumb.removeAllEndpoints(e);
+          //jsPlumb.jsPlumb.detachAllConnections(e);//document.getElementById(e));
+         // jsPlumb.jsPlumb.remove(e);
         }
       
         componentDidMount() {
@@ -137,24 +170,12 @@ class Main extends Component {
           let canvas=document.getElementById("diagram");
           jsPlumb.jsPlumb.ready(function() {
             jsPlumb.jsPlumb.setContainer(canvas);
-            // var j = (window.j = jsPlumb.jsPlumb.getInstance({
-            //   container: canvas,
-            //   connector: "StateMachine",
-            //   endpoint: ["Dot", { radius: 3 }],
-            //   anchor: "Center"
-            // }));
-      //saloni
-     /* that.connectorProperties = {
-        paintStyle: { stroke: "red", strokeWidth: 4 },
-        hoverPaintStyle: { stroke: "red", strokeWidth: 8 },
-        connector: "Flowchart",
-        endpoint: ["Dot", { radius: 3 }],
-      };*/
-        jsPlumb.jsPlumb.registerConnectionTypes({
+
+            jsPlumb.jsPlumb.registerConnectionTypes({
               "black-connection": {
                 paintStyle: { stroke: "#0071c5" },
                 hoverPaintStyle: { stroke: "red"  },
-                connector: ["StateMachine", {curviness:0.7}],
+               // connector: ["StateMachine", {curviness:0.7}],
                 overlays:[ 
                   "Arrow", 
                     [ "Label", { location:0.25, id:"myLabel" ,color:'blue'} ]
@@ -169,11 +190,6 @@ class Main extends Component {
               console.log(el);
            });
            jsPlumb.jsPlumb.bind("contextmenu", (component, event) => {
-            if(component.hasClass("jtk-managed")){
-              event.preventDefault();
-              jsPlumb.jsPlumb.removeAllEndpoints(event);
-              jsPlumb.jsPlumb.remove(event);
-            }
               if(component.hasClass("jtk-connector")){
                 event.preventDefault();
                 var conn = jsPlumb.jsPlumb.getConnections({
@@ -209,8 +225,9 @@ class Main extends Component {
             bEl.appendChild(t);
             dEl.append(bEl);
             dEl.append("body");
-           
-            //document.getElementById(id).setAttribute("style", "border:2px solid red; background-color: rgb(255, 125, 115);");
+               top: -14px;
+    right: -30px;
+            //document.getElementById(id).setAttribute("style", "top:-14px;right:-30px");
  
         }
       });//var j=this.instance;
