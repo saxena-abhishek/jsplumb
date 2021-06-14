@@ -95,10 +95,10 @@ class Main extends Component {
           
           const box = document.getElementById("toolbox");
           this.nodenames = [
-              { id: 'nginx', name: 'Nginx', icon: 'fa-file',vc:0 ,stat:true,icon2:'fa-times' },
-              { id: 'wordpress', name: 'Wordpress', icon: 'fa-wordpress',vc:0 ,stat:true,icon2:'fa-times' },
-              { id: 'mysql', name: 'MySQL', icon: 'fa-database',vc:0 ,stat:true ,icon2:'fa-times'},
-              { id: 'locust', name: 'Locust', icon: 'fa',vc:0 ,stat:false ,icon2:'fa-times'}
+              { id: 'nginx', name: 'Nginx', icon: 'fa-file',vc:0 ,stat:true },
+              { id: 'wordpress', name: 'Wordpress', icon: 'fa-wordpress',vc:0 ,stat:true },
+              { id: 'mysql', name: 'MySQL', icon: 'fa-database',vc:0 ,stat:true },
+              { id: 'locust', name: 'Locust', icon: 'fa',vc:0 ,stat:false ,}
           ]
       
           for (let i = 0; i < this.nodenames.length; i++) {
@@ -108,18 +108,10 @@ class Main extends Component {
               var icon = document.createElement("i");
               let iconclass = this.nodenames[i].icon;
               icon.classList.add("fa", iconclass);
-              
-             
+
               var img1 = document.createElement("img");
               img1.src = "https://img.icons8.com/metro/20/0071c5/grasshopper.png";
-
-
-              var icon2 = document.createElement("i");
-              icon2.type="button";
-              let icon2class=this.nodenames[i].icon2;
-              icon2.classList.add("fa",icon2class)
-              icon2.classList.add("cross-button")
-              control.append(icon2)
+             
               if(this.nodenames[i].stat){
               control.append(icon);
               }
@@ -127,7 +119,6 @@ class Main extends Component {
               else{
               control.append(img1)
               }
-              // control.append(button1)
               var text = document.createElement("span");
               text.innerHTML = this.nodenames[i].name;
               control.append("  ");
@@ -142,7 +133,7 @@ class Main extends Component {
       
         componentDidMount() {
           this.initialShow();
-          let that=this;
+         // let that=this;
           let canvas=document.getElementById("diagram");
           jsPlumb.jsPlumb.ready(function() {
             jsPlumb.jsPlumb.setContainer(canvas);
@@ -159,19 +150,41 @@ class Main extends Component {
         connector: "Flowchart",
         endpoint: ["Dot", { radius: 3 }],
       };*/
-      jsPlumb.jsPlumb.registerConnectionTypes({
-          "black-connection": {
-            paintStyle: { stroke: "#0071c5" },
-            hoverPaintStyle: { stroke: "red"  },
-            
-            overlays:[ 
-              "Arrow", 
-                [ "Label", { location:0.25, id:"myLabel" ,color:'blue'} ]
-              ],
-            endpoint: ["Dot", { radius: 1 }],
-          }
-            })
-            
+        jsPlumb.jsPlumb.registerConnectionTypes({
+              "black-connection": {
+                paintStyle: { stroke: "#0071c5" },
+                hoverPaintStyle: { stroke: "red"  },
+                connector: ["StateMachine", {curviness:0.7}],
+                overlays:[ 
+                  "Arrow", 
+                    [ "Label", { location:0.25, id:"myLabel" ,color:'blue'} ]
+                  ],
+                endpoint: ["Dot", { radius: 1 }],
+              }
+                })
+
+            jsPlumb.jsPlumb.bind("connection",(info)=>{
+              console.log("connection h")//+info)
+              let el =info.connection.id;
+              console.log(el);
+           });
+           jsPlumb.jsPlumb.bind("contextmenu", (component, event) => {
+            if(component.hasClass("jtk-managed")){
+              event.preventDefault();
+              jsPlumb.jsPlumb.removeAllEndpoints(event);
+              jsPlumb.jsPlumb.remove(event);
+            }
+              if(component.hasClass("jtk-connector")){
+                event.preventDefault();
+                var conn = jsPlumb.jsPlumb.getConnections({
+                  source: component.sourceId,
+                  target: component.targetId
+                });
+              if (conn[0]) {
+                jsPlumb.jsPlumb.deleteConnection(conn[0]);
+              }
+              }
+           })
     //  that.instance=j;
    //   jsPlumb.jsPlumb.deleteConnectionsForElement()
       // jsPlumb.jsPlumb.registerConnectionTypes({
