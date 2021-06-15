@@ -6,6 +6,7 @@ import { findPosition } from './utils/domUtils';
 class Main extends Component {
     constructor(props){
         super(props);
+
        this.initialShow = this.initialShow.bind(this);
        this.onDragStart = this.onDragStart.bind(this);
        this.saveNodeJson = this.saveNodeJson.bind(this);
@@ -31,8 +32,8 @@ class Main extends Component {
         });      
         var connections = jsPlumb.jsPlumb.getAllConnections();
         var tryht = [];
-        console.log(connections);
         connections.forEach(function (connection, id ) {
+          
           tryht.push({
                 SourceId: connection.sourceId,
                 TargetId: connection.targetId
@@ -43,8 +44,7 @@ class Main extends Component {
         }
       onDragStart(event) {
         event.dataTransfer.setData('text/plain', event.target.id);
-      
-       // console.log(event.currentTarget.id);
+
       }
       onDragOver(event) {
         event.preventDefault();
@@ -60,7 +60,6 @@ class Main extends Component {
         if(draggableElement.classList.contains('cln')){
           let cloneEl = draggableElement.cloneNode(true);
           const dropzone = event.target;
-
           let positionX;
           let positionY;
           const position= findPosition(dropzone);
@@ -76,15 +75,13 @@ class Main extends Component {
           cloneEl.id=draggableElement.id+(++this.nodenames[item].vc);
           icon2.id=draggableElement.id+"_cross_"+this.nodenames[item].vc;
           dropzone.appendChild(cloneEl);
-          let control=document.getElementById(cloneEl.id);icon2.addEventListener("click",e=>this.removeNode(e,control.id),false);
+          let control=document.getElementById(cloneEl.id);
+          icon2.addEventListener("click",e=>this.removeNode(e,control.id),false);
           control.append(icon2);
           document.getElementById(icon2.id).setAttribute("style", "top:-8px;right:-8px;position:absolute;cursor:pointer;color:red");
           
-
           jsPlumb.jsPlumb.draggable(cloneEl.id, { containment: true });
-          
-          
-         // jsPlumb.jsPlumb.addEndpoint(cloneEl.id,this.connectorProperties)
+
           jsPlumb.jsPlumb.addEndpoint(cloneEl.id, {
             endpoint: "Dot",
             paintStyle:{ fill:"#0071c5", outlineStroke:"white", outlineWidth:1 },
@@ -101,7 +98,7 @@ class Main extends Component {
             isTarget: true,
             connectionType: "black-connection",
             maxConnections: -1,
-          });//*/
+          });
         }event.dataTransfer.clearData();
        
        
@@ -153,8 +150,6 @@ class Main extends Component {
         componentDidMount() {
           this.initialShow();
           let canvas=document.getElementById("diagram");
-      
-
           jsPlumb.jsPlumb.ready(function() {
             jsPlumb.jsPlumb.setContainer(canvas);
            
@@ -163,20 +158,15 @@ class Main extends Component {
               "black-connection": {
                 paintStyle: { stroke: "#0071c5" },
                 hoverPaintStyle: { stroke: "red"  },
-               // connector: ["StateMachine", {curviness:0.7}],
-               
-                overlays:[ 
-                 
+               // connector: ["StateMachine", {curviness:0.7}],               
+                overlays:[                  
                   "Arrow", 
-                    [ "Label", { label:'', location:0.25, id:"myLabel" ,color:'blue',cursor:'pointer',cssClass:'fa fa-times red-color',cssClassColor:'red'} ]
+                    [ "Label", { label:"", location:0.25, id:"myLabel" ,color:'blue',cursor:'pointer',cssClass:'fa fa-times red-color',cssClassColor:'red'} ]
                     
-                  ],
-                
-                
-
+                  ],                                
               }
                 })
-
+               
             jsPlumb.jsPlumb.bind("connection",(info)=>{
               console.log("connection h")//+info)
               let el =info.connection.id;
@@ -198,6 +188,7 @@ class Main extends Component {
         }
       
         render() {
+          jsPlumb.jsPlumb.select().setLabel(this.props.rps); 
           return (
         <div className="container-fluid" >
             <div style={{display:'flex'}}>

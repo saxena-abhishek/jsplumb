@@ -6,13 +6,10 @@ class Header extends Component {
   constructor(props) {
     super(props);
     this.state = { rps: 0 };
-    this.slidechanger = this.slidechanger.bind(this);
   }
   slidechanger(e) {
-    var ref = e.target.value;
-    this.setState({ rps: ref });
-    
-    this.props.rpsconnection(ref);
+    this.setState({ rps: e });  
+    this.props.slidechanger(e);
   }
 
 
@@ -26,7 +23,7 @@ class Header extends Component {
           <div style={{ flex: 1 ,color:'#0071c5', fontSize:'17px'}}>Load Condition(RPS):{this.state.rps}</div>
           <div id="sliderbox" >
           <input
-            onChange={this.slidechanger}
+            onChange={(e)=>this.slidechanger(e.target.value)}
             id="my"
             className="slider"
             value={this.state.rps}
