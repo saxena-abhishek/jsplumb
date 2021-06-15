@@ -11,7 +11,11 @@ class Header extends Component {
   slidechanger(e) {
     var ref = e.target.value;
     this.setState({ rps: ref });
+    
+    this.props.rpsconnection(ref);
   }
+
+
   render() {
     return (
       <div style={{display:'flex' , flexDirection:'column'}}>

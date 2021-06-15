@@ -60,9 +60,6 @@ class Main extends Component {
         if(draggableElement.classList.contains('cln')){
           let cloneEl = draggableElement.cloneNode(true);
           const dropzone = event.target;
-        
-          var dbl =document.createElement("div");
-          dbl.addEventListener("click",this.doubleClick(),false);
 
           let positionX;
           let positionY;
