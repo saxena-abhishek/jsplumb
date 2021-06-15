@@ -239,3 +239,8 @@ i.cross-button {
   cursor: pointer;
   
   }
+
+  .red-color{
+    color:red;
+    cursor:pointer;
+  }

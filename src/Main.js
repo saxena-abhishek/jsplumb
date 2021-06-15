@@ -146,19 +146,27 @@ class Main extends Component {
         componentDidMount() {
           this.initialShow();
           let canvas=document.getElementById("diagram");
+      
+
           jsPlumb.jsPlumb.ready(function() {
             jsPlumb.jsPlumb.setContainer(canvas);
+           
 
             jsPlumb.jsPlumb.registerConnectionTypes({
               "black-connection": {
                 paintStyle: { stroke: "#0071c5" },
                 hoverPaintStyle: { stroke: "red"  },
                // connector: ["StateMachine", {curviness:0.7}],
+               
                 overlays:[ 
+                 
                   "Arrow", 
-                    [ "Label", { location:0.25, id:"myLabel" ,color:'blue'} ]
+                    [ "Label", {  location:0.25, id:"myLabel" ,color:'blue',cursor:'pointer',cssClass:'fa fa-times red-color',cssClassColor:'red'} ]
+                    
                   ],
-                endpoint: ["Dot", { radius: 1 }],
+                
+                
+
               }
                 })
 
