@@ -9,6 +9,7 @@ class Main extends Component {
        this.initialShow = this.initialShow.bind(this);
        this.onDragStart = this.onDragStart.bind(this);
        this.saveNodeJson = this.saveNodeJson.bind(this);
+       this.doubleClick=this.doubleClick.bind(this);
        this.nodenames = [];
        this.instance ='';
        this.connectorProperties={};
@@ -48,15 +49,21 @@ class Main extends Component {
       onDragOver(event) {
         event.preventDefault();
       }
+    
       onDrop(event) {
         const id = event
           .dataTransfer
           .getData('text'); 
+         
       
         const draggableElement = document.getElementById(id);
         if(draggableElement.classList.contains('cln')){
           let cloneEl = draggableElement.cloneNode(true);
           const dropzone = event.target;
+        
+          var dbl =document.createElement("div");
+          dbl.addEventListener("click",this.doubleClick(),false);
+
           let positionX;
           let positionY;
           const position= findPosition(dropzone);
@@ -99,6 +106,9 @@ class Main extends Component {
             maxConnections: -1,
           });//*/
         }event.dataTransfer.clearData();
+       
+       
+        
       }
       
         initialShow(){          
