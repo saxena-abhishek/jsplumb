@@ -168,7 +168,7 @@ class Main extends Component {
                 overlays:[ 
                  
                   "Arrow", 
-                    [ "Label", {  location:0.25, id:"myLabel" ,color:'blue',cursor:'pointer',cssClass:'fa fa-times red-color',cssClassColor:'red'} ]
+                    [ "Label", { label:'', location:0.25, id:"myLabel" ,color:'blue',cursor:'pointer',cssClass:'fa fa-times red-color',cssClassColor:'red'} ]
                     
                   ],
                 
