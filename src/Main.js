@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import jsPlumb from "jsplumb/dist/js/jsplumb.min";
 import "./jsplumbdemo.css";
 import { findPosition } from './utils/domUtils';
+import ConfigDiv from './ConfigDiv';
 
 class Main extends Component {
     constructor(props){
@@ -11,8 +12,9 @@ class Main extends Component {
        this.onDragStart = this.onDragStart.bind(this);
        this.saveNodeJson = this.saveNodeJson.bind(this);
        this.doubleClick=this.doubleClick.bind(this);
+       this.closeDiv=this.closeDiv.bind(this);
        this.nodenames = [];
-       this.state = {nodeList:[],nodeConnections:[]};
+       this.state = {nodeList:[],nodeConnections:[],showDiv:false,id:''};
       }
       doubleClick(){
         console.log("clicked");
@@ -68,6 +70,9 @@ class Main extends Component {
           var icon2 = document.createElement("i");
           icon2.type="button";
           icon2.classList.add("fa","fa-times","fa-lg");
+          var icon3 = document.createElement("i");
+          icon3.type="button";
+          icon3.classList.add("fa","fa-pencil");
           
 
           var item = this.nodenames.findIndex(item => item.id === draggableElement.id);
@@ -77,8 +82,12 @@ class Main extends Component {
           let control=document.getElementById(cloneEl.id);
           icon2.addEventListener("click",e=>this.removeNode(e,control.id),false);
           control.append(icon2);
+          icon3.addEventListener("click",e=>this.setState({showDiv:true,id:cloneEl.id}),false);
+          control.append(icon3);
+          //icon3.onclick= (e)=><ConfigDiv id={cloneEl.id}/>
           document.getElementById(icon2.id).setAttribute("style", "top:-12px;right:-8px;position:absolute;cursor:pointer;color:red; ");
-          
+          // jsPlumb.jsPlumb.bind("contextmenu",control=>{
+          //   console.log("hie")})
           jsPlumb.jsPlumb.draggable(cloneEl.id, { containment: true });
 
           jsPlumb.jsPlumb.addEndpoint(cloneEl.id, {
@@ -103,6 +112,10 @@ class Main extends Component {
         }event.dataTransfer.clearData();
              
       }
+
+        sayhello(e){
+          console.log("hiendsk kds")
+        }
         nodesListGenerate(){
           var testContainer = document.querySelector('#diagram');
           var controls = testContainer.querySelectorAll('.control');
@@ -117,11 +130,7 @@ class Main extends Component {
           }); 
           this.setState({nodeList:nodes});
         }
-        addHexColor(c1, c2) {
-          var hexStr = (parseInt(c1, 16) + parseInt(c2, 16)).toString(16);
-          while (hexStr.length < 6) { hexStr = '0' + hexStr; } // Zero pad.
-          return hexStr;
-        }
+    
         colorBalancer(){
 
         }
@@ -208,9 +217,14 @@ class Main extends Component {
            
           });
         }
+        closeDiv(showMe){
+          console.log("then:"+showMe+"now:"+!showMe)
+          this.setState({showDiv:!showMe})
+        }
       
         render() {
           jsPlumb.jsPlumb.select().setLabel(this.props.rps); 
+          let comp=this.state.showDiv?<ConfigDiv id={this.state.id} showDiv={this.state.showDiv} closeDiv={this.closeDiv}/>:"";
           return (
         <div className="container-fluid" >
             <div style={{display:'flex'}}>
@@ -219,10 +233,11 @@ class Main extends Component {
                 </div>
               </div>
               <div style={{flex:7}} >
-                <div id="diagram" style={{height: "90vh", position: 'relative'}} onDragOver={(e)=>this.onDragOver(e)}
-                onDrop={(event)=>this.onDrop(event)}  >
-                  <button className="btn" onClick={this.saveNodeJson}>Validate</button>
-                </div>
+              {comp}
+              <div id="diagram" style={{height: "90vh", position: 'relative'}} onDragOver={(e)=>this.onDragOver(e)}
+          onDrop={(event)=>this.onDrop(event)}  >
+            <button className="btn" onClick={this.saveNodeJson}>Validate</button>
+          </div>
               </div>
             </div>
             <div style={{padding:'20px 20px'}}></div>
