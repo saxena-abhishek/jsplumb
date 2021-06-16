@@ -3,10 +3,18 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import MyJsPlumb from './App';
 import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux';
+import { createStore } from "redux";
+import Reducer from './Reducer';
+
+
+const store = createStore(Reducer);
+
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <MyJsPlumb />
+   <MyJsPlumb  />
   </React.StrictMode>,
   document.getElementById('root')
 );

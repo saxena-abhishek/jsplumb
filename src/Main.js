@@ -3,6 +3,8 @@ import jsPlumb from "jsplumb/dist/js/jsplumb.min";
 import "./jsplumbdemo.css";
 import { findPosition } from './utils/domUtils';
 import ConfigDiv from './ConfigDiv';
+import { connect} from 'react-redux';
+
 
 class Main extends Component {
     constructor(props){
@@ -55,7 +57,7 @@ class Main extends Component {
           .dataTransfer
           .getData('text'); 
          
-      
+     
         const draggableElement = document.getElementById(id);
         if(draggableElement.classList.contains('cln')){
           let cloneEl = draggableElement.cloneNode(true);
@@ -75,9 +77,9 @@ class Main extends Component {
           icon3.classList.add("fa","fa-pencil");
           
 
-          var item = this.nodenames.findIndex(item => item.id === draggableElement.id);
-          cloneEl.id=draggableElement.id+(++this.nodenames[item].vc);
-          icon2.id=draggableElement.id+"_cross_"+this.nodenames[item].vc;
+          var item = this.props.nodeList.findIndex(item => item.id === draggableElement.id);
+          cloneEl.id=draggableElement.id+(++this.props.nodeList[item].vc);
+          icon2.id=draggableElement.id+"_cross_"+this.props.nodeList[item].vc;
           dropzone.appendChild(cloneEl);
           let control=document.getElementById(cloneEl.id);
           icon2.addEventListener("click",e=>this.removeNode(e,control.id),false);
@@ -144,27 +146,27 @@ class Main extends Component {
               { id: 'locust', name: 'Locust', icon: 'fa',vc:0 ,stat:false}
           ]
       
-          for (let i = 0; i < this.nodenames.length; i++) {
+          for (let i = 0; i < this.props.nodeList.length; i++) {
               var control = document.createElement("div");
               control.draggable=true;
               control.classList.add("cln");
-              var icon = document.createElement("i");
-              let iconclass = this.nodenames[i].icon;
-              icon.classList.add("fa", iconclass);
-              var img1 = document.createElement("img");
-              img1.src = "https://img.icons8.com/metro/20/0071c5/grasshopper.png";
-              if(this.nodenames[i].stat){
-              control.append(icon);
-              }          
-              else{
-              control.append(img1)
-              }
+              //var icon = document.createElement("i");
+              //let iconclass = this.nodenames[i].icon;
+              //icon.classList.add("fa", iconclass);
+              //var img1 = document.createElement("img");
+             // img1.src = "https://img.icons8.com/metro/20/0071c5/grasshopper.png";
+             // if(this.nodenames[i].stat){
+             // control.append(icon);
+              //}          
+              //else{
+             // control.append(img1)
+              //}
               var text = document.createElement("span");
-              text.innerHTML = this.nodenames[i].name;
-              control.append("  ");
+              text.innerHTML = this.props.nodeList[i].name;
+              //control.append("  ");
               control.append(text);
               control.classList.add('control');                   
-              control.id = this.nodenames[i].id; 
+              control.id = this.props.nodeList[i].id; 
               box.append(control);             
               control.addEventListener("dragstart",e=>this.onDragStart(e),false); 
                
@@ -223,6 +225,7 @@ class Main extends Component {
         }
       
         render() {
+          console.log(this.props)
           jsPlumb.jsPlumb.select().setLabel(this.props.rps); 
           let comp=this.state.showDiv?<ConfigDiv id={this.state.id} showDiv={this.state.showDiv} closeDiv={this.closeDiv}/>:"";
           return (
@@ -244,6 +247,20 @@ class Main extends Component {
           </div>
           );
         }
+        
+}
+const mapStateToProps = (state, ownProps) => ({
+  // todo: state.todos[ownProps.id],
+  nodeList:state.nodeList
+})
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    // dispatching plain actions
+    // increment: () => dispatch({ type: 'INCREMENT' }),
+    dispatch
+   
+  }
 }
  
-export default Main;
+export default connect(mapStateToProps,mapDispatchToProps)(Main);
