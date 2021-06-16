@@ -67,7 +67,8 @@ class Main extends Component {
           cloneEl.setAttribute("style","top:" + positionY + "px; left:" + positionX + "px;");
           var icon2 = document.createElement("i");
           icon2.type="button";
-          icon2.classList.add("fa","fa-times");
+          icon2.classList.add("fa","fa-times","fa-lg");
+          
 
           var item = this.nodenames.findIndex(item => item.id === draggableElement.id);
           cloneEl.id=draggableElement.id+(++this.nodenames[item].vc);
@@ -76,21 +77,22 @@ class Main extends Component {
           let control=document.getElementById(cloneEl.id);
           icon2.addEventListener("click",e=>this.removeNode(e,control.id),false);
           control.append(icon2);
-          document.getElementById(icon2.id).setAttribute("style", "top:-8px;right:-8px;position:absolute;cursor:pointer;color:red");
+          document.getElementById(icon2.id).setAttribute("style", "top:-12px;right:-8px;position:absolute;cursor:pointer;color:red; ");
           
           jsPlumb.jsPlumb.draggable(cloneEl.id, { containment: true });
 
           jsPlumb.jsPlumb.addEndpoint(cloneEl.id, {
-            endpoint: "Dot",
-            paintStyle:{ fill:"#0071c5", outlineStroke:"white", outlineWidth:1 },
+            jtk: "Dot",
+            paintStyle:{ fill:"#0071c5", outlineStroke:"white",backgroundColor:"white", outlineWidth:1 },
             anchor: ["RightMiddle"],
             isSource: true,
             connectionType: "black-connection",
             maxConnections: -1,
+            
           });
       
           jsPlumb.jsPlumb.addEndpoint(cloneEl.id, {
-            endpoint: "Dot",
+            jtk: "Dot",
             paintStyle:{ fill:"#0071c5", outlineStroke:"white", outlineWidth:1 },
             anchor: ["LeftMiddle"],
             isTarget: true,
@@ -203,6 +205,7 @@ class Main extends Component {
               }
               }
            })  
+           
           });
         }
       
