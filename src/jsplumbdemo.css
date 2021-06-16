@@ -213,8 +213,36 @@ img{
   color: #0071c5;
  
 }
+.slider {
+  display: inline;
+  -webkit-appearance: none;
+  height: 15px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+  width: 80%;
+  margin-left: 5%;
+}
 
+:root {
+  --red-color:0;
+ }
+ 
+ .slider {
+   -webkit-transition: .2s;
+   transition: opacity .2s;
 
+ }
+
+ .jtk-endpoint-anchor {
+  background-color: rgb(var(--red-color), 127, 127);
+}
+
+#slider {
+  background: linear-gradient(to right, rgb(0, 0, 0), rgb(255, 0, 0));
+}
 span{
   position: relative;
   top: 20px;

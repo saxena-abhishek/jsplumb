@@ -12,24 +12,11 @@ class Main extends Component {
        this.saveNodeJson = this.saveNodeJson.bind(this);
        this.doubleClick=this.doubleClick.bind(this);
        this.nodenames = [];
-       this.instance ='';
-       this.connectorProperties={};
       }
       doubleClick(){
         console.log("clicked");
       }
       saveNodeJson() {
-        var testContainer = document.querySelector('#diagram');
-        var controls = testContainer.querySelectorAll('.control');
-        console.log(controls);
-        if (window.NodeList && !NodeList.prototype.map) {
-            NodeList.prototype.map = Array.prototype.map;
-          }
-       var nodes = controls.map(item=> {
-            return {
-                id: item.id,
-            }
-        });      
         var connections = jsPlumb.jsPlumb.getAllConnections();
         var tryht = [];
         connections.forEach(function (connection, id ) {
@@ -39,6 +26,7 @@ class Main extends Component {
                 TargetId: connection.targetId
             });
         });
+        var nodes = this.state.nodeList;
         const json = JSON.stringify({ nodes, tryht });
         console.log(json);
         }
@@ -99,12 +87,28 @@ class Main extends Component {
             connectionType: "black-connection",
             maxConnections: -1,
           });
+          this.nodesListGenerate();
         }event.dataTransfer.clearData();
-       
-       
-        
+             
       }
-      
+        nodesListGenerate(){
+          var testContainer = document.querySelector('#diagram');
+          var controls = testContainer.querySelectorAll('.control');
+          //console.log(controls);
+          if (window.NodeList && !NodeList.prototype.map) {
+              NodeList.prototype.map = Array.prototype.map;
+            }
+         var nodes = controls.map(item=> {
+              return {
+                  id: item.id,
+              }
+          }); 
+          this.setState({nodeList:nodes});
+        }
+        colorBalancer(){
+        
+        }
+
         initialShow(){          
           const box = document.getElementById("toolbox");
           this.nodenames = [

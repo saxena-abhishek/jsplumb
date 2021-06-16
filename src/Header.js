@@ -10,8 +10,8 @@ class Header extends Component {
   slidechanger(e) {
     this.setState({ rps: e });  
     this.props.slidechanger(e);
+    document.documentElement.style.setProperty('--red-color', e);
   }
-
 
   render() {
     return (
@@ -24,12 +24,12 @@ class Header extends Component {
           <div id="sliderbox" >
           <input
             onChange={(e)=>this.slidechanger(e.target.value)}
-            id="my"
+            id="slider"
             className="slider"
             value={this.state.rps}
             type="range"
             min="0"
-            max="1000"
+            max="500"
           ></input>
           </div>
           <div style={{ flex: 1 }}></div>
