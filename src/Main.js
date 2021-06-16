@@ -12,11 +12,12 @@ class Main extends Component {
        this.saveNodeJson = this.saveNodeJson.bind(this);
        this.doubleClick=this.doubleClick.bind(this);
        this.nodenames = [];
+       this.state = {nodeList:[],nodeConnections:[]};
       }
       doubleClick(){
         console.log("clicked");
       }
-      saveNodeJson() {
+      traceConnections(){
         var connections = jsPlumb.jsPlumb.getAllConnections();
         var tryht = [];
         connections.forEach(function (connection, id ) {
@@ -26,10 +27,19 @@ class Main extends Component {
                 TargetId: connection.targetId
             });
         });
-        var nodes = this.state.nodeList;
-        const json = JSON.stringify({ nodes, tryht });
+        this.setState({nodeConnections:tryht});
+      }
+      saveNodeJson() {
+        this.traceConnections();
+        var components = this.state.nodeList;
+        var configurations = this.state.nodeConnections;
+        const json = JSON.stringify({ components, configurations });
+        let fob={"workspace":"Anirban","project":"HCL_BO"}
         console.log(json);
         }
+      validate(){
+        console.log("validated!");
+      }
       onDragStart(event) {
         event.dataTransfer.setData('text/plain', event.target.id);
 
@@ -94,7 +104,7 @@ class Main extends Component {
         nodesListGenerate(){
           var testContainer = document.querySelector('#diagram');
           var controls = testContainer.querySelectorAll('.control');
-          //console.log(controls);
+          
           if (window.NodeList && !NodeList.prototype.map) {
               NodeList.prototype.map = Array.prototype.map;
             }
@@ -105,8 +115,13 @@ class Main extends Component {
           }); 
           this.setState({nodeList:nodes});
         }
+        addHexColor(c1, c2) {
+          var hexStr = (parseInt(c1, 16) + parseInt(c2, 16)).toString(16);
+          while (hexStr.length < 6) { hexStr = '0' + hexStr; } // Zero pad.
+          return hexStr;
+        }
         colorBalancer(){
-        
+
         }
 
         initialShow(){          
@@ -203,7 +218,7 @@ class Main extends Component {
               <div style={{flex:7}} >
                 <div id="diagram" style={{height: "90vh", position: 'relative'}} onDragOver={(e)=>this.onDragOver(e)}
                 onDrop={(event)=>this.onDrop(event)}  >
-                  <button className="btn" onClick={this.saveNodeJson}>Save Connections</button>
+                  <button className="btn" onClick={this.saveNodeJson}>Validate</button>
                 </div>
               </div>
             </div>
