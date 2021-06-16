@@ -227,7 +227,7 @@ img{
 }
 
 :root {
-  --red-color:0;
+  color:grey;
  }
  
  .slider {
@@ -236,7 +236,7 @@ img{
 
  }
 
- .jtk-endpoint-anchor {
+ .jtk-endpoint-anchor.cln {
   background-color: rgb(var(--red-color), 127, 127);
 }
 
@@ -271,4 +271,7 @@ i.cross-button {
   .red-color{
     color:red;
     cursor:pointer;
+  }
+  i.icon2{
+    size:40px;
   }
