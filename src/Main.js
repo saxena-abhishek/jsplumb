@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import jsPlumb from "jsplumb/dist/js/jsplumb.min";
 import "./jsplumbdemo.css";
 import { findPosition } from './utils/domUtils';
+import { connect} from 'react-redux';
+
 
 class Main extends Component {
     constructor(props){
@@ -43,7 +45,7 @@ class Main extends Component {
           .dataTransfer
           .getData('text'); 
          
-      
+     
         const draggableElement = document.getElementById(id);
         if(draggableElement.classList.contains('cln')){
           let cloneEl = draggableElement.cloneNode(true);
@@ -195,6 +197,7 @@ class Main extends Component {
         }
       
         render() {
+          console.log(this.props)
           jsPlumb.jsPlumb.select().setLabel(this.props.rps); 
           return (
         <div className="container-fluid" >
@@ -214,6 +217,20 @@ class Main extends Component {
           </div>
           );
         }
+        
+}
+const mapStateToProps = (state, ownProps) => ({
+  // todo: state.todos[ownProps.id],
+  nodeList:state.nodeList
+})
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    // dispatching plain actions
+    // increment: () => dispatch({ type: 'INCREMENT' }),
+    dispatch
+   
+  }
 }
  
-export default Main;
+export default connect(mapStateToProps,mapDispatchToProps)(Main);

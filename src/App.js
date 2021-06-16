@@ -2,6 +2,15 @@ import Footer from './Footer';
 import Header from './Header';
 import Main from './Main';
 import React, { Component } from 'react';
+import { connect} from 'react-redux';
+import { Provider } from 'react-redux';
+import { createStore } from "redux";
+import Reducer from './Reducer';
+
+
+const store = createStore(Reducer);
+
+
 class MyJsPlumb extends Component {
   constructor(props) {
     super(props);
@@ -19,16 +28,19 @@ class MyJsPlumb extends Component {
 
 }*/
 
+
   render() { 
+   
     return (  <div>
       <Header slidechanger={this.slidechanger}/>
-      <Main rps={this.state.rps}/>
+    <Provider store={store}><Main rps={this.state.rps}/></Provider>
       <Footer/>
     </div>);
   }
 }
- 
-export default MyJsPlumb;
+
+
+export default (MyJsPlumb);
 
 
   
