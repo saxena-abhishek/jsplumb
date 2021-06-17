@@ -13,14 +13,10 @@ class Main extends Component {
        this.initialShow = this.initialShow.bind(this);
        this.onDragStart = this.onDragStart.bind(this);
        this.saveNodeJson = this.saveNodeJson.bind(this);
-       this.doubleClick=this.doubleClick.bind(this);
        this.closeDiv=this.closeDiv.bind(this);
        this.nodenames = [];
-       this.state = {nodeList:[],nodeConnections:[],showDiv:false,id:''};
-      }
-      doubleClick(){
-        console.log("clicked");
-      }
+       this.state = {nodeList:[],myvar:5,nodeConnections:[],showDiv:false,id:'', workspace:"Anirban" , project:"HCL_BO" ,components:[]}
+    }
       traceConnections(){
         var connections = jsPlumb.jsPlumb.getAllConnections();
         var tryht = [];
@@ -40,7 +36,7 @@ class Main extends Component {
         const json = JSON.stringify({ components, configurations });
         let fob={"workspace":"Anirban","project":"HCL_BO"}
         console.log(json);
-        }
+                }
       validate(){
         console.log("validated!");
       }
@@ -59,6 +55,7 @@ class Main extends Component {
          
      
         const draggableElement = document.getElementById(id);
+        console.log(id);
         if(draggableElement.classList.contains('cln')){
           let cloneEl = draggableElement.cloneNode(true);
           const dropzone = event.target;
@@ -86,8 +83,12 @@ class Main extends Component {
           control.append(icon2);
           icon3.addEventListener("click",e=>this.setState({showDiv:true,id:cloneEl.id}),false);
           control.append(icon3);
+          console.log(cloneEl.id)
 
-            
+          this.setState({
+            components:[...this.state.components,{ uniqueId:cloneEl.id ,componentId:id, configuration:[],connectedTo:[],connectedFrom:[]}]
+
+          })
 
 
 
@@ -207,7 +208,7 @@ class Main extends Component {
                
             jsPlumb.jsPlumb.bind("connection",(info)=>{
               console.log("connection h")//+info)
-              let el =info.connection.id;
+              let el =info.connection.targetId;          
               console.log(el);
            });
            jsPlumb.jsPlumb.bind("contextmenu", (component, event) => {
@@ -232,8 +233,9 @@ class Main extends Component {
       
         render() {
           console.log(this.props)
+          console.log(this.state)
           jsPlumb.jsPlumb.select().setLabel(this.props.rps); 
-          let comp=this.state.showDiv?<ConfigDiv  id={this.state.id} showDiv={this.state.showDiv} closeDiv={this.closeDiv}/>:"";
+          let comp=this.state.showDiv?<ConfigDiv id={this.state.id} showDiv={this.state.showDiv} closeDiv={this.closeDiv}/>:"";
           return (
         <div className="container-fluid" >
             <div style={{display:'flex'}}>
@@ -242,10 +244,9 @@ class Main extends Component {
                 </div>
               </div>
               <div style={{flex:7}} >
-              
+              {comp}
               <div id="diagram" style={{height: "90vh", position: 'relative'}} onDragOver={(e)=>this.onDragOver(e)}
           onDrop={(event)=>this.onDrop(event)}  >
-           <div id="pop"> {comp}</div>
             <button className="btn" onClick={this.saveNodeJson}>Validate</button>
           </div>
               </div>

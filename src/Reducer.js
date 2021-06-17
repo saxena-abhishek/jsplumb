@@ -2,10 +2,10 @@
 
 
 const initialState = {
-    nodeList:[{ id: 'locust 0', name: 'Locust', configuration: {instanceType: ['t2-micro', 't2-large']} ,vc:0},
-    { id: 'nginx 0', name: 'nginx', configuration: {instanceType: ['t2-micro', 't2-large']} ,vc:0},
-    { id: 'wordpress 0', name: 'wordpress', configuration: {instanceType: ['t2-micro', 't2-large']},vc:0},
-    { id: 'mysql 0', name: 'mysql' , configuration: {instanceType: ['t2-micro', 't2-large']},vc:0} ]
+    nodeList:[{ id: 'locust ', name: 'Locust', configuration: {instanceType: ['t2-micro', 't2-large']} ,vc:0},
+    { id: 'nginx ', name: 'nginx', configuration: {instanceType: ['t2-micro', 't2-large']} ,vc:0},
+    { id: 'wordpress ', name: 'wordpress', configuration: {instanceType: ['t2-micro', 't2-large']},vc:0},
+    { id: 'mysql ', name: 'mysql' , configuration: {instanceType: ['t2-micro', 't2-large']},vc:0} ]
     
 }
  
