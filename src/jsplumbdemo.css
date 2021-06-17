@@ -180,3 +180,14 @@ i.cross-button {
   left: 50%;
   margin-left: -80px;
 }
+
+#pop{
+  
+ 
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+}

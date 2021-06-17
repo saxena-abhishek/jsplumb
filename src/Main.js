@@ -245,7 +245,7 @@ class Main extends Component {
               
               <div id="diagram" style={{height: "90vh", position: 'relative'}} onDragOver={(e)=>this.onDragOver(e)}
           onDrop={(event)=>this.onDrop(event)}  >
-            {comp}
+           <div id="pop"> {comp}</div>
             <button className="btn" onClick={this.saveNodeJson}>Validate</button>
           </div>
               </div>
