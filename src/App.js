@@ -2,7 +2,6 @@ import Footer from './Footer';
 import Header from './Header';
 import Main from './Main';
 import React, { Component } from 'react';
-import { connect} from 'react-redux';
 import { Provider } from 'react-redux';
 import { createStore } from "redux";
 import Reducer from './Reducer';

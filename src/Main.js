@@ -29,7 +29,7 @@ class Main extends Component {
 
           for(let i=0;i<this.nList.length;i++){
              connections.forEach(function (connection, id ) {
-               if(connection.sourceId==that.nList[i].name){
+               if(connection.sourceId===that.nList[i].name){
                 targetIds.push(connection.targetId);
               }
             })
@@ -195,8 +195,8 @@ class Main extends Component {
                 })
                
             jsPlumb.jsPlumb.bind("connection",(info)=>{
-              let i=that.nList.findIndex(item=>item.name==info.targetId);
-              let li=that.nList.findIndex(item=>item.name==info.sourceId);
+              let i=that.nList.findIndex(item=>item.name===info.targetId);
+              let li=that.nList.findIndex(item=>item.name===info.sourceId);
               
               that.nList[i].depth.push(info.sourceId);
               console.log(that.nList[i].depth);
@@ -235,9 +235,9 @@ class Main extends Component {
                 </div>
               </div>
               <div style={{flex:7}} >
-              {comp}
+              
               <div id="diagram" style={{height: "90vh", position: 'relative'}} onDragOver={(e)=>this.onDragOver(e)}
-          onDrop={(event)=>this.onDrop(event)}  >
+          onDrop={(event)=>this.onDrop(event)}  ><div id="config-items" style={{position:'absolute',right:'200px',backgroundColor:'#e6e6e6'}}>{comp}</div>
             <button className="btn" onClick={this.traceConnections}>Validate</button>
           </div>
               </div>
