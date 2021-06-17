@@ -86,6 +86,12 @@ class Main extends Component {
           control.append(icon2);
           icon3.addEventListener("click",e=>this.setState({showDiv:true,id:cloneEl.id}),false);
           control.append(icon3);
+
+            
+
+
+
+
           //icon3.onclick= (e)=><ConfigDiv id={cloneEl.id}/>
           document.getElementById(icon2.id).setAttribute("style", "top:-12px;right:-8px;position:absolute;cursor:pointer;color:red; ");
           // jsPlumb.jsPlumb.bind("contextmenu",control=>{
@@ -227,7 +233,7 @@ class Main extends Component {
         render() {
           console.log(this.props)
           jsPlumb.jsPlumb.select().setLabel(this.props.rps); 
-          let comp=this.state.showDiv?<ConfigDiv id={this.state.id} showDiv={this.state.showDiv} closeDiv={this.closeDiv}/>:"";
+          let comp=this.state.showDiv?<ConfigDiv  id={this.state.id} showDiv={this.state.showDiv} closeDiv={this.closeDiv}/>:"";
           return (
         <div className="container-fluid" >
             <div style={{display:'flex'}}>
@@ -236,9 +242,10 @@ class Main extends Component {
                 </div>
               </div>
               <div style={{flex:7}} >
-              {comp}
+              
               <div id="diagram" style={{height: "90vh", position: 'relative'}} onDragOver={(e)=>this.onDragOver(e)}
           onDrop={(event)=>this.onDrop(event)}  >
+            {comp}
             <button className="btn" onClick={this.saveNodeJson}>Validate</button>
           </div>
               </div>
