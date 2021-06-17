@@ -12,7 +12,7 @@ class Main extends Component {
 
        this.initialShow = this.initialShow.bind(this);
        this.onDragStart = this.onDragStart.bind(this);
-       this.saveNodeJson = this.saveNodeJson.bind(this);
+      // this.saveNodeJson = this.saveNodeJson.bind(this);
        this.traceConnections = this.traceConnections.bind(this);
        this.closeDiv=this.closeDiv.bind(this);
        this.nodenames = [];
@@ -29,7 +29,7 @@ class Main extends Component {
 
           for(let i=0;i<this.nList.length;i++){
              connections.forEach(function (connection, id ) {
-               if(connection.sourceId==that.nList[i]){
+               if(connection.sourceId==that.nList[i].name){
                 targetIds.push(connection.targetId);
               }
             })
@@ -39,7 +39,7 @@ class Main extends Component {
         original.components=comp;
         }
 
-        console.log("format:"+original);
+        console.log("format:"+JSON.stringify(original));
        
       }
       
@@ -79,7 +79,6 @@ class Main extends Component {
           icon3.type="button";
           icon3.classList.add("fa","fa-pencil");
           
-
           var item = this.props.nodeList.findIndex(item => item.id === draggableElement.id);
           cloneEl.id=draggableElement.id+(++this.props.nodeList[item].vc);
           icon2.id=draggableElement.id+"_cross_"+this.props.nodeList[item].vc;
@@ -89,21 +88,10 @@ class Main extends Component {
           control.append(icon2);
           icon3.addEventListener("click",e=>this.setState({showDiv:true,id:cloneEl.id}),false);
           control.append(icon3);
-         // console.log(cloneEl.id);
+         
           this.nList.push({name:cloneEl.id,depth:[]});
-          console.log(this.nList);
-          // this.setState({
-          //   res.components:[...this.state.res.components,{ uniqueId:cloneEl.id ,componentId:id, configuration:[],connectedTo:[],connectedFrom:[]}]
 
-          // })
-
-
-
-
-          //icon3.onclick= (e)=><ConfigDiv id={cloneEl.id}/>
           document.getElementById(icon2.id).setAttribute("style", "top:-12px;right:-8px;position:absolute;cursor:pointer;color:red; ");
-          // jsPlumb.jsPlumb.bind("contextmenu",control=>{
-          //   console.log("hie")})
           jsPlumb.jsPlumb.draggable(cloneEl.id, { containment: true });
 
           jsPlumb.jsPlumb.addEndpoint(cloneEl.id, {
@@ -128,10 +116,6 @@ class Main extends Component {
         }event.dataTransfer.clearData();
              
       }
-
-        sayhello(e){
-          console.log("hiendsk kds")
-        }
         nodesListGenerate(){
           var testContainer = document.querySelector('#diagram');
           var controls = testContainer.querySelectorAll('.control');
@@ -211,11 +195,13 @@ class Main extends Component {
                 })
                
             jsPlumb.jsPlumb.bind("connection",(info)=>{
-              console.log("connection h")//+info)
               let i=that.nList.findIndex(item=>item.name==info.targetId);
+              let li=that.nList.findIndex(item=>item.name==info.sourceId);
+              
               that.nList[i].depth.push(info.sourceId);
-             // let el =info.connection.targetId;            
-              //console.log(el);
+              console.log(that.nList[i].depth);
+              that.nList[i].depth=(that.nList[i].depth).concat(that.nList[li].depth)
+
            });
            jsPlumb.jsPlumb.bind("contextmenu", (component, event) => {
               if(component.hasClass("jtk-connector")){
@@ -238,8 +224,7 @@ class Main extends Component {
         }
       
         render() {
-         // console.log(this.props)
-          //console.log(this.state)
+
           jsPlumb.jsPlumb.select().setLabel(this.props.rps); 
           let comp=this.state.showDiv?<ConfigDiv id={this.state.id} showDiv={this.state.showDiv} closeDiv={this.closeDiv}/>:"";
           return (
