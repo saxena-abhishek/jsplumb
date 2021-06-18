@@ -4,6 +4,7 @@ import "./jsplumbdemo.css";
 import { findPosition } from './utils/domUtils';
 import ConfigDiv from './ConfigDiv';
 import { connect } from 'react-redux';
+import SlidingPanel from 'react-sliding-side-panel';
 
 
 class Main extends Component {
@@ -17,7 +18,7 @@ class Main extends Component {
     this.closeDiv = this.closeDiv.bind(this);
     this.nodenames = [];
     this.nList = [];
-    this.state = { nodeList: [], nodeConnections: [], showDiv: false, id: '' };
+    this.state = { nodeList: [], nodeConnections: [], showDiv: false, id: '' ,showPanel:''};
   }
   traceConnections() {
     var connections = jsPlumb.jsPlumb.getAllConnections();
@@ -97,7 +98,7 @@ class Main extends Component {
       let control = document.getElementById(cloneEl.id);
       icon2.addEventListener("click", e => this.removeNode(e, control.id), false);
       control.append(icon2);
-      icon3.addEventListener("click", e => this.setState({ showDiv: true, id: cloneEl.id }), false);
+      icon3.addEventListener("click", e => this.setState({ showDiv: true, showPanel:true ,id: cloneEl.id }), false);
       control.append(icon3);
 
       this.nList.push({ name: cloneEl.id, componentId: item.componentId, depth: [] });
@@ -237,7 +238,34 @@ class Main extends Component {
   render() {
 
     jsPlumb.jsPlumb.select().setLabel(this.props.rps);
-    let comp = this.state.showDiv ? <ConfigDiv id={this.state.id} showDiv={this.state.showDiv} closeDiv={this.closeDiv} /> : "";
+    let comp = this.state.showDiv ?
+    
+    
+    <div  style={{width:'25%' ,position:'absolute' , right:'0px',backgroundColor:'#e6e6e6' ,height:'543px'}}> <div ><SlidingPanel
+    type={'right'}
+    isOpen={this.state.showPanel}
+    size={100}
+  className="panel-content"
+  >
+    <div>
+      <div>Instance Name:</div>
+      <input></input>
+      Instance Type: <form>
+        <select value="instanceType">
+          <option>t2-large</option>
+        <option>t2-micro</option>
+        </select>
+        
+      </form>
+      <button>Save</button>
+      <button onClick={() => this.setState({showPanel:false,showDiv:false})}>Close</button>
+    </div>
+  </SlidingPanel> </div> </div> : "";
+
+
+
+
+
     return (
       <div className="container-fluid" >
         <div style={{ display: 'flex' }}>
@@ -248,7 +276,7 @@ class Main extends Component {
           <div style={{ flex: 7 }} >
 
             <div id="diagram" style={{ height: "90vh", position: 'relative' }} onDragOver={(e) => this.onDragOver(e)}
-              onDrop={(event) => this.onDrop(event)}  ><div id="config-items" style={{ position: 'absolute', right: '200px', backgroundColor: '#e6e6e6' }}>{comp}</div>
+              onDrop={(event) => this.onDrop(event)}  ><div id="config-items">{comp}</div>
               <button className="btn" onClick={this.traceConnections}>Validate</button>
             </div>
           </div>

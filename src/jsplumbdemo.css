@@ -149,3 +149,16 @@ i.cross-button {
   user-select: none;
 
 }
+.panel-content{
+  position: absolute;
+  left: 0;
+  font-weight: 500;
+}
+
+select{
+  
+  align-content: center;
+  width:80%;
+  background-color: #e7e7e7;
+  height: 0.8cm;
+}
