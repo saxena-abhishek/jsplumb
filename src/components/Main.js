@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import jsPlumb from "jsplumb/dist/js/jsplumb.min";
-import "./jsplumbdemo.css";
-import { findPosition } from './utils/domUtils';
+import "../styles/jsplumbdemo.css";
+import { findPosition } from '../utils/domUtils';
 import { connect } from 'react-redux';
 import SlidingPanel from 'react-sliding-side-panel';
 
