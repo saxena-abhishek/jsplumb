@@ -162,3 +162,14 @@ select{
   background-color: #e7e7e7;
   height: 0.8cm;
 }
+
+.panel-container{
+  width: 25%;
+  position: absolute;
+  right: 0px;
+  background-color: #e6e6e6;
+  height: 543px;
+  border-style: groove;
+  border-color: gainsboro;
+
+}

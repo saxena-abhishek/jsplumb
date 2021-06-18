@@ -241,13 +241,14 @@ class Main extends Component {
     let comp = this.state.showDiv ?
     
     
-    <div  style={{width:'25%' ,position:'absolute' , right:'0px',backgroundColor:'#e6e6e6' ,height:'543px'}}> <div ><SlidingPanel
+    <div className="panel-container" > <div ><SlidingPanel
     type={'right'}
     isOpen={this.state.showPanel}
     size={100}
   className="panel-content"
   >
     <div>
+      ID : {this.state.id}
       <div>Instance Name:</div>
       <input></input>
       Instance Type: <form>
