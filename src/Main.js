@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import jsPlumb from "jsplumb/dist/js/jsplumb.min";
 import "./jsplumbdemo.css";
 import { findPosition } from './utils/domUtils';
-import ConfigDiv from './ConfigDiv';
 import { connect } from 'react-redux';
 import SlidingPanel from 'react-sliding-side-panel';
 
@@ -103,7 +102,7 @@ class Main extends Component {
 
       this.nList.push({ name: cloneEl.id, componentId: item.componentId, depth: [] });
 
-      document.getElementById(icon2.id).setAttribute("style", "top:-12px;right:-8px;position:absolute;cursor:pointer;color:red; ");
+      document.getElementById(icon2.id).setAttribute("style", "top:-10px;right:-8px;position:absolute;cursor:pointer;color:red; ");
       jsPlumb.jsPlumb.draggable(cloneEl.id, { containment: true });
 
       jsPlumb.jsPlumb.addEndpoint(cloneEl.id, {
@@ -145,28 +144,44 @@ class Main extends Component {
 
   initialShow() {
     const box = document.getElementById("toolbox");
-    this.nodenames = [
-      { id: 'nginx', name: 'Nginx', icon: 'fa-file', vc: 0, stat: true },
-      { id: 'wordpress', name: 'Wordpress', icon: 'fa-wordpress', vc: 0, stat: true },
-      { id: 'mysql', name: 'MySQL', icon: 'fa-database', vc: 0, stat: true },
-      { id: 'locust', name: 'Locust', icon: 'fa', vc: 0, stat: false }
-    ]
+    // this.nodenames = [
+    //   { id: 'nginx', name: 'Nginx', icon: 'fa-file', vc: 0, stat: true },
+    //   { id: 'wordpress', name: 'Wordpress', icon: 'fa-wordpress', vc: 0, stat: true },
+    //   { id: 'mysql', name: 'MySQL', icon: 'fa-database', vc: 0, stat: true },
+    //   { id: 'locust', name: 'Locust', icon: 'fa', vc: 0, stat: false }
+    // ]
 
     for (let i = 0; i < this.props.nodeList.length; i++) {
       var control = document.createElement("div");
       control.draggable = true;
       control.classList.add("cln");
-      //var icon = document.createElement("i");
-      //let iconclass = this.nodenames[i].icon;
-      //icon.classList.add("fa", iconclass);
-      //var img1 = document.createElement("img");
-      // img1.src = "https://img.icons8.com/metro/20/0071c5/grasshopper.png";
-      // if(this.nodenames[i].stat){
-      // control.append(icon);
-      //}          
-      //else{
-      // control.append(img1)
-      //}
+      let icon = document.createElement("i");
+      
+     
+
+
+       switch (this.props.nodeList[i].componentId){
+      case 1:
+        icon.classList.add("fa","fa-times");
+        var img1 = document.createElement("img");
+        img1.src = "https://img.icons8.com/metro/20/0071c5/grasshopper.png";
+        control.append(img1)
+        break;
+      case 2:
+          icon.classList.add("fa","fa-file");
+          control.append(icon)
+          break;
+      case 3:
+            icon.classList.add("fa","fa-wordpress");
+            control.append(icon)
+            break;
+
+      case 4:
+            icon.classList.add("fa","fa-database");
+            control.append(icon)
+            break;
+       }
+     
       var text = document.createElement("span");
       text.innerHTML = this.props.nodeList[i].name;
       //control.append("  ");
