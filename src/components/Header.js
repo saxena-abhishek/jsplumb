@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "../styles/jsplumbdemo.css";
 import "../styles/header.css";
-//import logo from '../../public/intellogoo.png';    <img src={process.env.PUBLIC_URL + '/intellogoo.png'} /> 
+import logo from '../intellogoo.png';   // <img src={process.env.PUBLIC_URL + '/intellogoo.png'} /> 
 
 class Header extends Component {
   constructor(props) {
@@ -17,7 +17,7 @@ class Header extends Component {
   render() {
     return (
       <div style={{display:'flex' , flexDirection:'column'}}>
-      <div style={{flex:1 , borderBottomStyle:'groove', borderWidth: '1px' , color:'#0071c5' , fontSize:'22px'}}><img src={process.env.PUBLIC_URL + '/intellogoo.png'} alt="Logo" style={{width:'65px',top:'0px'}} />     Benchmark Topology</div>
+      <div style={{flex:1 , borderBottomStyle:'groove', borderWidth: '1px' , color:'#0071c5' , fontSize:'22px'}}><img src={logo} alt="Logo" style={{width:'65px',top:'0px'}} />     Benchmark Topology</div>
       <div style={{ display: "flex", textAlign: "center",flex:3 , backgroundColor:'#E7E7E7'}}>
         <div style={{ display: "flex", flexDirection: "column", flex: 2 }}>
           <div style={{ flex: 2 }}></div>

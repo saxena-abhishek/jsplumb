@@ -12,19 +12,54 @@ class Main extends Component {
 
     this.initialShow = this.initialShow.bind(this);
     this.onDragStart = this.onDragStart.bind(this);
+    this.handleChangeName = this.handleChangeName.bind(this);
+    this.handleChangeType = this.handleChangeType.bind(this);
+   this.handleSubmit = this.handleSubmit.bind(this);
     // this.saveNodeJson = this.saveNodeJson.bind(this);
     this.traceConnections = this.traceConnections.bind(this);
     this.closeDiv = this.closeDiv.bind(this);
     this.nodenames = [];
     this.nList = [];
-    this.state = { nodeList: [], nodeConnections: [], showDiv: false, id: '' ,showPanel:''};
+    this.iType=[];
+    this.iName=[];
+    
+ 
+    this.state = { nodeList: [], nodeConnections: [], showDiv: false, id: '' ,showPanel:'',instanceType:'',instanceName:'' };
   }
+
+
+
+  handleChangeType(event) {
+    this.setState({instanceType: event.target.value});
+  }
+  handleChangeName(event) {
+    this.setState({instanceName: event.target.value});
+  }
+
+  handleSubmit(event) {
+    //alert('A name was submitted: ' + this.state.instanceName);
+    event.preventDefault();
+
+    this.traceConnections()
+
+  }
+
+
+
+
+
+
+
   traceConnections() {
+    
     var connections = jsPlumb.jsPlumb.getAllConnections();
     let that = this;
     let original = { workspace: "Anirban", project: "HCL_BO" };
     let targetIds = [];
     let comp = [];
+
+    let addConfiguration=[];
+    let confi;
     if (this.nList) {
 
       for (let i = 0; i < this.nList.length; i++) {
@@ -32,14 +67,25 @@ class Main extends Component {
           if (connection.sourceId === that.nList[i].name) {
             targetIds.push(connection.targetId);
           }
+          
         })
-        comp.push({ uniqueId: that.nList[i].name, componentId: that.nList[i].componentId, configuration: [], connectedTo: targetIds, connectedFrom: that.nList[i].depth })
+        if (this.nList[i].name === this.state.id) {
+          this.iName[i]=this.state.instanceName;
+           this.iType[i]=this.state.instanceType;
+
+         
+        }else{
+        
+        }
+       
+        comp.push({ uniqueId: that.nList[i].name, componentId: that.nList[i].componentId,  configuration:{ instanceName:this.iName[i], instanceType:this.iType[i]}, connectedTo: targetIds, connectedFrom: that.nList[i].depth })
         targetIds = [];
       }
       original.components = comp;
     }
 
     console.log("format:" + JSON.stringify(original));
+    this.setState({instanceName:'',instanceType:''})
     this.callApi(original);
   }
 
@@ -97,7 +143,7 @@ class Main extends Component {
       let control = document.getElementById(cloneEl.id);
       icon2.addEventListener("click", e => this.removeNode(e, control.id), false);
       control.append(icon2);
-      icon3.addEventListener("click", e => this.setState({ showDiv: true, showPanel:true ,id: cloneEl.id }), false);
+      icon3.addEventListener("click", () => this.setState({ showDiv: true, showPanel:true ,id: cloneEl.id }), false);
       control.append(icon3);
 
       this.nList.push({ name: cloneEl.id, componentId: item.componentId, depth: [] });
@@ -198,6 +244,8 @@ class Main extends Component {
     let el = document.getElementById(id);
     jsPlumb.jsPlumb.removeAllEndpoints(el);
     jsPlumb.jsPlumb.remove(el);
+    
+
   }
 
   componentDidMount() {
@@ -265,16 +313,17 @@ class Main extends Component {
     <div>
       ID : {this.state.id}
       <div>Instance Name:</div>
-      <input></input>
-      Instance Type: <form>
-        <select value="instanceType">
+      <input value={this.state.instanceName}   onChange={this.handleChangeName}></input>
+      Instance Type: < form onSubmit={this.handleSubmit}>
+        <select value={this.state.instanceType} onChange={this.handleChangeType}>
+          <option>Select Instance Type</option>
           <option>t2-large</option>
         <option>t2-micro</option>
         </select>
-        
+        <button type="submit">Save</button>
       </form>
-      <button>Save</button>
-      <button onClick={() => this.setState({showPanel:false,showDiv:false})}>Close</button>
+     
+      <button onClick={() => this.setState({showPanel:false,showDiv:false ,instanceName:'',instanceName:''})}>Close</button>
     </div>
   </SlidingPanel> </div> </div> : "";
 
