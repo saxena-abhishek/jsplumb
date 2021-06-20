@@ -244,9 +244,19 @@ class Main extends Component {
     let el = document.getElementById(id);
     jsPlumb.jsPlumb.removeAllEndpoints(el);
     jsPlumb.jsPlumb.remove(el);
-    
+    let i;
+    console.log(this.nList,"ids")
+   
+    for(i=0;i<this.nList.length;i++)
+    {
 
-  }
+      if(id===this.nList[i].name)
+      {
+        this.nList.splice(i,1);
+      }
+      
+    }
+      }
 
   componentDidMount() {
     this.initialShow();

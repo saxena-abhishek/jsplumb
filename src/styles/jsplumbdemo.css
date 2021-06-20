@@ -98,7 +98,9 @@ img{
  }
 
  .jtk-endpoint-anchor.cln {
-  background-color: rgb(var(--red-color), 127, 127);
+  background-color: rgb(var(--white-color), 127, 127);
+  
+  
 }
 
 #slider {

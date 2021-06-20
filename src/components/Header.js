@@ -11,7 +11,10 @@ class Header extends Component {
   slidechanger(e) {
     this.setState({ rps: e });  
     this.props.slidechanger(e);
-    document.documentElement.style.setProperty('--red-color', e);
+    if(e===0){
+      document.documentElement.style.setProperty('background-color', "white");
+    }
+    document.documentElement.style.setProperty('--white-color', e);
   }
 
   render() {

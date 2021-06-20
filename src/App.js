@@ -14,7 +14,7 @@ class MyJsPlumb extends Component {
     this.slidechanger=this.slidechanger.bind(this);
   }
   slidechanger(e) {
-    console.log("event value"+e);
+    //console.log("event value"+e);
     //var ref = e.target.value;
     this.setState({ rps: e });
   }
