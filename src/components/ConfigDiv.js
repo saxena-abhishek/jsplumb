@@ -11,10 +11,51 @@
 //     )
 // }
 
-// import React, { useState } from 'react';
-// import SlidingPanel from 'react-sliding-side-panel';
+ import React, {Component} from 'react';
+ import SlidingPanel from 'react-sliding-side-panel';
  
-// const App = () => {
+ class ConfigDiv extends Component {
+      constructor(props) {
+          super(props);
+          this.state ={showPanel:props.showDiv,instanceName:"Enter",instanceVal:""};
+          this.handleChange=this.handleChange.bind(this);
+          //this.state = { showP:this.props.showPanel ,showD:this.props.showD }
+      }
+      handleChange(e){
+        this.setState({[e.target.name]:e.target.value});
+      }
+  
+      render() { 
+        return(
+
+          <div className="panel-container" > <div ><SlidingPanel
+              type={'right'}
+              isOpen={this.state.showPanel}
+              size={100}
+            className="panel-content"
+            >
+              <div>
+                ID : {this.props.id}
+                <div>Instance Name:</div>
+                <input value={this.state.instanceName} name={this.state.instanceName}  onChange={(e)=>this.handleChange(e)}></input>
+                <input type="text" value={this.state.instanceVal} name={this.state.instanceVal} onChange={(e)=>this.handleChange(e)}></input>
+                {/* Instance Type: < form onSubmit={this.handleSubmit}>
+                  <select value={this.state.instanceType} onChange={this.handleChangeType}>
+                    <option>Select Instance Type</option>
+                    <option>t2-large</option>
+                    <option>t2-micro</option>
+                  </select>
+                  <button type="submit">Save</button>
+                </form> */}
+              
+                <button onClick={() => this.setState({showPanel:false,showDiv:false ,instanceName:'',instanceVal:''})}>Close</button>
+              </div>
+            </SlidingPanel> </div> </div>
+        )
+      }
+    }
+    export default ConfigDiv;
+// const ConfigDiv = () => {
 //   const [openPanel, setOpenPanel] = useState(false);
 //   return (
 //     <div>
@@ -35,7 +76,7 @@
 //   );
 // };
  
-// export default App;
+// export default ConfigDiv;
 
 
 // import React, { Component } from 'react';

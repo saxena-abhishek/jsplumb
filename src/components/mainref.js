@@ -3,7 +3,7 @@ import jsPlumb from "jsplumb/dist/js/jsplumb.min";
 import "../styles/jsplumbdemo.css";
 import { findPosition } from '../utils/domUtils';
 import { connect } from 'react-redux';
-import SlidingPanel from 'react-sliding-side-panel';
+import ConfigDiv from './ConfigDiv';
 
 
 class Main extends Component {
@@ -14,14 +14,16 @@ class Main extends Component {
     this.onDragStart = this.onDragStart.bind(this);
     this.handleChangeName = this.handleChangeName.bind(this);
     this.handleChangeType = this.handleChangeType.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+   this.handleSubmit = this.handleSubmit.bind(this);
     // this.saveNodeJson = this.saveNodeJson.bind(this);
-    this.traceConnections = this.traceConnections.bind(this);
+    this.oldtraceConnections = this.oldtraceConnections.bind(this);
     this.closeDiv = this.closeDiv.bind(this);
     this.nodenames = [];
     this.nList = [];
     this.iType=[];
-    this.iName=[]; 
+    this.iName=[];
+    
+ 
     this.state = { nodeList: [], nodeConnections: [], showDiv: false, id: '' ,showPanel:'',instanceType:'',instanceName:'' };
   }
 
@@ -35,37 +37,78 @@ class Main extends Component {
   }
 
   handleSubmit(event) {
+    //alert('A name was submitted: ' + this.state.instanceName);
     event.preventDefault();
-    this.saveConfig();
-  }
 
+    this.saveConfig();
+
+  }
   saveConfig(){
     let indx= this.nList.findIndex(node=> node.name==this.state.id);
     this.nList[indx].configuration = {[this.state.instanceName]:this.state.instanceType};
   }
 
-  traceConnections() {    
+oldtraceConnections(){
+  var connections = jsPlumb.jsPlumb.getAllConnections();
+  let that = this;
+  let original = { workspace: "Anirban", project: "HCL_BO" };
+  let targetIds = [];
+  let comp = [];
+  if (this.nList) {
+    for (let i = 0; i < this.nList.length; i++) {
+      connections.forEach(function (connection, id) {
+        if (connection.sourceId === that.nList[i].name) {
+          targetIds.push(connection.targetId);
+        }
+      })
+      comp.push({ uniqueId: that.nList[i].name, componentId: that.nList[i].componentId, configuration: [], connectedTo: targetIds, connectedFrom: that.nList[i].depth })
+      targetIds = [];
+    }
+    original.components = comp;
+  }
+  console.log("format:" + JSON.stringify(original));
+  this.callApi(original);
+}
+
+
+
+ /* traceConnections() {   
     var connections = jsPlumb.jsPlumb.getAllConnections();
     let that = this;
     let original = { workspace: "Anirban", project: "HCL_BO" };
     let targetIds = [];
     let comp = [];
+
+    let addConfiguration=[];
+    let confi;
     if (this.nList) {
 
       for (let i = 0; i < this.nList.length; i++) {
         connections.forEach(function (connection, id) {
           if (connection.sourceId === that.nList[i].name) {
             targetIds.push(connection.targetId);
-          } 
-        })  
-        comp.push({ uniqueId: that.nList[i].name, componentId: that.nList[i].componentId,  configuration:this.nList[i].configuration, connectedTo: targetIds, connectedFrom: that.nList[i].depth })
+          }
+          
+        })
+        if (this.nList[i].name === this.state.id) {
+          this.iName[i]=this.state.instanceName;
+           this.iType[i]=this.state.instanceType;
+
+         
+        }else{
+        
+        }
+       
+        comp.push({ uniqueId: that.nList[i].name, componentId: that.nList[i].componentId,  configuration:{ instanceName:this.iName[i], instanceType:this.iType[i]}, connectedTo: targetIds, connectedFrom: that.nList[i].depth })
         targetIds = [];
       }
       original.components = comp;
     }
+
     console.log("format:" + JSON.stringify(original));
+    this.setState({instanceName:'',instanceType:''})
     this.callApi(original);
-  }
+  }*/
 
   callApi(data) {
     fetch("http://65.1.81.30:5000/ec2/deploy", {
@@ -124,7 +167,7 @@ class Main extends Component {
       icon3.addEventListener("click", () => this.setState({ showDiv: true, showPanel:true ,id: cloneEl.id }), false);
       control.append(icon3);
 
-      this.nList.push({ name: cloneEl.id, componentId: item.componentId, depth: [],configuration:{} });
+      this.nList.push({ name: cloneEl.id, componentId: item.componentId, depth: [] ,configuration:{}});
 
       document.getElementById(icon2.id).setAttribute("style", "top:-10px;right:-8px;position:absolute;cursor:pointer;color:red; ");
       jsPlumb.jsPlumb.draggable(cloneEl.id, { containment: true });
@@ -289,36 +332,7 @@ class Main extends Component {
   render() {
 
     jsPlumb.jsPlumb.select().setLabel(this.props.rps);
-    let comp = this.state.showDiv ?
-    
-    
-    <div className="panel-container" > <div ><SlidingPanel
-    type={'right'}
-    isOpen={this.state.showPanel}
-    size={100}
-  className="panel-content"
-  >
-    <div>
-      ID : {this.state.id}
-      <div>Instance Name:</div>
-      <input value={this.state.instanceName}   onChange={this.handleChangeName}></input>
-      Instance Type: < form onSubmit={this.handleSubmit}>
-        <select value={this.state.instanceType} onChange={this.handleChangeType}>
-          <option>Select Instance Type</option>
-          <option>t2-large</option>
-        <option>t2-micro</option>
-        </select>
-        <button type="submit">Save</button>
-      </form>
-     
-      <button onClick={() => this.setState({showPanel:false,showDiv:false ,instanceName:'',instanceName:''})}>Close</button>
-    </div>
-  </SlidingPanel> </div> </div> : "";
-
-
-
-
-
+    let comp = this.state.showDiv ?<ConfigDiv/> : "";
     return (
       <div className="container-fluid" >
         <div style={{ display: 'flex' }}>
@@ -330,7 +344,7 @@ class Main extends Component {
 
             <div id="diagram" style={{ height: "90vh", position: 'relative' }} onDragOver={(e) => this.onDragOver(e)}
               onDrop={(event) => this.onDrop(event)}  ><div id="config-items">{comp}</div>
-              <button className="btn" onClick={this.traceConnections}>Validate</button>
+              <button className="btn" onClick={this.oldtraceConnections}>Validate</button>
             </div>
           </div>
         </div>
