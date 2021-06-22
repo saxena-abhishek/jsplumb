@@ -37,11 +37,8 @@ class Main extends Component {
   }
 
   handleSubmit(event) {
-    //alert('A name was submitted: ' + this.state.instanceName);
-    event.preventDefault();
-
+        event.preventDefault();
     this.saveConfig();
-
   }
   saveConfig(){
     let indx= this.nList.findIndex(node=> node.name==this.state.id);
@@ -164,7 +161,7 @@ oldtraceConnections(){
       let control = document.getElementById(cloneEl.id);
       icon2.addEventListener("click", e => this.removeNode(e, control.id), false);
       control.append(icon2);
-      icon3.addEventListener("click", () => this.setState({ showDiv: true, showPanel:true ,id: cloneEl.id }), false);
+      icon3.addEventListener("click", () => this.setState({ showDiv: true, showPanel:true ,id: cloneEl.id , instanceName:'',instanceType:'' }), false);
       control.append(icon3);
 
       this.nList.push({ name: cloneEl.id, componentId: item.componentId, depth: [] ,configuration:{}});
@@ -251,7 +248,7 @@ oldtraceConnections(){
      
       var text = document.createElement("span");
       text.innerHTML = this.props.nodeList[i].name;
-      //control.append("  ");
+      control.append(" ");
       control.append(text);
       control.classList.add('control');
       control.id = this.props.nodeList[i].id;

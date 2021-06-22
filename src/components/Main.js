@@ -37,11 +37,13 @@ class Main extends Component {
   handleSubmit(event) {
     event.preventDefault();
     this.saveConfig();
+    this.setState({showPanel:false,showDiv:false ,instanceName:'',instanceName:''})
   }
 
   saveConfig(){
     let indx= this.nList.findIndex(node=> node.name==this.state.id);
-    this.nList[indx].configuration = {[this.state.instanceName]:this.state.instanceType};
+    this.nList[indx].configuration.InstName = [this.state.instanceName];
+    this.nList[indx].configuration.InstType= this.state.instanceType;
   }
 
   traceConnections() {    
@@ -58,7 +60,7 @@ class Main extends Component {
             targetIds.push(connection.targetId);
           } 
         })  
-        comp.push({ uniqueId: that.nList[i].name, componentId: that.nList[i].componentId,  configuration:this.nList[i].configuration, connectedTo: targetIds, connectedFrom: that.nList[i].depth })
+        comp.push({ uniqueId: that.nList[i].name, componentId: that.nList[i].componentId,  configuration:[this.nList[i].configuration.InstName ,this.nList[i].configuration.InstType], connectedTo: targetIds, connectedFrom: that.nList[i].depth })
         targetIds = [];
       }
       original.components = comp;
@@ -88,7 +90,20 @@ class Main extends Component {
   onDragOver(event) {
     event.preventDefault();
   }
-
+  onEdit(id){
+   
+    this.setState({ showDiv: true, showPanel:true ,id: id });
+    let i;
+    console.log(this.nList)
+     for(i=0;i<this.nList.length;i++)
+     {
+    if(this.nList[i].name===id){
+    this.setState({instanceName:this.nList[i].configuration.InstName ,instanceType:this.nList[i].configuration.InstType})
+    
+   }
+   
+    }
+  }
   onDrop(event) {
     const id = event
       .dataTransfer
@@ -121,7 +136,7 @@ class Main extends Component {
       let control = document.getElementById(cloneEl.id);
       icon2.addEventListener("click", e => this.removeNode(e, control.id), false);
       control.append(icon2);
-      icon3.addEventListener("click", () => this.setState({ showDiv: true, showPanel:true ,id: cloneEl.id }), false);
+      icon3.addEventListener("click", (e) => this.onEdit(cloneEl.id ), false);
       control.append(icon3);
 
       this.nList.push({ name: cloneEl.id, componentId: item.componentId, depth: [],configuration:{} });
@@ -208,7 +223,7 @@ class Main extends Component {
      
       var text = document.createElement("span");
       text.innerHTML = this.props.nodeList[i].name;
-      //control.append("  ");
+      control.append(" ");
       control.append(text);
       control.classList.add('control');
       control.id = this.props.nodeList[i].id;
@@ -309,9 +324,10 @@ class Main extends Component {
         <option>t2-micro</option>
         </select>
         <button type="submit">Save</button>
+        <button onClick={() => this.setState({showPanel:false,showDiv:false ,instanceName:'',instanceName:''})}>Close</button>
       </form>
      
-      <button onClick={() => this.setState({showPanel:false,showDiv:false ,instanceName:'',instanceName:''})}>Close</button>
+      
     </div>
   </SlidingPanel> </div> </div> : "";
 
