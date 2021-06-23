@@ -155,23 +155,61 @@ i.cross-button {
   position: absolute;
   left: 0;
   font-weight: 500;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
 }
 
 select{
   
   align-content: center;
   width:80%;
-  background-color: #e7e7e7;
+  background-color: white;
   height: 0.8cm;
+  
 }
 
 .panel-container{
   width: 25%;
   position: absolute;
   right: 0px;
-  background-color: #e6e6e6;
+  
   height: 543px;
   border-style: groove;
   border-color: gainsboro;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
 
+}
+option{
+  padding-bottom: 20px;
+}
+form {
+  padding-bottom: 20px;
+}
+button{
+  border-radius: 5px;
+}
+
+.rightPanelHeader{
+  color: #0071c5;
+  width: 100%;
+  border-style: groove;
+  text-align: center;
+  font-weight: bold; 
+  background-color: white;
+  font-size: 16px;
+  border-radius: 4px;
+  
+}
+input{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.node{
+  background-color: blue;
+  width: 100px;
+  height: 100px;
 }
