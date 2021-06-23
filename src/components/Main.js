@@ -41,7 +41,7 @@ class Main extends Component {
 
   saveConfig(){
     let indx= this.nList.findIndex(node=> node.name===this.state.id);
-    this.nList[indx].configuration.InstName = [this.state.instanceName];
+    this.nList[indx].configuration.InstName = this.state.instanceName;
     this.nList[indx].configuration.InstType= this.state.instanceType;
   }
 
@@ -59,7 +59,7 @@ class Main extends Component {
             targetIds.push(connection.targetId);
           } 
         })  
-        comp.push({ uniqueId: that.nList[i].name, componentId: that.nList[i].componentId,  configuration:[this.nList[i].configuration.InstName ,this.nList[i].configuration.InstType], connectedTo: targetIds, connectedFrom: that.nList[i].depth })
+        comp.push({ uniqueId: that.nList[i].name, componentId: that.nList[i].componentId,  configuration:{ variables: {instanceName : this.nList[i].configuration.InstName , instanceType: this.nList[i].configuration.InstType}}, connectedTo: targetIds, connectedFrom: that.nList[i].depth });
         targetIds = [];
       }
       original.components = comp;
