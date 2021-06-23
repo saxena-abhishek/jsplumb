@@ -99,7 +99,7 @@ class Main extends Component {
      {
     if(this.nList[i].name===id){
     this.setState({instanceName:this.nList[i].configuration.InstName ,instanceType:this.nList[i].configuration.InstType})
-    
+    console.log(this.nList[i].configuration.InstName,"getting conf")
    }
    
     }
@@ -316,10 +316,10 @@ class Main extends Component {
     <div>
       ID : {this.state.id}
       <div>Instance Name:</div>
-      <input value={this.state.instanceName}   onChange={this.handleChangeName}></input>
-      Instance Type: < form onSubmit={this.handleSubmit}>
+      <input style={{backgroundColor:'white'}}value={this.state.instanceName}   onChange={this.handleChangeName}></input>
+      Instance Type: < form  className="form-group" onSubmit={this.handleSubmit}>
         <select value={this.state.instanceType} onChange={this.handleChangeType}>
-          <option>Select Instance Type</option>
+          <option>Instance Type</option>
           <option>t2-large</option>
         <option>t2-micro</option>
         </select>
