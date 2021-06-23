@@ -124,8 +124,8 @@ class Main extends Component {
       icon2.type = "button";
       icon2.classList.add("fa", "fa-times", "fa-lg");
       var icon3 = document.createElement("span");
-      icon3.type = "button";
-      icon3.classList.add("fa", "fa-pencil");
+      //icon3.type = "button";
+      icon3.classList.add("node");
 
       var item = this.props.nodeList.find(item => item.id === draggableElement.id);
       cloneEl.id = draggableElement.id + (++item.vc);
@@ -134,7 +134,7 @@ class Main extends Component {
       let control = document.getElementById(cloneEl.id);
       icon2.addEventListener("click", e => this.removeNode(e, control.id), false);
       control.append(icon2);
-      icon3.addEventListener("click", (e) => this.onEdit(cloneEl.id ,item.componentId,id), false);
+      icon3.addEventListener("dblclick", (e) => this.onEdit(cloneEl.id ,item.componentId,id), false);
     
       control.append(icon3);
 

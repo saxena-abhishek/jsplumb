@@ -209,7 +209,8 @@ input{
   margin-right: auto;
 }
 .node{
-  background-color: blue;
-  width: 100px;
-  height: 100px;
+  height: 100%;
+  display: inline-block;
+  width: 100%;
+  top: -24px;
 }
