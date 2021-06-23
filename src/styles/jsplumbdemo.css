@@ -166,6 +166,7 @@ select{
   width:80%;
   background-color: white;
   height: 0.8cm;
+  
 }
 
 .panel-container{
@@ -181,6 +182,34 @@ select{
   padding: 20px;
 
 }
+option{
+  padding-bottom: 20px;
+}
+form {
+  padding-bottom: 20px;
+}
 button{
   border-radius: 5px;
+}
+
+.rightPanelHeader{
+  color: #0071c5;
+  width: 100%;
+  border-style: groove;
+  text-align: center;
+  font-weight: bold; 
+  background-color: white;
+  font-size: 16px;
+  border-radius: 4px;
+  
+}
+input{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.node{
+  background-color: blue;
+  width: 100px;
+  height: 100px;
 }

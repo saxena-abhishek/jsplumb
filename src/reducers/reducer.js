@@ -4,7 +4,7 @@
 const initialState = {
     nodeList:[{ componentId: 1, id: 'locust', name: 'Locust', configuration: {instanceType: ['t2-micro', 't2-large']} ,vc:0},
     { componentId: 2, id: 'nginx', name: 'nginx', configuration: {instanceType: ['t2-micro', 't2-large']} ,vc:0},
-    { componentId: 3, id: 'wordpress', name: 'wordpress', configuration: {instanceType: ['t2-micro', 't2-large',"example"]},vc:0},
+    { componentId: 3, id: 'wordpress', name: 'wordpress', configuration: {instanceType: ['t2-micro', 't2-large']},vc:0},
     { componentId: 4, id: 'mysql', name: 'mysql' , configuration: {instanceType: ['t2-micro', 't2-large']},vc:0} ]
     
 }

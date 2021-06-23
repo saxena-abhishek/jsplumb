@@ -4,8 +4,6 @@ import "../styles/jsplumbdemo.css";
 import { findPosition } from '../utils/domUtils';
 import { connect } from 'react-redux';
 import SlidingPanel from 'react-sliding-side-panel';
-
-
 class Main extends Component {
   constructor(props) {
     super(props);
@@ -21,8 +19,9 @@ class Main extends Component {
     this.nodenames = [];
     this.nList = [];
     this.iType=[];
+    this.numberrs=[1,2,3,4,5,6]
     this.iName=[]; 
-    this.state = { nodeList: [], nodeConnections: [], showDiv: false, id: '' ,showPanel:'',instanceType:'',instanceName:'' };
+    this.state = { nodeList: [], nodeConnections: [], showDiv: false, id: '' ,showPanel:'',instanceType:'',instanceName:'',activeComponentId:'', activeNodeName:''};
   }
 
 
@@ -37,11 +36,11 @@ class Main extends Component {
   handleSubmit(event) {
     event.preventDefault();
     this.saveConfig();
-    this.setState({showPanel:false,showDiv:false ,instanceName:'',instanceName:''})
+    this.setState({showPanel:false,showDiv:false ,instanceName:'',instanceType:''})
   }
 
   saveConfig(){
-    let indx= this.nList.findIndex(node=> node.name==this.state.id);
+    let indx= this.nList.findIndex(node=> node.name===this.state.id);
     this.nList[indx].configuration.InstName = [this.state.instanceName];
     this.nList[indx].configuration.InstType= this.state.instanceType;
   }
@@ -90,16 +89,15 @@ class Main extends Component {
   onDragOver(event) {
     event.preventDefault();
   }
-  onEdit(id){
-   
-    this.setState({ showDiv: true, showPanel:true ,id: id });
+  onEdit(id,activeComponentId ,activeNodeName){
+    
+    this.setState({ showDiv: true, showPanel:true ,id: id ,activeComponentId:activeComponentId ,activeNodeName:activeNodeName});
     let i;
-    console.log(this.nList)
      for(i=0;i<this.nList.length;i++)
      {
     if(this.nList[i].name===id){
     this.setState({instanceName:this.nList[i].configuration.InstName ,instanceType:this.nList[i].configuration.InstType})
-    console.log(this.nList[i].configuration.InstName,"getting conf")
+    
    }
    
     }
@@ -111,7 +109,7 @@ class Main extends Component {
 
 
     const draggableElement = document.getElementById(id);
-    console.log(id);
+    
     if (draggableElement.classList.contains('cln')) {
       let cloneEl = draggableElement.cloneNode(true);
       const dropzone = event.target;
@@ -125,7 +123,7 @@ class Main extends Component {
       var icon2 = document.createElement("i");
       icon2.type = "button";
       icon2.classList.add("fa", "fa-times", "fa-lg");
-      var icon3 = document.createElement("i");
+      var icon3 = document.createElement("span");
       icon3.type = "button";
       icon3.classList.add("fa", "fa-pencil");
 
@@ -136,7 +134,8 @@ class Main extends Component {
       let control = document.getElementById(cloneEl.id);
       icon2.addEventListener("click", e => this.removeNode(e, control.id), false);
       control.append(icon2);
-      icon3.addEventListener("click", (e) => this.onEdit(cloneEl.id ), false);
+      icon3.addEventListener("click", (e) => this.onEdit(cloneEl.id ,item.componentId,id), false);
+    
       control.append(icon3);
 
       this.nList.push({ name: cloneEl.id, componentId: item.componentId, depth: [],configuration:{} });
@@ -219,6 +218,7 @@ class Main extends Component {
             icon.classList.add("fa","fa-database");
             control.append(icon)
             break;
+      default:
        }
      
       var text = document.createElement("span");
@@ -301,6 +301,21 @@ class Main extends Component {
     this.setState({ showDiv: !showMe })
   }
 
+  fetchOption(){
+    
+let i=this.state.activeComponentId;
+    return( <>{this.props.nodeList[i-1].configuration.instanceType.map((number,i) =>
+    <option>{number}</option>
+               
+   )}
+   </>
+   )
+     }
+
+  
+    
+
+
   render() {
 
     jsPlumb.jsPlumb.select().setLabel(this.props.rps);
@@ -313,18 +328,23 @@ class Main extends Component {
     size={100}
   className="panel-content"
   >
-    <div>
-      ID : {this.state.id}
-      <div>Instance Name:</div>
-      <input style={{backgroundColor:'white'}}value={this.state.instanceName}   onChange={this.handleChangeName}></input>
-      Instance Type: < form  className="form-group" onSubmit={this.handleSubmit}>
+    <div style={{display:'flex',flexDirection:'column' ,textAlign:'center'}}>
+     <div className="rightPanelHeader"> {this.state.activeNodeName} Configuration</div>
+
+      {/* <div >ID : {this.state.id}</div> */}
+      <div style={{padding:'10px 10px '}}>
+      <div>Instance Name</div>
+      <input style={{backgroundColor:'white'}}value={this.state.instanceName} placeholder="Instance Name"  onChange={this.handleChangeName}></input>
+      </div>
+      Instance Type < form  className="form-group" onSubmit={this.handleSubmit}>
         <select value={this.state.instanceType} onChange={this.handleChangeType}>
           <option>Instance Type</option>
-          <option>t2-large</option>
-        <option>t2-micro</option>
+        {this.fetchOption()}
         </select>
+        <div style={{padding:'10px 10px '}}>
         <button type="submit">Save</button>
-        <button onClick={() => this.setState({showPanel:false,showDiv:false ,instanceName:'',instanceName:''})}>Close</button>
+        <button onClick={() => this.setState({showPanel:false,showDiv:false ,instanceName:'',instanceType:''})}>Close</button>
+        </div>
       </form>
      
       
