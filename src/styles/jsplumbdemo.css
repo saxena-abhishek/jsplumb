@@ -214,3 +214,15 @@ input{
   width: 100%;
   top: -24px;
 }
+
+.node1{
+  height: 100%;
+  display: inline-block;
+  width: 100%;
+  top: -24px;
+}
+
+.newclass{
+  color: #212529;
+  background-color: #212529;
+}

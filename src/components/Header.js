@@ -2,11 +2,15 @@ import React, { Component } from "react";
 import "../styles/jsplumbdemo.css";
 import "../styles/header.css";
 import logo from '../intellogoo.png';   // <img src={process.env.PUBLIC_URL + '/intellogoo.png'} /> 
+import { connect } from 'react-redux';
+import { callTraceFunction } from "../Action";
 
 class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { rps: 0 };
+    this.launchBenchmark=this.launchBenchmark.bind(this)
+    this.state = { rps: 0 , validate:false };
+   
   }
   slidechanger(e) {
     this.setState({ rps: e });  
@@ -16,6 +20,13 @@ class Header extends Component {
     }
     document.documentElement.style.setProperty('--white-color', e);
   }
+
+launchBenchmark(){
+  console.log(this.state.validate,"validate")
+  this.setState({validate:true})
+  console.log(this.state.validate,"validate")
+}
+
 
   render() {
     return (
@@ -85,7 +96,7 @@ class Header extends Component {
             <div style={{ display: "flex" }}>
               <div style={{ flex: 1 }}></div>
               <div style={{ flex: 2 }}>
-                <button>Launch Benchmark</button>
+                <button onClick={()=>this.props.callTracefunc({launchh:true})}>Launch Benchmark</button>
                 <button>Cancel</button>
               </div>
             </div>
@@ -97,4 +108,19 @@ class Header extends Component {
   }
 }
 
-export default Header;
+
+const mapStateToProps = (state, ownProps) => ({
+  // todo: state.todos[ownProps.id],
+  nodeList: state.nodeList
+})
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    // dispatching plain actions
+    // increment: () => dispatch({ type: 'INCREMENT' }),
+    callTracefunc:data=>dispatch(callTraceFunction(data))
+
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)( Header);

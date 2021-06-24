@@ -266,7 +266,7 @@ class Main extends Component {
           // connector: ["StateMachine", {curviness:0.7}],               
           overlays: [
             "Arrow",
-            ["Label", { label: "", location: 0.25, id: "myLabel", color: 'blue', cursor: 'pointer', cssClass: 'fa fa-times red-color', cssClassColor: 'red' }]
+            ["Label", { label: "", location: 0.25, id: "myLabel", color: 'blue', cursor: 'pointer', cssClassColor: 'red' }]
 
           ],
         }
@@ -281,7 +281,7 @@ class Main extends Component {
         that.nList[i].depth = (that.nList[i].depth).concat(that.nList[li].depth)
 
       });
-      jsPlumb.jsPlumb.bind("contextmenu", (component, event) => {
+      jsPlumb.jsPlumb.bind("click", (component, event) => {
         if (component.hasClass("jtk-connector")) {
           event.preventDefault();
           var conn = jsPlumb.jsPlumb.getConnections({
