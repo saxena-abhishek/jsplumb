@@ -277,7 +277,7 @@ class Main extends Component {
       jsPlumb.jsPlumb.bind("connection", (info) => {
         let i = that.nList.findIndex(item => item.name === info.targetId);
         let li = that.nList.findIndex(item => item.name === info.sourceId);
-
+        console.log(li)
         that.nList[i].depth.push(info.sourceId);
         console.log(that.nList[i].depth);
         that.nList[i].depth = (that.nList[i].depth).concat(that.nList[li].depth)

@@ -8,4 +8,5 @@
     border: thin;
     color: black;
     border-top-style: groove;
+    z-index: 11;
 }

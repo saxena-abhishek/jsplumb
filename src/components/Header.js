@@ -32,8 +32,6 @@ launchBenchmark(){
 callApi(){
 axios.get(`http://65.1.81.30:5000/ec2/deploy`)
       .then(res => {
-        // const persons = res.data;
-        // this.setState({ persons });
         console.log(res)
       }).catch(err=>{console.log(err)})
     }
