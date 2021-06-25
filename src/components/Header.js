@@ -4,6 +4,9 @@ import "../styles/header.css";
 import logo from '../intellogoo.png';   // <img src={process.env.PUBLIC_URL + '/intellogoo.png'} /> 
 import { connect } from 'react-redux';
 import { callTraceFunction } from "../Action";
+import {toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+toast.configure()
 
 class Header extends Component {
   constructor(props) {
@@ -25,6 +28,14 @@ launchBenchmark(){
   console.log(this.state.validate,"validate")
   this.setState({validate:true})
   console.log(this.state.validate,"validate")
+  this.props.callTracefunc({launchh:true})
+  this.notify()
+}
+
+ notify = ()=>{ 
+  
+  // Calling toast method by passing string
+  toast(<div style={{backgroundColor:'#d4edda', color:'green' }}> Launch Succeed</div>,{position: toast.POSITION.TOP_CENTER}) 
 }
 
 
@@ -94,10 +105,10 @@ launchBenchmark(){
           <div style={{ flex: 3 }}></div>
           <div style={{ flex: 1 }}>
             <div style={{ display: "flex" }}>
-              <div style={{ flex: 1 }}></div>
-              <div style={{ flex: 2 }}>
-                <button onClick={()=>this.props.callTracefunc({launchh:true})}>Launch Benchmark</button>
-                <button>Cancel</button>
+              
+              <div style={{ flex: 3 }}>
+                <button onClick={this.launchBenchmark}>Launch Benchmark</button>
+                <button>Download</button>
               </div>
             </div>
           </div>

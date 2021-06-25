@@ -20,9 +20,7 @@ const Reducer = (state = initialState, action) => {
       
             case "CALL_TRACE_FUNCTION": {
                 // console.log(action.payload,"data in reducer")
-                return {
-                    launch:action.payload.launchh
-                }
+                return { ...state, launch:action.payload.launchh }
             }
         default:
             return state;

@@ -262,12 +262,13 @@ class Main extends Component {
 
       jsPlumb.jsPlumb.registerConnectionTypes({
         "black-connection": {
+          zIndex:-1,
           paintStyle: { stroke: "#0071c5" },
           hoverPaintStyle: { stroke: "red" },
           // connector: ["StateMachine", {curviness:0.7}],               
           overlays: [
             "Arrow",
-            ["Label", { label: "", location: 0.25, id: "myLabel", color: 'blue', cursor: 'pointer', cssClassColor: 'red' }]
+            ["Label", { label: "", location: 0.25, id: "myLabel", color: 'blue', cursor: 'pointer', cssClass:"connectClass",cssClassColor: 'red' }]
 
           ],
         }

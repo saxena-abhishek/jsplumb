@@ -159,6 +159,7 @@ i.cross-button {
   border-radius: 5px;
   background-color: #f2f2f2;
   padding: 20px;
+  z-index: 2; 
 }
 
 select{
@@ -174,7 +175,7 @@ select{
   width: 25%;
   position: absolute;
   right: 0px;
-  
+  z-index: 2; 
   height: 543px;
   border-style: groove;
   border-color: gainsboro;
@@ -224,7 +225,7 @@ input{
   border-color:#0071c5 ;
   border-radius:5px;
   padding: 8px 4px;
-
-  
 }
-
+.connectClass{
+  z-index: 100;
+}
