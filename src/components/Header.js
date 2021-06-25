@@ -119,7 +119,7 @@ this.responce= axios.get(`http://65.1.81.30:5000/api/v1/terraform-manager/deploy
               
               <div style={{ flex: 3 }}>
                 <button onClick={this.launchBenchmark}>Launch Benchmark</button>
-                <button onClick={this.callApi}>Download</button>
+                <button onClick={this.launchBenchmark}>Download</button>
               </div>
             </div>
           </div>

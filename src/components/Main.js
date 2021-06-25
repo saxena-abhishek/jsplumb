@@ -133,7 +133,7 @@ class Main extends Component {
       var icon2 = document.createElement("i");
       icon2.type = "button";
       var icon3 = document.createElement("span");
-      console.log(cloneEl.id,"id in drop")
+    
       //icon3.type = "button";
       icon3.classList.add("node");
       var item = this.props.nodeList.find(item => item.id === draggableElement.id);
@@ -279,12 +279,8 @@ class Main extends Component {
       jsPlumb.jsPlumb.bind("connection", (info) => {
         let i = that.nList.findIndex(item => item.name === info.targetId);
         let li = that.nList.findIndex(item => item.name === info.sourceId);
-        console.log(info.targetId,"target id")
-        console.log(info.sourceId,"sourceId")
-        console.log(li,"connection li")
-        console.log(i,"connection i")
         that.nList[i].depth.push(info.sourceId);
-        console.log(that.nList[i].depth);
+        // console.log(that.nList[i].depth);
         that.nList[i].depth = (that.nList[i].depth).concat(that.nList[li].depth)
 
       });
