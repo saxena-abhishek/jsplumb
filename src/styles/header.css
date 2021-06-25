@@ -129,4 +129,6 @@ input{
     text-align: center;
   }
 
- 
+  button:hover {background-color: white; color: blue;
+  border-color: blue;
+border-style: groove;}
