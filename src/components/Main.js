@@ -281,7 +281,7 @@ class Main extends Component {
         let li = that.nList.findIndex(item => item.name === info.sourceId);
         that.nList[i].depth.push(info.sourceId);
         // console.log(that.nList[i].depth);
-        that.nList[i].depth = (that.nList[i].depth).concat(that.nList[li].depth)
+        that.nList[i].depth = (that.nList[i].depth).concat(that.nList[li].depth);
 
       });
       jsPlumb.jsPlumb.bind("click", (component, event) => {
