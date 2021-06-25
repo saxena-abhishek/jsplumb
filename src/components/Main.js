@@ -22,7 +22,9 @@ class Main extends Component {
     this.numberrs=[1,2,3,4,5,6]
     this.iName=[]; 
     this.state = { nodeList: [], nodeConnections: [], showDiv: false, id: '' ,showPanel:'',instanceType:'',instanceName:'',activeComponentId:'', activeNodeName:''};
+  
   }
+
 
 
 
@@ -89,7 +91,7 @@ class Main extends Component {
   onDragOver(event) {
     event.preventDefault();
   }
-  onEdit(id,activeComponentId ,activeNodeName){
+  onEdit(id,activeComponentId ,activeNodeName,icon2,icon3){
     
     this.setState({ showDiv: true, showPanel:true ,id: id ,activeComponentId:activeComponentId ,activeNodeName:activeNodeName});
     let i;
@@ -97,10 +99,17 @@ class Main extends Component {
      {
     if(this.nList[i].name===id){
     this.setState({instanceName:this.nList[i].configuration.InstName ,instanceType:this.nList[i].configuration.InstType})
-    
+    icon2.classList.remove("fa", "fa-times", "fa-lg" );
+    icon3.classList.remove("selected" );
    }
    
     }
+  }
+
+  onSelect(icon2,icon3){
+    icon2.classList.add("fa", "fa-times", "fa-lg" );
+    icon3.classList.add("selected" );
+   
   }
   onDrop(event) {
     const id = event
@@ -118,28 +127,24 @@ class Main extends Component {
       const position = findPosition(dropzone);
       positionX = event.pageX - position.x;
       positionY = event.pageY - position.y;
-
-      cloneEl.setAttribute("style", "top:" + positionY + "px; left:" + positionX + "px;");
+       cloneEl.setAttribute("style", "top:" + positionY + "px; left:" + positionX + "px;");
       var icon2 = document.createElement("i");
       icon2.type = "button";
-      icon2.classList.add("fa", "fa-times", "fa-lg");
       var icon3 = document.createElement("span");
+      console.log(cloneEl.id,"id in drop")
       //icon3.type = "button";
       icon3.classList.add("node");
-
       var item = this.props.nodeList.find(item => item.id === draggableElement.id);
       cloneEl.id = draggableElement.id + (++item.vc);
       icon2.id = draggableElement.id + "_cross_" + item.vc;
       dropzone.appendChild(cloneEl);
       let control = document.getElementById(cloneEl.id);
       icon2.addEventListener("click", e => this.removeNode(e, control.id), false);
-      control.append(icon2);
-      icon3.addEventListener("dblclick", (e) => this.onEdit(cloneEl.id ,item.componentId,id), false);
-    
+      icon3.addEventListener("click", (e) => this.onSelect(icon2 ,icon3), false);
+      icon3.addEventListener("dblclick", (e) => this.onEdit(cloneEl.id ,item.componentId,id,icon2,icon3), false);
       control.append(icon3);
-
+      control.append(icon2)
       this.nList.push({ name: cloneEl.id, componentId: item.componentId, depth: [],configuration:{} });
-
       document.getElementById(icon2.id).setAttribute("style", "top:-10px;right:-8px;position:absolute;cursor:pointer;color:red; ");
       jsPlumb.jsPlumb.draggable(cloneEl.id, { containment: true });
 
@@ -194,10 +199,6 @@ class Main extends Component {
       control.draggable = true;
       control.classList.add("cln");
       let icon = document.createElement("i");
-      
-     
-
-
        switch (this.props.nodeList[i].componentId){
       case 1:
         icon.classList.add("fa","fa-times");
@@ -317,6 +318,8 @@ let i=this.state.activeComponentId;
 
 
   render() {
+    let status = this.props.launch? this.traceConnections():'';
+
 
     jsPlumb.jsPlumb.select().setLabel(this.props.rps);
     let comp = this.state.showDiv ?
@@ -366,7 +369,7 @@ let i=this.state.activeComponentId;
 
             <div id="diagram" style={{ height: "90vh", position: 'relative' }} onDragOver={(e) => this.onDragOver(e)}
               onDrop={(event) => this.onDrop(event)}  ><div id="config-items">{comp}</div>
-              <button className="btn" onClick={this.traceConnections}>Validate</button>
+              
             </div>
           </div>
         </div>
@@ -378,7 +381,8 @@ let i=this.state.activeComponentId;
 }
 const mapStateToProps = (state, ownProps) => ({
   // todo: state.todos[ownProps.id],
-  nodeList: state.nodeList
+  nodeList: state.nodeList,
+  launch:state.launch
 })
 
 const mapDispatchToProps = (dispatch) => {

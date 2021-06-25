@@ -7,10 +7,10 @@ export const setUserName = payload => {
     }
 }
 
-export const callTraceFunction = data => {
-    console.log(data,"data in action")
+export const callTraceFunction = payload => {
+    // console.log(payload,"data in action")
     return {
         type: CALL_TRACE_FUNCTION,
-        payload: data
+        payload: payload
     }
 }

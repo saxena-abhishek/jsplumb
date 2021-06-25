@@ -50,7 +50,7 @@ min-height: 100%;
   position: relative;
 background-color: whitesmoke;
 color: black;
-width: 120px;
+width: 115px;
 height: 70px;
 border-color: gainsboro;
 display: block;
@@ -58,6 +58,7 @@ text-align: center;
 /* font-weight: 600; */
 font-family: intel-clear,tahoma,Helvetica,helvetica,Arial,sans-serif;
 box-shadow: 0 4px 8px 0 rgba(218, 213, 213, 0.2), 0 4px 8px 0 rgba(0, 0, 0, 0.19);
+cursor: move;
   
 }
 
@@ -213,16 +214,17 @@ input{
   display: inline-block;
   width: 100%;
   top: -24px;
+
+ 
+}
+.selected{
+  border-style: groove;
+  /* background-color: aqua; */
+  box-shadow: 0 4px 8px 0 rgba(155, 168, 247, 0.2), 0 4px 8px 0 rgba(135, 146, 243, 0.19);
+  border-color:#0071c5 ;
+  border-radius:5px;
+  padding: 8px 4px;
+
+  
 }
 
-.node1{
-  height: 100%;
-  display: inline-block;
-  width: 100%;
-  top: -24px;
-}
-
-.newclass{
-  color: #212529;
-  background-color: #212529;
-}

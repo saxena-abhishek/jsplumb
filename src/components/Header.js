@@ -111,7 +111,7 @@ launchBenchmark(){
 
 const mapStateToProps = (state, ownProps) => ({
   // todo: state.todos[ownProps.id],
-  nodeList: state.nodeList
+  status: state
 })
 
 const mapDispatchToProps = (dispatch) => {
