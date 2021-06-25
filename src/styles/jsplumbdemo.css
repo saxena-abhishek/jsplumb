@@ -175,7 +175,7 @@ select{
   width: 25%;
   position: absolute;
   right: 0px;
-  z-index: 2; 
+  z-index: 10; 
   height: 543px;
   border-style: groove;
   border-color: gainsboro;
@@ -226,6 +226,4 @@ input{
   border-radius:5px;
   padding: 8px 4px;
 }
-.connectClass{
-  z-index: 100;
-}
+
