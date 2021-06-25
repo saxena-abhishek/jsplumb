@@ -18,10 +18,15 @@ const Reducer = (state = initialState, action) => {
             return (Object.assign({}, state, { nodeList: action.payload }));
         }
       
-            case "CALL_TRACE_FUNCTION": {
+        case "CALL_TRACE_FUNCTION": {
                 // console.log(action.payload,"data in reducer")
                 return { ...state, launch:action.payload.launchh }
-            }
+        }
+
+        case "SEND_LAUNCH_STATUS":{
+           // console.log(action.payload,"data in reducer")
+            return{  ...state,launch:action.payload.launchStatus  }
+        }
         default:
             return state;
     }

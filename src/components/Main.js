@@ -4,6 +4,7 @@ import "../styles/jsplumbdemo.css";
 import { findPosition } from '../utils/domUtils';
 import { connect } from 'react-redux';
 import SlidingPanel from 'react-sliding-side-panel';
+import { sendLaunchStatus } from "../Action";
 class Main extends Component {
   constructor(props) {
     super(props);
@@ -21,7 +22,7 @@ class Main extends Component {
     this.iType=[];
     this.numberrs=[1,2,3,4,5,6]
     this.iName=[]; 
-    this.state = { nodeList: [], nodeConnections: [], showDiv: false, id: '' ,showPanel:'',instanceType:'',instanceName:'',activeComponentId:'', activeNodeName:''};
+    this.state = { nodeList: [], nodeConnections: [], showDiv: false, id: '' ,showPanel:'',instanceType:'',instanceName:'',activeComponentId:'', activeNodeName:'' ,launchStatus:false};
   
   }
 
@@ -68,6 +69,7 @@ class Main extends Component {
     }
     console.log("format:" + JSON.stringify(original));
     this.callApi(original);
+    this.props.sendLaunchStatus({launchStatus:false});
   }
 
   callApi(data) {
@@ -277,7 +279,10 @@ class Main extends Component {
       jsPlumb.jsPlumb.bind("connection", (info) => {
         let i = that.nList.findIndex(item => item.name === info.targetId);
         let li = that.nList.findIndex(item => item.name === info.sourceId);
-        console.log(li)
+        console.log(info.targetId,"target id")
+        console.log(info.sourceId,"sourceId")
+        console.log(li,"connection li")
+        console.log(i,"connection i")
         that.nList[i].depth.push(info.sourceId);
         console.log(that.nList[i].depth);
         that.nList[i].depth = (that.nList[i].depth).concat(that.nList[li].depth)
@@ -388,9 +393,8 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    // dispatching plain actions
-    // increment: () => dispatch({ type: 'INCREMENT' }),
-    dispatch
+    
+    sendLaunchStatus:data=>dispatch(sendLaunchStatus(data))
 
   }
 }

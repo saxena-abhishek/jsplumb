@@ -13,7 +13,10 @@ class Header extends Component {
   constructor(props) {
     super(props);
     this.launchBenchmark=this.launchBenchmark.bind(this)
-    this.state = { rps: 0 , validate:false };
+    this.state = { rps: 0 , validate:false ,apiSuccess:false};
+    this.responce=[];
+    this.apiS='';
+    
    
   }
   slidechanger(e) {
@@ -27,19 +30,23 @@ class Header extends Component {
 
 launchBenchmark(){
   this.props.callTracefunc({launchh:true})
-  this.notify()
+  this.callApi()
+
 }
 callApi(){
-axios.get(`http://65.1.81.30:5000/api/v1/terraform-manager/deploy`)
+this.responce= axios.get(`http://65.1.81.30:5000/api/v1/terraform-manager/deploy`)
       .then(res => {
-        console.log(res)
-      }).catch(err=>{console.log(err)})
+        this.setState({apiSuccess:true})
+        this.notify(this.state.apiSuccess)
+        console.log(res,"success")
+      }).catch(err=> {  console.log(err,"err"); this.notify(this.state.apiSuccess) })
+     
+    
     }
 
- notify = ()=>{ 
-  
-  // Calling toast method by passing string
-  toast(<div style={{backgroundColor:'#d4edda', color:'green' }}> Launch Succeed</div>,{position: toast.POSITION.TOP_CENTER}) 
+ notify = (isApiSuccess)=>{ 
+  isApiSuccess?
+  toast(<div style={{backgroundColor:'#d4edda', color:'green' }}> Launch Succeed</div>,{position: toast.POSITION.TOP_CENTER}) :toast(<div style={{backgroundColor:'#f8d7da', color:'red' }}> Launch Failed</div>,{position: toast.POSITION.TOP_CENTER}) 
 }
 
 
