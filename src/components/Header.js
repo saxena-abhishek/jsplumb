@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { callTraceFunction } from "../Action";
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 toast.configure()
 
 class Header extends Component {
@@ -25,12 +26,17 @@ class Header extends Component {
   }
 
 launchBenchmark(){
-  console.log(this.state.validate,"validate")
-  this.setState({validate:true})
-  console.log(this.state.validate,"validate")
   this.props.callTracefunc({launchh:true})
   this.notify()
 }
+callApi(){
+axios.get(`http://65.1.81.30:5000/ec2/deploy`)
+      .then(res => {
+        // const persons = res.data;
+        // this.setState({ persons });
+        console.log(res)
+      }).catch(err=>{console.log(err)})
+    }
 
  notify = ()=>{ 
   
@@ -108,7 +114,7 @@ launchBenchmark(){
               
               <div style={{ flex: 3 }}>
                 <button onClick={this.launchBenchmark}>Launch Benchmark</button>
-                <button>Download</button>
+                <button onClick={this.callApi}>Download</button>
               </div>
             </div>
           </div>
