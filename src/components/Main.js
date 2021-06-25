@@ -71,7 +71,7 @@ class Main extends Component {
   }
 
   callApi(data) {
-    fetch("http://65.1.81.30:5000/ec2/deploy", {
+    fetch("http://65.1.81.30:5000/api/v1/terraform-manager/deploy", {
       method: "POST",
       body: JSON.stringify(data),
       headers: { }

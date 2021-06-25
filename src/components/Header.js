@@ -30,7 +30,7 @@ launchBenchmark(){
   this.notify()
 }
 callApi(){
-axios.get(`http://65.1.81.30:5000/ec2/deploy`)
+axios.get(`http://65.1.81.30:5000/api/v1/terraform-manager/deploy`)
       .then(res => {
         console.log(res)
       }).catch(err=>{console.log(err)})
