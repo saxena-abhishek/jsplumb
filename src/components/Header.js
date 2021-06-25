@@ -125,14 +125,11 @@ axios.get(`http://65.1.81.30:5000/ec2/deploy`)
 
 
 const mapStateToProps = (state, ownProps) => ({
-  // todo: state.todos[ownProps.id],
   status: state
 })
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    // dispatching plain actions
-    // increment: () => dispatch({ type: 'INCREMENT' }),
     callTracefunc:data=>dispatch(callTraceFunction(data))
 
   }
