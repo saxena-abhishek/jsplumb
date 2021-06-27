@@ -48,7 +48,7 @@ class Main extends Component {
     this.nList[indx].configuration.InstType= this.state.instanceType;
   }
 
-  traceConnections() {    
+  traceConnections(download = false) {    
     var connections = jsPlumb.jsPlumb.getAllConnections();
     let that = this;
     let original = { workspace: "Anirban", project: "HCL_BO" };
@@ -68,8 +68,12 @@ class Main extends Component {
       original.components = comp;
     }
     console.log("format:" + JSON.stringify(original));
-    this.callApi(original);
-    this.props.sendLaunchStatus({launchStatus:false});
+    if(download) {
+      this.download(original);
+    } else {
+      this.callApi(original);
+      this.props.sendLaunchStatus({launchStatus:false});  
+    }
   }
 
   callApi(data) {
@@ -81,6 +85,24 @@ class Main extends Component {
 
       .then(response => response.json())
       .then(json => console.log(json));
+  }
+
+  download(data) {
+    fetch("http://65.1.81.30:5000/files", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { }
+    }).then(response => response.blob())
+    .then(zipFile => {
+      var blob = zipFile;
+      var link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'download'
+      link.click();
+    })
+    .catch((error) => {
+      console.log("Error: ", error)
+    })
   }
 
   validate() {
@@ -321,7 +343,7 @@ let i=this.state.activeComponentId;
 
   render() {
     let status = this.props.launch? this.traceConnections():'';
-
+    let status1 = this.props.download? this.traceConnections(true):'';
 
     jsPlumb.jsPlumb.select().setLabel(this.props.rps);
     let comp = this.state.showDiv ?
@@ -384,7 +406,8 @@ let i=this.state.activeComponentId;
 const mapStateToProps = (state, ownProps) => ({
   // todo: state.todos[ownProps.id],
   nodeList: state.nodeList,
-  launch:state.launch
+  launch:state.launch,
+  download: state.download
 })
 
 const mapDispatchToProps = (dispatch) => {

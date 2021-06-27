@@ -23,6 +23,10 @@ const Reducer = (state = initialState, action) => {
                 return { ...state, launch:action.payload.launchh }
         }
 
+        case "CALL_DOWNLOAD_FUNCTION": {
+            return { ...state, download:action.payload.download }
+        }
+
         case "SEND_LAUNCH_STATUS":{
            // console.log(action.payload,"data in reducer")
             return{  ...state,launch:action.payload.launchStatus  }

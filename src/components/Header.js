@@ -3,7 +3,7 @@ import "../styles/jsplumbdemo.css";
 import "../styles/header.css";
 import logo from '../intellogoo.png';   // <img src={process.env.PUBLIC_URL + '/intellogoo.png'} /> 
 import { connect } from 'react-redux';
-import { callTraceFunction } from "../Action";
+import { callTraceFunction, callDownloadFunction } from "../Action";
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
@@ -12,7 +12,8 @@ toast.configure()
 class Header extends Component {
   constructor(props) {
     super(props);
-    this.launchBenchmark=this.launchBenchmark.bind(this)
+    this.launchBenchmark=this.launchBenchmark.bind(this);
+    this.downloadBenchmark=this.downloadBenchmark.bind(this);
     this.state = { rps: 0 , validate:false ,apiSuccess:false};
     this.responce=[];
     this.apiS='';
@@ -30,9 +31,24 @@ class Header extends Component {
 
 launchBenchmark(){
   this.props.callTracefunc({launchh:true})
-  this.callApi()
-
+  // this.callApi()
 }
+
+downloadBenchmark(){
+  this.props.callDownloadfunc({download:true})
+  // this.download();
+}
+
+download(){
+  this.responce= axios.get(`http://65.1.81.30:5000/files`)
+        .then(res => {
+          this.setState({apiSuccess:true})
+          this.notify(this.state.apiSuccess)
+          console.log(res,"success")
+        }).catch(err=> {  console.log(err,"err"); this.notify(this.state.apiSuccess) })
+      }
+
+      
 callApi(){
 this.responce= axios.get(`http://65.1.81.30:5000/api/v1/terraform-manager/deploy`)
       .then(res => {
@@ -119,7 +135,7 @@ this.responce= axios.get(`http://65.1.81.30:5000/api/v1/terraform-manager/deploy
               
               <div style={{ flex: 3 }}>
                 <button onClick={this.launchBenchmark}>Launch Benchmark</button>
-                <button onClick={this.launchBenchmark}>Download</button>
+                <button onClick={this.downloadBenchmark}>Download</button>
               </div>
             </div>
           </div>
@@ -137,7 +153,8 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    callTracefunc:data=>dispatch(callTraceFunction(data))
+    callTracefunc:data=>dispatch(callTraceFunction(data)),
+    callDownloadfunc:data=>dispatch(callDownloadFunction(data)),
 
   }
 }
