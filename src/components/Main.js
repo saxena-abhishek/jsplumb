@@ -19,36 +19,33 @@ class Main extends Component {
     this.closeDiv = this.closeDiv.bind(this);
     this.nodenames = [];
     this.nList = [];
-    this.iType=[];
-    this.numberrs=[1,2,3,4,5,6]
-    this.iName=[]; 
-    this.state = { nodeList: [], nodeConnections: [], showDiv: false, id: '' ,showPanel:'',instanceType:'',instanceName:'',activeComponentId:'', activeNodeName:'' ,launchStatus:false};
-  
+    this.iType = [];
+    this.numberrs = [1, 2, 3, 4, 5, 6]
+    this.iName = [];
+    this.state = { nodeList: [], nodeConnections: [], showDiv: false, id: '', showPanel: '', instanceType: '', instanceName: '', activeComponentId: '', activeNodeName: '', launchStatus: false };
+
   }
-
-
-
 
   handleChangeType(event) {
-    this.setState({instanceType: event.target.value});
+    this.setState({ instanceType: event.target.value });
   }
   handleChangeName(event) {
-    this.setState({instanceName: event.target.value});
+    this.setState({ instanceName: event.target.value });
   }
 
   handleSubmit(event) {
     event.preventDefault();
     this.saveConfig();
-    this.setState({showPanel:false,showDiv:false ,instanceName:'',instanceType:''})
+    this.setState({ showPanel: false, showDiv: false, instanceName: '', instanceType: '' })
   }
 
-  saveConfig(){
-    let indx= this.nList.findIndex(node=> node.name===this.state.id);
+  saveConfig() {
+    let indx = this.nList.findIndex(node => node.name === this.state.id);
     this.nList[indx].configuration.InstName = this.state.instanceName;
-    this.nList[indx].configuration.InstType= this.state.instanceType;
+    this.nList[indx].configuration.InstType = this.state.instanceType;
   }
 
-  traceConnections(download = false) {    
+  traceConnections(download = false) {
     var connections = jsPlumb.jsPlumb.getAllConnections();
     let that = this;
     let original = { workspace: "Anirban", project: "HCL_BO" };
@@ -60,19 +57,19 @@ class Main extends Component {
         connections.forEach(function (connection, id) {
           if (connection.sourceId === that.nList[i].name) {
             targetIds.push(connection.targetId);
-          } 
-        })  
-        comp.push({ uniqueId: that.nList[i].name, componentId: that.nList[i].componentId,  configuration:{ variables: {instanceName : this.nList[i].configuration.InstName , instanceType: this.nList[i].configuration.InstType}}, connectedTo: targetIds, connectedFrom: that.nList[i].depth });
+          }
+        })
+        comp.push({ uniqueId: that.nList[i].name, componentId: that.nList[i].componentId, configuration: { variables: { instanceName: this.nList[i].configuration.InstName, instanceType: this.nList[i].configuration.InstType } }, connectedTo: targetIds, connectedFrom: that.nList[i].depth });
         targetIds = [];
       }
       original.components = comp;
     }
     console.log("format:" + JSON.stringify(original));
-    if(download) {
+    if (download) {
       this.download(original);
     } else {
       this.callApi(original);
-      this.props.sendLaunchStatus({launchStatus:false});  
+      this.props.sendLaunchStatus({ launchStatus: false });
     }
   }
 
@@ -80,7 +77,7 @@ class Main extends Component {
     fetch("http://65.1.81.30:5000/api/v1/terraform-manager/deploy", {
       method: "POST",
       body: JSON.stringify(data),
-      headers: { }
+      headers: {}
     })
 
       .then(response => response.json())
@@ -91,18 +88,18 @@ class Main extends Component {
     fetch("http://65.1.81.30:5000/files", {
       method: "POST",
       body: JSON.stringify(data),
-      headers: { }
+      headers: {}
     }).then(response => response.blob())
-    .then(zipFile => {
-      var blob = zipFile;
-      var link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.download = 'download'
-      link.click();
-    })
-    .catch((error) => {
-      console.log("Error: ", error)
-    })
+      .then(zipFile => {
+        var blob = zipFile;
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = 'download'
+        link.click();
+      })
+      .catch((error) => {
+        console.log("Error: ", error)
+      })
   }
 
   validate() {
@@ -115,25 +112,24 @@ class Main extends Component {
   onDragOver(event) {
     event.preventDefault();
   }
-  onEdit(id,activeComponentId ,activeNodeName,icon2,icon3){
-    
-    this.setState({ showDiv: true, showPanel:true ,id: id ,activeComponentId:activeComponentId ,activeNodeName:activeNodeName});
+  onEdit(id, activeComponentId, activeNodeName, icon2, icon3) {
+
+    this.setState({ showDiv: true, showPanel: true, id: id, activeComponentId: activeComponentId, activeNodeName: activeNodeName });
     let i;
-     for(i=0;i<this.nList.length;i++)
-     {
-    if(this.nList[i].name===id){
-    this.setState({instanceName:this.nList[i].configuration.InstName ,instanceType:this.nList[i].configuration.InstType})
-    icon2.classList.remove("fa", "fa-times", "fa-lg" );
-    icon3.classList.remove("selected" );
-   }
-   
+    for (i = 0; i < this.nList.length; i++) {
+      if (this.nList[i].name === id) {
+        this.setState({ instanceName: this.nList[i].configuration.InstName, instanceType: this.nList[i].configuration.InstType })
+        icon2.classList.remove("fa", "fa-times", "fa-lg");
+        icon3.classList.remove("selected");
+      }
+
     }
   }
 
-  onSelect(icon2,icon3){
-    icon2.classList.add("fa", "fa-times", "fa-lg" );
-    icon3.classList.add("selected" );
-   
+  onSelect(icon2, icon3) {
+    icon2.classList.add("fa", "fa-times", "fa-lg");
+    icon3.classList.add("selected");
+
   }
   onDrop(event) {
     const id = event
@@ -142,7 +138,7 @@ class Main extends Component {
 
 
     const draggableElement = document.getElementById(id);
-    
+
     if (draggableElement.classList.contains('cln')) {
       let cloneEl = draggableElement.cloneNode(true);
       const dropzone = event.target;
@@ -151,11 +147,11 @@ class Main extends Component {
       const position = findPosition(dropzone);
       positionX = event.pageX - position.x;
       positionY = event.pageY - position.y;
-       cloneEl.setAttribute("style", "top:" + positionY + "px; left:" + positionX + "px;");
+      cloneEl.setAttribute("style", "top:" + positionY + "px; left:" + positionX + "px;");
       var icon2 = document.createElement("i");
       icon2.type = "button";
       var icon3 = document.createElement("span");
-    
+
       //icon3.type = "button";
       icon3.classList.add("node");
       var item = this.props.nodeList.find(item => item.id === draggableElement.id);
@@ -164,11 +160,11 @@ class Main extends Component {
       dropzone.appendChild(cloneEl);
       let control = document.getElementById(cloneEl.id);
       icon2.addEventListener("click", e => this.removeNode(e, control.id), false);
-      icon3.addEventListener("click", (e) => this.onSelect(icon2 ,icon3), false);
-      icon3.addEventListener("dblclick", (e) => this.onEdit(cloneEl.id ,item.componentId,id,icon2,icon3), false);
+      icon3.addEventListener("click", (e) => this.onSelect(icon2, icon3), false);
+      icon3.addEventListener("dblclick", (e) => this.onEdit(cloneEl.id, item.componentId, id, icon2, icon3), false);
       control.append(icon3);
       control.append(icon2)
-      this.nList.push({ name: cloneEl.id, componentId: item.componentId, depth: [],configuration:{} });
+      this.nList.push({ name: cloneEl.id, componentId: item.componentId, depth: [], configuration: {} });
       document.getElementById(icon2.id).setAttribute("style", "top:-10px;right:-8px;position:absolute;cursor:pointer;color:red; ");
       jsPlumb.jsPlumb.draggable(cloneEl.id, { containment: true });
 
@@ -223,29 +219,29 @@ class Main extends Component {
       control.draggable = true;
       control.classList.add("cln");
       let icon = document.createElement("i");
-       switch (this.props.nodeList[i].componentId){
-      case 1:
-        icon.classList.add("fa","fa-times");
-        var img1 = document.createElement("img");
-        img1.src = "https://img.icons8.com/metro/20/0071c5/grasshopper.png";
-        control.append(img1)
-        break;
-      case 2:
-          icon.classList.add("fa","fa-file");
+      switch (this.props.nodeList[i].componentId) {
+        case 1:
+          icon.classList.add("fa", "fa-times");
+          var img1 = document.createElement("img");
+          img1.src = "https://img.icons8.com/metro/20/0071c5/grasshopper.png";
+          control.append(img1)
+          break;
+        case 2:
+          icon.classList.add("fa", "fa-file");
           control.append(icon)
           break;
-      case 3:
-            icon.classList.add("fa","fa-wordpress");
-            control.append(icon)
-            break;
+        case 3:
+          icon.classList.add("fa", "fa-wordpress");
+          control.append(icon)
+          break;
 
-      case 4:
-            icon.classList.add("fa","fa-database");
-            control.append(icon)
-            break;
-      default:
-       }
-     
+        case 4:
+          icon.classList.add("fa", "fa-database");
+          control.append(icon)
+          break;
+        default:
+      }
+
       var text = document.createElement("span");
       text.innerHTML = this.props.nodeList[i].name;
       control.append(" ");
@@ -263,18 +259,16 @@ class Main extends Component {
     jsPlumb.jsPlumb.removeAllEndpoints(el);
     jsPlumb.jsPlumb.remove(el);
     let i;
-    console.log(this.nList,"ids")
-   
-    for(i=0;i<this.nList.length;i++)
-    {
+    console.log(this.nList, "ids")
 
-      if(id===this.nList[i].name)
-      {
-        this.nList.splice(i,1);
+    for (i = 0; i < this.nList.length; i++) {
+
+      if (id === this.nList[i].name) {
+        this.nList.splice(i, 1);
       }
-      
+
     }
-      }
+  }
 
   componentDidMount() {
     this.initialShow();
@@ -286,13 +280,13 @@ class Main extends Component {
 
       jsPlumb.jsPlumb.registerConnectionTypes({
         "black-connection": {
-          zIndex:-1,
+          zIndex: -1,
           paintStyle: { stroke: "#0071c5" },
           hoverPaintStyle: { stroke: "red" },
           // connector: ["StateMachine", {curviness:0.7}],               
           overlays: [
             "Arrow",
-            ["Label", { label: "", location: 0.25, id: "myLabel", color: 'blue', cursor: 'pointer', cssClass:"connectClass",cssClassColor: 'red' }]
+            ["Label", { label: "", location: 0.25, id: "myLabel", color: 'blue', cursor: 'pointer', cssClass: "connectClass", cssClassColor: 'red' }]
 
           ],
         }
@@ -326,61 +320,52 @@ class Main extends Component {
     this.setState({ showDiv: !showMe })
   }
 
-  fetchOption(){
-    
-let i=this.state.activeComponentId;
-    return( <>{this.props.nodeList[i-1].configuration.instanceType.map((number,i) =>
-    <option>{number}</option>
-               
-   )}
-   </>
-   )
-     }
+  fetchOption() {
 
-  
-    
+    let i = this.state.activeComponentId;
+    return (<>{this.props.nodeList[i - 1].configuration.instanceType.map((number, i) =>
+      <option>{number}</option>
+
+    )}
+    </>
+    )
+  }
 
 
   render() {
-    let status = this.props.launch? this.traceConnections():'';
-    let status1 = this.props.download? this.traceConnections(true):'';
+    let status = this.props.launch ? this.traceConnections() : '';
+    let status1 = this.props.download ? this.traceConnections(true) : '';
 
     jsPlumb.jsPlumb.select().setLabel(this.props.rps);
     let comp = this.state.showDiv ?
-    
-    
-    <div className="panel-container" > <div ><SlidingPanel
-    type={'right'}
-    isOpen={this.state.showPanel}
-    size={100}
-  className="panel-content"
-  >
-    <div style={{display:'flex',flexDirection:'column' ,textAlign:'center'}}>
-     <div className="rightPanelHeader"> {this.state.activeNodeName} Configuration</div>
 
-      {/* <div >ID : {this.state.id}</div> */}
-      <div style={{padding:'10px 10px '}}>
-      <div>Instance Name</div>
-      <input style={{backgroundColor:'white'}}value={this.state.instanceName} placeholder="Instance Name"  onChange={this.handleChangeName}></input>
-      </div>
-      Instance Type < form  className="form-group" onSubmit={this.handleSubmit}>
-        <select value={this.state.instanceType} onChange={this.handleChangeType}>
-          <option>Instance Type</option>
-        {this.fetchOption()}
-        </select>
-        <div style={{padding:'10px 10px '}}>
-        <button type="submit">Save</button>
-        <button onClick={() => this.setState({showPanel:false,showDiv:false ,instanceName:'',instanceType:''})}>Close</button>
+
+      <div className="panel-container" > <div ><SlidingPanel
+        type={'right'}
+        isOpen={this.state.showPanel}
+        size={100}
+        className="panel-content"
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
+          <div className="rightPanelHeader"> {this.state.activeNodeName} Configuration</div>
+
+          {/* <div >ID : {this.state.id}</div> */}
+          <div style={{ padding: '10px 10px ' }}>
+            <div>Instance Name</div>
+            <input style={{ backgroundColor: 'white' }} value={this.state.instanceName} placeholder="Instance Name" onChange={this.handleChangeName}></input>
+          </div>
+          Instance Type < form className="form-group" onSubmit={this.handleSubmit}>
+            <select value={this.state.instanceType} onChange={this.handleChangeType}>
+              <option>Instance Type</option>
+              {this.fetchOption()}
+            </select>
+            <div style={{ padding: '10px 10px ' }}>
+              <button type="submit">Save</button>
+              <button onClick={() => this.setState({ showPanel: false, showDiv: false, instanceName: '', instanceType: '' })}>Close</button>
+            </div>
+          </form>
         </div>
-      </form>
-     
-      
-    </div>
-  </SlidingPanel> </div> </div> : "";
-
-
-
-
+      </SlidingPanel> </div> </div> : "";
 
     return (
       <div className="container-fluid" >
@@ -393,7 +378,7 @@ let i=this.state.activeComponentId;
 
             <div id="diagram" style={{ height: "90vh", position: 'relative' }} onDragOver={(e) => this.onDragOver(e)}
               onDrop={(event) => this.onDrop(event)}  ><div id="config-items">{comp}</div>
-              
+
             </div>
           </div>
         </div>
@@ -406,14 +391,14 @@ let i=this.state.activeComponentId;
 const mapStateToProps = (state, ownProps) => ({
   // todo: state.todos[ownProps.id],
   nodeList: state.nodeList,
-  launch:state.launch,
+  launch: state.launch,
   download: state.download
 })
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    
-    sendLaunchStatus:data=>dispatch(sendLaunchStatus(data))
+
+    sendLaunchStatus: data => dispatch(sendLaunchStatus(data))
 
   }
 }
