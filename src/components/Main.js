@@ -23,7 +23,7 @@ class Main extends Component {
     this.numberrs = [1, 2, 3, 4, 5, 6]
     this.iName = [];
     this.state = { nodeList: [], nodeConnections: [], showDiv: false, id: '', showPanel: '', instanceType: '', instanceName: '', activeComponentId: '', activeNodeName: '', launchStatus: false };
-
+  //  this.connectionsList= new Map();
   }
 
   handleChangeType(event) {
@@ -50,6 +50,7 @@ class Main extends Component {
     let that = this;
     let original = { workspace: "Anirban", project: "HCL_BO" };
     let targetIds = [];
+    let sourceIds = [];
     let comp = [];
     if (this.nList) {
 
@@ -57,10 +58,13 @@ class Main extends Component {
         connections.forEach(function (connection, id) {
           if (connection.sourceId === that.nList[i].name) {
             targetIds.push(connection.targetId);
+          }if(connection.targetId === that.nList[i].name) {
+            sourceIds.push(connection.sourceId)
           }
         })
-        comp.push({ uniqueId: that.nList[i].name, componentId: that.nList[i].componentId, configuration: { variables: { instanceName: this.nList[i].configuration.InstName, instanceType: this.nList[i].configuration.InstType } }, connectedTo: targetIds, connectedFrom: that.nList[i].depth });
+        comp.push({ uniqueId: that.nList[i].name, componentId: that.nList[i].componentId, configuration: { variables: { instanceName: this.nList[i].configuration.InstName, instanceType: this.nList[i].configuration.InstType } }, connectedTo: targetIds, connectedFrom: sourceIds });
         targetIds = [];
+        sourceIds = [];
       }
       original.components = comp;
     }
@@ -167,7 +171,7 @@ class Main extends Component {
       icon3.addEventListener("dblclick", (e) => this.onEdit(cloneEl.id, item.componentId, id, icon2, icon3), false);
       control.append(icon3);
       control.append(icon2)
-      this.nList.push({ name: cloneEl.id, componentId: item.componentId, depth: [], configuration: {} });
+      this.nList.push({ name: cloneEl.id, componentId: item.componentId, configuration: {} });
       document.getElementById(icon2.id).setAttribute("style", "top:-10px;right:-8px;position:absolute;cursor:pointer;color:red; ");
       jsPlumb.jsPlumb.draggable(cloneEl.id, { containment: true });
 
@@ -296,11 +300,17 @@ class Main extends Component {
       })
 
       jsPlumb.jsPlumb.bind("connection", (info) => {
-        let i = that.nList.findIndex(item => item.name === info.targetId);
-        let li = that.nList.findIndex(item => item.name === info.sourceId);
-        that.nList[i].depth.push(info.sourceId);
-        // console.log(that.nList[i].depth);
-        that.nList[i].depth = (that.nList[i].depth).concat(that.nList[li].depth);
+       /* if(this.connectionsList.has(info.sourceId)){
+          let ob=this.connectionsList.get(info.sourceId);
+          this.connectionsList.set(info.sourceId,[...ob,info.targetId]);
+      }else{
+          this.connectionsList.set(info.sourceId,[info.targetId]);
+      }*/
+      //  let i = that.nList.findIndex(item => item.name === info.targetId);
+      //   let li = that.nList.findIndex(item => item.name === info.sourceId);
+      //   that.nList[i].depth.push(info.sourceId);
+      //  // console.log(that.nList[i].depth);
+      //   that.nList[i].depth = (that.nList[i].depth).concat(that.nList[li].depth);
 
       });
       jsPlumb.jsPlumb.bind("click", (component, event) => {
