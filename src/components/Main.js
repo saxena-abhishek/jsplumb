@@ -294,7 +294,7 @@ removeSelected(icon2,icon3){
 
   componentDidMount() {
     this.initialShow();
-    let that = this;
+    // let that = this;
     let canvas = document.getElementById("diagram");
     jsPlumb.jsPlumb.ready(function () {
       jsPlumb.jsPlumb.setContainer(canvas);
