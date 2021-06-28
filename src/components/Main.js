@@ -89,8 +89,8 @@ class Main extends Component {
      
     })
     
-      .then(response =>{this.notify(true);})
-      .catch((error)=>{  this.notify(false); });
+      .then(response =>{console.log('response',response);this.notify(true);})
+      .catch((error)=>{ console.log('error',error); this.notify(false); });
     
   }
 
