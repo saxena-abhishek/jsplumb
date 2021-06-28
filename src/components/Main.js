@@ -5,6 +5,8 @@ import { findPosition } from '../utils/domUtils';
 import { connect } from 'react-redux';
 import SlidingPanel from 'react-sliding-side-panel';
 import { sendLaunchStatus ,sendDownloadStatus} from "../Action";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 class Main extends Component {
   constructor(props) {
     super(props);
@@ -22,7 +24,7 @@ class Main extends Component {
     this.iType = [];
     this.numberrs = [1, 2, 3, 4, 5, 6]
     this.iName = [];
-    this.state = { nodeList: [], nodeConnections: [], showDiv: false, id: '', showPanel: '', instanceType: '', instanceName: '', activeComponentId: '', activeNodeName: '', launchStatus: false };
+    this.state = { nodeList: [], nodeConnections: [], showDiv: false, id: '', showPanel: '', instanceType: '', instanceName: '', activeComponentId: '', activeNodeName: '', launchStatus: false ,postApiSuccess:false};
   //  this.connectionsList= new Map();
   }
 
@@ -83,11 +85,13 @@ class Main extends Component {
     fetch("http://65.1.81.30:5000/api/v1/terraform-manager/deploy", {
       method: "POST",
       body: JSON.stringify(data),
-      headers: {}
+      headers: {},
+     
     })
-
-      .then(response => response.json())
-      .then(json => console.log(json));
+    
+      .then(response =>{this.notify(true);})
+      .catch((error)=>{  this.notify(false); });
+    
   }
 
   download(data) {
@@ -102,6 +106,7 @@ class Main extends Component {
         link.href = window.URL.createObjectURL(blob);
         link.download = 'download'
         link.click();
+        // this.notify(true)
       })
       .catch((error) => {
         console.log("Error: ", error)
@@ -338,6 +343,13 @@ removeSelected(icon2,icon3){
 
     });
   }
+
+  notify = (isApiSuccess) => {
+    isApiSuccess ?
+      toast(<div style={{ backgroundColor: '#d4edda', color: 'green' }}> Launch Succeed</div>, { position: toast.POSITION.TOP_CENTER }) : toast(<div style={{ backgroundColor: '#f8d7da', color: 'red' }}> Launch Failed</div>, { position: toast.POSITION.TOP_CENTER })
+  }
+
+
   closeDiv(showMe) {
     console.log("then:" + showMe + "now:" + !showMe)
     this.setState({ showDiv: !showMe })
