@@ -31,12 +31,12 @@ class Header extends Component {
 
   launchBenchmark() {
     this.props.callTracefunc({ launchh: true })
-    // this.callApi()
+   this.callApi()
   }
 
   downloadBenchmark() {
     this.props.callDownloadfunc({ download: true })
-    // this.download();
+  //  this.download();
   }
 
   download() {

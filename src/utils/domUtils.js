@@ -5,7 +5,7 @@ export function findPosition(obj) {
         do {
             curleft += obj.offsetLeft;
             curtop += obj.offsetTop;
-        } while (obj = obj.offsetParent);
+        } while (obj === obj.offsetParent);
         return { x: curleft, y: curtop };
     }
 }
