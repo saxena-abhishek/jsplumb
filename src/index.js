@@ -9,9 +9,6 @@ import Reducer from './reducers/reducer';
 const store = createStore(Reducer);
 
 
-console.log(store)
-
-
 ReactDOM.render(
   
   <Provider store={store}> <MyJsPlumb  /></Provider>

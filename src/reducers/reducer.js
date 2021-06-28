@@ -28,6 +28,11 @@ const Reducer = (state = initialState, action) => {
             // console.log(action.payload,"data in reducer")
             return { ...state, launch: action.payload.launchStatus }
         }
+
+        case "SEND_DOWNLOAD_STATUS": {
+            // console.log(action.payload,"data in reducer")
+            return { ...state, download: action.payload.download }
+        }
         default:
             return state;
     }

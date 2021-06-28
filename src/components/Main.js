@@ -4,7 +4,7 @@ import "../styles/jsplumbdemo.css";
 import { findPosition } from '../utils/domUtils';
 import { connect } from 'react-redux';
 import SlidingPanel from 'react-sliding-side-panel';
-import { sendLaunchStatus } from "../Action";
+import { sendLaunchStatus ,sendDownloadStatus} from "../Action";
 class Main extends Component {
   constructor(props) {
     super(props);
@@ -45,7 +45,7 @@ class Main extends Component {
     this.nList[indx].configuration.InstType = this.state.instanceType;
   }
 
-  traceConnections(download = false) {
+  traceConnections(download) {
     var connections = jsPlumb.jsPlumb.getAllConnections();
     let that = this;
     let original = { workspace: "Anirban", project: "HCL_BO" };
@@ -67,10 +67,12 @@ class Main extends Component {
     console.log("format:" + JSON.stringify(original));
     if (download) {
       this.download(original);
+
     } else {
       this.callApi(original);
       this.props.sendLaunchStatus({ launchStatus: false });
     }
+    this.props.sendDownloadStatus({ download: false });
   }
 
   callApi(data) {
@@ -100,6 +102,7 @@ class Main extends Component {
       .catch((error) => {
         console.log("Error: ", error)
       })
+
   }
 
   validate() {
@@ -333,8 +336,8 @@ class Main extends Component {
 
 
   render() {
-    let status = this.props.launch ? this.traceConnections() : '';
-    let status1 = this.props.download ? this.traceConnections(true) : '';
+    let status = this.props.launch ? this.traceConnections(false) : '';
+    let status1 = this.props.download ? this.traceConnections(this.props.download) : '';
 
     jsPlumb.jsPlumb.select().setLabel(this.props.rps);
     let comp = this.state.showDiv ?
@@ -398,7 +401,8 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
 
-    sendLaunchStatus: data => dispatch(sendLaunchStatus(data))
+    sendLaunchStatus: data => dispatch(sendLaunchStatus(data)),
+    sendDownloadStatus: data => dispatch(sendDownloadStatus(data))
 
   }
 }
