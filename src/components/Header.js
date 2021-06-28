@@ -31,7 +31,7 @@ class Header extends Component {
 
   launchBenchmark() {
     this.props.callTracefunc({ launchh: true })
-   this.callApi()
+   //this.callApi()
   }
 
   downloadBenchmark() {

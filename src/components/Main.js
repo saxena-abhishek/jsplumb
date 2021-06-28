@@ -113,6 +113,7 @@ class Main extends Component {
     console.log("validated!");
   }
   onDragStart(event) {
+
     event.dataTransfer.setData('text/plain', event.target.id);
 
   }
@@ -126,16 +127,25 @@ class Main extends Component {
     for (i = 0; i < this.nList.length; i++) {
       if (this.nList[i].name === id) {
         this.setState({ instanceName: this.nList[i].configuration.InstName, instanceType: this.nList[i].configuration.InstType })
-        icon2.classList.remove("fa", "fa-times", "fa-lg");
-        icon3.classList.remove("selected");
+        // icon2.classList.remove("fa", "fa-times", "fa-lg");
+        // icon3.classList.remove("selected");
+        this.removeSelected(icon2,icon3)
       }
 
     }
   }
 
+removeSelected(icon2,icon3){
+   icon2.classList.remove("fa", "fa-times", "fa-lg");
+     icon3.classList.remove("selected");
+     icon3.addEventListener("click", (e) =>   this.onSelect(icon2,icon3), false);
+}
+
   onSelect(icon2, icon3) {
     icon2.classList.add("fa", "fa-times", "fa-lg");
     icon3.classList.add("selected");
+  
+    icon3.addEventListener("click", (e) =>   this.removeSelected(icon2,icon3), false);
 
   }
   onDrop(event) {
