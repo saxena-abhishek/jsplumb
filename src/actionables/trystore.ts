@@ -1,5 +1,5 @@
 import { configureStore,createAction } from '@reduxjs/toolkit'
-import nodesReducer from '../reducers/nodesReducer';
+import nodesReducer from '../reducers/reducer';
 
 const store = configureStore({
   reducer: {
