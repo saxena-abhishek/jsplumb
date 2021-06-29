@@ -70,7 +70,7 @@ class Header extends Component {
     return (
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <div style={{ flex: 1, borderBottomStyle: 'groove', borderWidth: '1px', color: '#0071c5', fontSize: '22px' }}><img src={logo} alt="Logo" style={{ width: '65px', top: '0px' }} />     Benchmark Topology</div>
-        <div style={{ display: "flex", textAlign: "center", flex: 3, backgroundColor: '#E7E7E7' }}>
+        <div style={{ display: "flex", textAlign: "center", flex: 3, backgroundColor: '#E7E7E7', paddingBottom: '10px' }}>
           <div style={{ display: "flex", flexDirection: "column", flex: 2 }}>
             <div style={{ flex: 2 }}></div>
             <div style={{ flex: 1, color: '#0071c5', fontSize: '17px' }}>Load Condition(RPS):{this.state.rps}</div>
@@ -134,8 +134,8 @@ class Header extends Component {
               <div style={{ display: "flex" }}>
 
                 <div style={{ flex: 3 }}>
-                  <button onClick={this.launchBenchmark}>Launch Benchmark</button>
-                  <button onClick={this.downloadBenchmark}>Download</button>
+                  <button onClick={this.downloadBenchmark} style={{ marginLeft: '10px', marginRight: '10px' }}>Download</button>
+                  <button onClick={this.launchBenchmark} style={{ marginLeft: '10px' }}>Deploy</button>                
                 </div>
               </div>
             </div>

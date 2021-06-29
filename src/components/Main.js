@@ -24,7 +24,7 @@ class Main extends Component {
     this.iType = [];
     this.numberrs = [1, 2, 3, 4, 5, 6]
     this.iName = [];
-    this.state = { nodeList: [], nodeConnections: [], showDiv: false, id: '', showPanel: '', instanceType: '', instanceName: '', activeComponentId: '', activeNodeName: '', launchStatus: false ,postApiSuccess:false};
+    this.state = { loading: false, nodeList: [], nodeConnections: [], showDiv: false, id: '', showPanel: '', instanceType: '', instanceName: '', activeComponentId: '', activeNodeName: '', launchStatus: false ,postApiSuccess:false};
   //  this.connectionsList= new Map();
   }
 
@@ -48,6 +48,7 @@ class Main extends Component {
   }
 
   traceConnections(download) {
+    this.setState({ loading: true });
     var connections = jsPlumb.jsPlumb.getAllConnections();
     let that = this;
     let original = { workspace: "Anirban", project: "HCL_BO" };
@@ -89,8 +90,13 @@ class Main extends Component {
      
     })
     
-      .then(response =>{this.notify(true);})
-      .catch((error)=>{  this.notify(false); });
+      .then(response =>{ this.setState({ loading: false });
+      this.notify(true);
+    })
+      .catch((error)=>{
+        this.setState({ loading: false });  
+        this.notify(false); 
+      });
     
   }
 
@@ -101,10 +107,11 @@ class Main extends Component {
       headers: {}
     }).then(response => response.blob())
       .then(zipFile => {
+        this.setState({ loading: false });
         var blob = zipFile;
         var link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
-        link.download = 'download'
+        link.download = 'terraform-scripts'
         link.click();
         // this.notify(true)
       })
@@ -161,7 +168,7 @@ removeSelected(icon2,icon3){
 
     const draggableElement = document.getElementById(id);
 
-    if (draggableElement.classList.contains('cln')) {
+    if (draggableElement && draggableElement.classList.contains('cln')) {
       let cloneEl = draggableElement.cloneNode(true);
       const dropzone = event.target;
       let positionX;
@@ -346,7 +353,7 @@ removeSelected(icon2,icon3){
 
   notify = (isApiSuccess) => {
     isApiSuccess ?
-      toast(<div style={{ backgroundColor: '#d4edda', color: 'green' }}> Launch Succeed</div>, { position: toast.POSITION.TOP_CENTER }) : toast(<div style={{ backgroundColor: '#f8d7da', color: 'red' }}> Launch Failed</div>, { position: toast.POSITION.TOP_CENTER })
+      toast(<div style={{ backgroundColor: '#d4edda', color: 'green' }}> Deployment Initiated</div>, { position: toast.POSITION.TOP_CENTER }) : toast(<div style={{ backgroundColor: '#f8d7da', color: 'red' }}> Deployment Failed</div>, { position: toast.POSITION.TOP_CENTER })
   }
 
 
@@ -371,7 +378,7 @@ removeSelected(icon2,icon3){
     let status = this.props.launch ? this.traceConnections(false) : '';
     let status1 = this.props.download ? this.traceConnections(this.props.download) : '';
 
-    jsPlumb.jsPlumb.select().setLabel(this.props.rps);
+    // jsPlumb.jsPlumb.select().setLabel(this.props.rps);
     let comp = this.state.showDiv ?
 
 
@@ -404,6 +411,9 @@ removeSelected(icon2,icon3){
 
     return (
       <div className="container-fluid" >
+        
+        {(this.state.loading) ? <div class="loading"> Loading </div> : null}
+
         <div style={{ display: 'flex' }}>
           <div style={{ flex: 2 }} >
             <div id="toolbox" className="justify-content-center" >
