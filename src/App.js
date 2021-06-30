@@ -3,9 +3,10 @@ import Header from './components/Header';
 import Main from './components/Main';
 import React, { Component } from 'react';
 import {Provider} from 'react-redux';
-import { createStore } from "redux";
-import Reducer from './reducers/reducer';
-const store = createStore(Reducer);
+import {store} from './actionables/store';
+//import { createStore } from "redux";
+//import Reducer from './redux/reducers/reducer';
+//const store = createStore(Reducer);
 
 class MyJsPlumb extends Component {
   constructor(props) {

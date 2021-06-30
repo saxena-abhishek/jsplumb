@@ -1,0 +1,41 @@
+import { nodeConstants } from '../../actionables/actionTypes';
+
+const initialState = {
+    nodeList:[{ componentId: 1, id: 'locust', name: 'Locust', configuration: {instanceType: ['t2-micro', 't2-large']} ,vc:0},
+    { componentId: 2, id: 'nginx', name: 'nginx', configuration: {instanceType: ['t2-micro', 't2-large']} ,vc:0},
+    { componentId: 3, id: 'wordpress', name: 'wordpress', configuration: {instanceType: ['t2-micro', 't2-large']},vc:0},
+    { componentId: 4, id: 'mysql', name: 'mysql' , configuration: {instanceType: ['t2-micro', 't2-large']},vc:0} ],
+    nList:[]
+    
+}
+
+//nList:[{this.nList.push({ name: cloneEl.id, componentId: item.componentId, depth: [],configuration:{} });}]
+ const reducer=(state = initialState, action) =>{
+  switch (action.type) {
+    case nodeConstants.TYPE_OF_NODES:
+        return {
+          nodeList: state.nodeList
+        };
+    case nodeConstants.ADD_NODE:
+          return Object.assign({}, state, state.nList.push(action.node))
+           // nList: [action.node, ...state.nList]//name: cloneEl.id, componentId: item.componentId, depth: [],configuration:{} });
+    case nodeConstants.LIST_NODES:
+      return {
+        nList: state.nList
+      };
+    case nodeConstants.DELETE_NODE:
+          return Object.assign({}, state, {
+            nList: state.nList.filter((node) => {
+              return node.name !== action.id
+            })
+          });
+    case nodeConstants.UPDATE_NODES:
+      let indx= state.nList.findIndex(node=> node.name===action.config.id);
+      state.nList[indx].configuration=action.config.configuration;
+      return Object.assign({}, state, state.nList)
+    
+    default:
+      return state;
+  }
+}
+ export default reducer;
