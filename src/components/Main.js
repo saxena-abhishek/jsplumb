@@ -4,7 +4,8 @@ import "../styles/jsplumbdemo.css";
 import { findPosition } from '../utils/domUtils';
 import { connect } from 'react-redux';
 import SlidingPanel from 'react-sliding-side-panel';
-import {actions} from '../actionables/actionCreator';
+import {mapStateToProps,mapDispatchToProps} from './container';
+//import {actions} from '../actionables/actionCreator';
 //import { jsPlumbInstance } from 'jsplumb';
 class Main extends Component {
   constructor(props) {
@@ -12,8 +13,8 @@ class Main extends Component {
 
     this.initialShow = this.initialShow.bind(this);
     this.onDragStart = this.onDragStart.bind(this);
-    this.handleChangeName = this.handleChangeName.bind(this);
-    this.handleChangeType = this.handleChangeType.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    //this.handleChangeType = this.handleChangeType.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     // this.saveNodeJson = this.saveNodeJson.bind(this);
     this.traceConnections = this.traceConnections.bind(this);
@@ -27,8 +28,8 @@ class Main extends Component {
   handleChangeType(event) {
     this.setState({instanceType: event.target.value});
   }
-  handleChangeName(event) {
-    this.setState({instanceName: event.target.value});
+  handleChange(event) {
+    this.setState({[event.target.name]: event.target.value});
   }
 
   handleSubmit(event) {
@@ -38,9 +39,11 @@ class Main extends Component {
   }
 
   saveConfig(){
-   let config={};
-    config.configuration={InstName : this.state.instanceName,
-      InstType: this.state.instanceType};
+   let config={};//configuration:{ variables: {instanceName : InstName , instanceType: InstType}},
+    config.configuration={
+      InstName : this.state.instanceName,
+      InstType: this.state.instanceType
+    };
     config.id=this.state.id;
     this.props.updateNodeConfig(config); 
   }
@@ -49,26 +52,22 @@ class Main extends Component {
     var connections = jsPlumb.jsPlumb.getAllConnections();
     let that = this;
     let original = { workspace: "Anirban", project: "HCL_BO" };
-    let comp = [];
     if (this.props.nList) {
-
       for (let i = 0; i < this.props.nList.length; i++) {
         let targetIds = [];
         let sourceIds = [];
         connections.forEach(function (connection, id) {
       //  connections.map( connection => {
-          if (connection.sourceId === that.props.nList[i].name) {
+          if (connection.sourceId === that.props.nList[i].uniqueId) {
             targetIds.push(connection.targetId);
-          }else if (connection.targetId === that.props.nList[i].name) {
+          }else if (connection.targetId === that.props.nList[i].uniqueId) {
             sourceIds.push(connection.sourceId);
           } 
         })  
-        let ob ={ uniqueId: that.props.nList[i].name, componentId: that.props.nList[i].componentId,  configuration:{ variables: {instanceName : that.props.nList[i].configuration.InstName , instanceType: that.props.nList[i].configuration.InstType}}, connectedTo: targetIds, connectedFrom: sourceIds }
-        this.props.addNode(ob);
-        //console.log(this.props);
-        comp.push(ob);
+        let config ={ id: that.props.nList[i].uniqueId,connectedTo: targetIds, connectedFrom: sourceIds }
+        this.props.updateNodeConnection(config);
       }
-      original.components = comp;
+      original.components = this.props.nList;
     }
     console.log("format:" + JSON.stringify(original));
     this.callApi(original);
@@ -134,8 +133,8 @@ class Main extends Component {
     
       control.append(icon3);
 
-      this.props.addNode({ name: cloneEl.id, componentId: item.componentId, configuration:{},connectedTo:[],connectedFrom:[] });
-
+      this.props.addNode({ uniqueId: cloneEl.id, componentId: item.componentId, configuration:{},connectedTo:[],connectedFrom:[] });
+//uniqueId: name, componentId: componentId,  configuration:{ variables: {instanceName : InstName , instanceType: InstType}}, connectedTo: , connectedFrom:  }
       document.getElementById(icon2.id).setAttribute("style", "top:-10px;right:-8px;position:absolute;cursor:pointer;color:red; ");
       jsPlumb.jsPlumb.draggable(cloneEl.id, { containment: true });
 
@@ -231,7 +230,6 @@ class Main extends Component {
       })
       
    jsPlumb.jsPlumb.bind("click", function (component, event) {
-        console.log("click!")
         if (component.hasClass("jtk-connector")) {
           event.preventDefault();
           var conn = jsPlumb.jsPlumb.getConnections({
@@ -243,7 +241,7 @@ class Main extends Component {
           }
         }
       })
-   // });
+
       jsPlumb.jsPlumb.bind("contextmenu", (component, event) => {
         if (component.hasClass("jtk-connector")) {
           event.preventDefault();
@@ -287,10 +285,10 @@ class Main extends Component {
       {/* <div >ID : {this.state.id}</div> */}
       <div style={{padding:'10px 10px '}}>
       <div>Instance Name</div>
-      <input style={{backgroundColor:'white'}}value={this.state.instanceName} placeholder="Instance Name"  onChange={this.handleChangeName}></input>
+      <input style={{backgroundColor:'white'}} value={this.state.instanceName} name="instanceName" placeholder="Instance Name"  onChange={this.handleChange}></input>
       </div>
       Instance Type < form  className="form-group" onSubmit={this.handleSubmit}>
-        <select value={this.state.instanceType} onChange={this.handleChangeType}>
+        <select value={this.state.instanceType} name="instanceType" onChange={this.handleChange}>
           <option>Instance Type</option>
         {this.fetchOption()}
         </select>
@@ -312,7 +310,7 @@ class Main extends Component {
           <div style={{ flex: 7 }} >
             <div id="diagram" style={{ height: "90vh", position: 'relative' }} onDragOver={(e) => this.onDragOver(e)}
               onDrop={(event) => this.onDrop(event)}  ><div id="config-items">{comp}</div>
-              <button className="btn" onClick={this.traceConnections}>Validate</button>
+              <button className="btn" onClick={(e)=>this.traceConnections(e)}>Validate</button>
             </div>
           </div>
         </div>
@@ -321,19 +319,4 @@ class Main extends Component {
     );
   }
 }
-const mapStateToProps = (state, ownProps) => ({
-  nodeList: state.nodeList,
-  nList: state.nList
-})
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addNode: node=>dispatch(actions.addNode(node)),
-    updateNodeConfig: config=>dispatch(actions.updateNodeConfig(config)),
-    deleteNode: id=>dispatch(actions.deleteNode(id)),
-   // deleteConnection: id=>dispatch(actions.deleteConnection(id)),
-  //  deleteNode: id=>dispatch(actions.deleteNode(id)),
-  }
-}
-
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 //import jsPlumb from "jsplumb/dist/js/jsplumb.min";
+import {mapStateToProps,mapDispatchToProps} from './container';
 import "../styles/jsplumbdemo.css";
 
 class DrawNodes extends Component {
@@ -12,14 +13,7 @@ class DrawNodes extends Component {
   }
   render() {
         const box = document.getElementById("toolbox");
-        // this.nodenames = [
-        //   { id: 'nginx', name: 'Nginx', icon: 'fa-file', vc: 0, stat: true },
-        //   { id: 'wordpress', name: 'Wordpress', icon: 'fa-wordpress', vc: 0, stat: true },
-        //   { id: 'mysql', name: 'MySQL', icon: 'fa-database', vc: 0, stat: true },
-        //   { id: 'locust', name: 'Locust', icon: 'fa', vc: 0, stat: false }
-        // ]
-let comp="",cls="";
-
+        let comp="",cls="";
 
     for (let i = 0; i < this.props.nodeList.length; i++) {
     
@@ -55,4 +49,5 @@ let comp="",cls="";
 
   }
 }
-  export default DrawNodes;
+  //export default DrawNodes;
+  export default connect(mapStateToProps, mapDispatchToProps)(DrawNodes);

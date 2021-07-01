@@ -26,14 +26,18 @@ const initialState = {
     case nodeConstants.DELETE_NODE:
           return Object.assign({}, state, {
             nList: state.nList.filter((node) => {
-              return node.name !== action.id
+              return node.uniqueId !== action.id
             })
           });
-    case nodeConstants.UPDATE_NODES:
-      let indx= state.nList.findIndex(node=> node.name===action.config.id);
-      state.nList[indx].configuration=action.config.configuration;
-      return Object.assign({}, state, state.nList)
-    
+    case nodeConstants.UPDATE_NODES://configuration:{ variables: {instanceName : InstName , instanceType: InstType}},
+          let indx= state.nList.findIndex(node=> node.uniqueId===action.config.id);
+          state.nList[indx].configuration={"variables":action.config.configuration};
+          return Object.assign({}, state, state.nList);
+    case nodeConstants.UPDATE_NODES_CONN:
+          let ind= state.nList.findIndex(node=> node.uniqueId===action.config.id);
+          state.nList[ind].connectedTo=action.config.connectedTo;
+          state.nList[ind].connectedFrom=action.config.connectedFrom;
+          return Object.assign({}, state, state.nList);
     default:
       return state;
   }

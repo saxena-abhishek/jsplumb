@@ -10,6 +10,12 @@ export const actions = {
         node: node,
       }
     },
+    updateNodeConnection: function(config){
+      return {
+        type:nodeConstants.UPDATE_NODES_CONN,
+        config:config
+      }
+    },
     listNodes: function() {
       return {
         type: nodeConstants.LIST_NODES
@@ -28,8 +34,8 @@ export const actions = {
       }
     },
     nodeTypes: function(){
-        return{
-            type:nodeConstants.TYPE_OF_NODES
-        }
+      return{
+        type:nodeConstants.TYPE_OF_NODES
+      }
     }
   }
