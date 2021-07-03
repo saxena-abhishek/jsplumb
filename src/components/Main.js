@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-//import jsPlumb from "jsplumb/dist/js/jsplumb.min";
 import "../styles/jsplumbdemo.css";
 import { findPosition } from '../utils/domUtils';
 import { connect } from 'react-redux';
-import SlidingPanel from 'react-sliding-side-panel';
+import ConfigDiv from './ConfigDiv';
 import {mapStateToProps,mapDispatchToProps} from './container';
 
 class Main extends Component {
@@ -12,37 +11,12 @@ class Main extends Component {
     super(props);
     this.initialShow = this.initialShow.bind(this);
     this.onDragStart = this.onDragStart.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
     // this.saveNodeJson = this.saveNodeJson.bind(this);
-    this.closeDiv = this.closeDiv.bind(this);
-    this.iType=[];
-    this.numberrs=[1,2,3,4,5,6]
-    this.iName=[]; 
+    //this.closeDiv = this.closeDiv.bind(this);
+    // this.iType=[];
+    // this.numberrs=[1,2,3,4,5,6]
+    // this.iName=[]; 
     this.state = { showDiv: false, id: '' ,showPanel:'',instanceType:'',instanceName:'',activeComponentId:'', activeNodeName:''};
-  }
-
-  handleChangeType(event) {
-    this.setState({instanceType: event.target.value});
-  }
-  handleChange(event) {
-    this.setState({[event.target.name]: event.target.value});
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    this.saveConfig();
-    this.setState({showPanel:false,showDiv:false ,instanceName:'',instanceType:''})
-  }
-
-  saveConfig(){
-   let config={};
-    config.configuration={
-      InstName : this.state.instanceName,
-      InstType: this.state.instanceType
-    };
-    config.id=this.state.id;
-    this.props.updateNodeConfig(config); 
   }
 
 
@@ -56,12 +30,13 @@ class Main extends Component {
   onDragOver(event) {
     event.preventDefault();
   }
+
   onEdit(id,activeComponentId ,activeNodeName){
     
     this.setState({ showDiv: true, showPanel:true ,id: id ,activeComponentId:activeComponentId ,activeNodeName:activeNodeName});
     let i=this.props.nList.findIndex(node=>node.uniqueId===id);
     this.setState({instanceName:this.props.nList[i].configuration.InstName ,instanceType:this.props.nList[i].configuration.InstType})
-  }
+  }  
 
   onDrop(event) {
     const id = event
@@ -221,47 +196,11 @@ class Main extends Component {
 
     });
   }
-  closeDiv(showMe) {
-    console.log("then:" + showMe + "now:" + !showMe)
-    this.setState({ showDiv: !showMe })
-  }
-
-  fetchOption(){
-    let i=this.state.activeComponentId;
-    return( <>{this.props.nodeList[i-1].configuration.instanceType.map((number,indx) =><option key={indx}>{number}</option>           
-   )}
-   </>
-   )
-     }
 
   render() {
     this.props.jsplumb.select().setLabel(this.props.rps);
     let comp = this.state.showDiv ?
-    <div className="panel-container" > <div ><SlidingPanel
-    type={'right'}
-    isOpen={this.state.showPanel}
-    size={100}
-  className="panel-content"
-  >
-    <div style={{display:'flex',flexDirection:'column' ,textAlign:'center'}}>
-     <div className="rightPanelHeader"> {this.state.activeNodeName} Configuration</div>
-      {/* <div >ID : {this.state.id}</div> */}
-      <div style={{padding:'10px 10px '}}>
-      <div>Instance Name</div>
-      <input style={{backgroundColor:'white'}} value={this.state.instanceName} name="instanceName" placeholder="Instance Name"  onChange={this.handleChange}></input>
-      </div>
-      Instance Type < form  className="form-group" onSubmit={this.handleSubmit}>
-        <select value={this.state.instanceType} name="instanceType" onChange={this.handleChange}>
-          <option>Instance Type</option>
-        {this.fetchOption()}
-        </select>
-        <div style={{padding:'10px 10px '}}>
-        <button type="submit">Save</button>
-        <button onClick={() => this.setState({showPanel:false,showDiv:false ,instanceName:'',instanceType:''})}>Close</button>
-        </div>
-      </form>      
-    </div>
-  </SlidingPanel> </div> </div> : "";
+    <ConfigDiv id={this.state.id} activeComponentId={this.state.activeComponentId} activeNodeName={this.state.activeNodeName} showDiv={this.state.showDiv}/> : "";
 
     return (
       <div className="container-fluid" >
