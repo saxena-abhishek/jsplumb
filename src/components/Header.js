@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import "../styles/jsplumbdemo.css";
 import "../styles/header.css";
-import logo from '../intellogoo.png';   // <img src={process.env.PUBLIC_URL + '/intellogoo.png'} /> 
+import logo from '../intellogoo.png';   // <img src={process.env.PUBLIC_URL + '/intellogoo.png'} />
+import { connect } from 'react-redux';
+import {mapStateToProps,mapDispatchToProps} from './container'; 
 
 class Header extends Component {
   constructor(props) {
     super(props);
     this.state = { rps: 0 };
+    this.traceConnections=this.traceConnections.bind(this);
   }
   slidechanger(e) {
     this.setState({ rps: e });  
@@ -15,6 +18,41 @@ class Header extends Component {
       document.documentElement.style.setProperty('background-color', "white");
     }
     document.documentElement.style.setProperty('--white-color', e);
+  }
+
+  callApi(data) {
+    fetch("http://65.1.81.30:5000/ec2/deploy", {
+      method: "POST", 
+      body: JSON.stringify(data),
+      headers: { }
+    })
+      .then(response => response.json())
+      .then(json => console.log(json));
+  }
+
+  traceConnections() {    
+    var connections = this.props.jsplumb.getAllConnections();
+    let that = this;
+    let original = { workspace: "Anirban", project: "HCL_BO" };
+    if (this.props.nList) {
+      for (let i = 0; i < this.props.nList.length; i++) {
+        let targetIds = [];
+        let sourceIds = [];
+        connections.forEach(function (connection, id) {
+      //  connections.map( connection => {
+          if (connection.sourceId === that.props.nList[i].uniqueId) {
+            targetIds.push(connection.targetId);
+          }else if (connection.targetId === that.props.nList[i].uniqueId) {
+            sourceIds.push(connection.sourceId);
+          } 
+        })  
+        let config ={ id: that.props.nList[i].uniqueId,connectedTo: targetIds, connectedFrom: sourceIds }
+        this.props.updateNodeConnection(config);
+      }
+      original.components = this.props.nList;
+    }
+    console.log("format:" + JSON.stringify(original));
+    this.callApi(original);
   }
 
   render() {
@@ -85,7 +123,7 @@ class Header extends Component {
             <div style={{ display: "flex" }}>
               <div style={{ flex: 1 }}></div>
               <div style={{ flex: 2 }}>
-                <button>Launch Benchmark</button>
+                <button onClick={e=>this.traceConnections(e)}>Launch Benchmark</button>
                 <button>Cancel</button>
               </div>
             </div>
@@ -97,4 +135,4 @@ class Header extends Component {
   }
 }
 
-export default Header;
+export default  connect(mapStateToProps, mapDispatchToProps)(Header);

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import jsPlumb from "jsplumb/dist/js/jsplumb.min";
+//import jsPlumb from "jsplumb/dist/js/jsplumb.min";
 import "../styles/jsplumbdemo.css";
 import { findPosition } from '../utils/domUtils';
 import { connect } from 'react-redux';
@@ -15,7 +15,6 @@ class Main extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     // this.saveNodeJson = this.saveNodeJson.bind(this);
-    this.traceConnections = this.traceConnections.bind(this);
     this.closeDiv = this.closeDiv.bind(this);
     this.iType=[];
     this.numberrs=[1,2,3,4,5,6]
@@ -46,40 +45,6 @@ class Main extends Component {
     this.props.updateNodeConfig(config); 
   }
 
-  traceConnections() {    
-    var connections = jsPlumb.jsPlumb.getAllConnections();
-    let that = this;
-    let original = { workspace: "Anirban", project: "HCL_BO" };
-    if (this.props.nList) {
-      for (let i = 0; i < this.props.nList.length; i++) {
-        let targetIds = [];
-        let sourceIds = [];
-        connections.forEach(function (connection, id) {
-      //  connections.map( connection => {
-          if (connection.sourceId === that.props.nList[i].uniqueId) {
-            targetIds.push(connection.targetId);
-          }else if (connection.targetId === that.props.nList[i].uniqueId) {
-            sourceIds.push(connection.sourceId);
-          } 
-        })  
-        let config ={ id: that.props.nList[i].uniqueId,connectedTo: targetIds, connectedFrom: sourceIds }
-        this.props.updateNodeConnection(config);
-      }
-      original.components = this.props.nList;
-    }
-    console.log("format:" + JSON.stringify(original));
-    this.callApi(original);
-  }
-
-  callApi(data) {
-    fetch("http://65.1.81.30:5000/ec2/deploy", {
-      method: "POST", 
-      body: JSON.stringify(data),
-      headers: { }
-    })
-      .then(response => response.json())
-      .then(json => console.log(json));
-  }
 
   validate() {
     console.log("validated!");
@@ -134,9 +99,9 @@ class Main extends Component {
       this.props.addNode({ uniqueId: cloneEl.id, componentId: item.componentId, configuration:{},connectedTo:[],connectedFrom:[] });
 //uniqueId: name, componentId: componentId,  configuration:{ variables: {instanceName : InstName , instanceType: InstType}}, connectedTo: , connectedFrom:  }
       document.getElementById(icon2.id).setAttribute("style", "top:-10px;right:-8px;position:absolute;cursor:pointer;color:red; ");
-      jsPlumb.jsPlumb.draggable(cloneEl.id, { containment: true });
+      this.props.jsplumb.draggable(cloneEl.id, { containment: true });
 
-      jsPlumb.jsPlumb.addEndpoint(cloneEl.id, {
+      this.props.jsplumb.addEndpoint(cloneEl.id, {
         jtk: "Dot",
         paintStyle: { fill: "#0071c5", outlineStroke: "white", backgroundColor: "white", outlineWidth: 1 },
         anchor: ["RightMiddle"],
@@ -146,7 +111,7 @@ class Main extends Component {
 
       });
 
-      jsPlumb.jsPlumb.addEndpoint(cloneEl.id, {
+      this.props.jsplumb.addEndpoint(cloneEl.id, {
         jtk: "Dot",
         paintStyle: { fill: "#0071c5", outlineStroke: "white", outlineWidth: 1 },
         anchor: ["LeftMiddle"],
@@ -203,18 +168,19 @@ class Main extends Component {
 
   removeNode(e, id) {
     let el = document.getElementById(id);
-    jsPlumb.jsPlumb.removeAllEndpoints(el);
-    jsPlumb.jsPlumb.remove(el);
+    this.props.jsplumb.removeAllEndpoints(el);
+    this.props.jsplumb.remove(el);
     this.props.deleteNode(id);
       }
 
   componentDidMount() {
     this.initialShow();
+    let that=this;
     let canvas = document.getElementById("diagram");
-    jsPlumb.jsPlumb.ready(function () {
-      jsPlumb.jsPlumb.setContainer(canvas);
+    this.props.jsplumb.ready(function () {
+      that.props.jsplumb.setContainer(canvas);
 
-      jsPlumb.jsPlumb.registerConnectionTypes({
+      that.props.jsplumb.registerConnectionTypes({
         "black-connection": {
           paintStyle: { stroke: "#0071c5" },
           hoverPaintStyle: { stroke: "red" },
@@ -227,28 +193,28 @@ class Main extends Component {
         }
       })
       
-   jsPlumb.jsPlumb.bind("click", function (component, event) {
+      that.props.jsplumb.bind("click", function (component, event) {
         if (component.hasClass("jtk-connector")) {
           event.preventDefault();
-          var conn = jsPlumb.jsPlumb.getConnections({
+          var conn = that.props.jsplumb.getConnections({
             source: component.sourceId,
             target: component.targetId
           });
           if (conn[0]) {
-            jsPlumb.jsPlumb.deleteConnection(conn[0]);
+            that.props.jsplumb.deleteConnection(conn[0]);
           }
         }
       })
 
-      jsPlumb.jsPlumb.bind("contextmenu", (component, event) => {
+      that.props.jsplumb.bind("contextmenu", (component, event) => {
         if (component.hasClass("jtk-connector")) {
           event.preventDefault();
-          var conn = jsPlumb.jsPlumb.getConnections({
+          var conn = that.props.jsplumb.getConnections({
             source: component.sourceId,
             target: component.targetId
           });
           if (conn[0]) {
-            jsPlumb.jsPlumb.deleteConnection(conn[0]);
+            that.props.jsplumb.deleteConnection(conn[0]);
           }
         }
       })
@@ -269,8 +235,7 @@ class Main extends Component {
      }
 
   render() {
-
-    jsPlumb.jsPlumb.select().setLabel(this.props.rps);
+    this.props.jsplumb.select().setLabel(this.props.rps);
     let comp = this.state.showDiv ?
     <div className="panel-container" > <div ><SlidingPanel
     type={'right'}
@@ -308,7 +273,7 @@ class Main extends Component {
           <div style={{ flex: 7 }} >
             <div id="diagram" style={{ height: "90vh", position: 'relative' }} onDragOver={(e) => this.onDragOver(e)}
               onDrop={(event) => this.onDrop(event)}  ><div id="config-items">{comp}</div>
-              <button className="btn" onClick={(e)=>this.traceConnections(e)}>Validate</button>
+              <button className="btn" onClick={this.validate}>Validate</button>
             </div>
           </div>
         </div>
