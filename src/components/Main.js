@@ -5,16 +5,14 @@ import { findPosition } from '../utils/domUtils';
 import { connect } from 'react-redux';
 import SlidingPanel from 'react-sliding-side-panel';
 import {mapStateToProps,mapDispatchToProps} from './container';
-//import {actions} from '../actionables/actionCreator';
-//import { jsPlumbInstance } from 'jsplumb';
+
 class Main extends Component {
+  
   constructor(props) {
     super(props);
-
     this.initialShow = this.initialShow.bind(this);
     this.onDragStart = this.onDragStart.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    //this.handleChangeType = this.handleChangeType.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     // this.saveNodeJson = this.saveNodeJson.bind(this);
     this.traceConnections = this.traceConnections.bind(this);
@@ -39,7 +37,7 @@ class Main extends Component {
   }
 
   saveConfig(){
-   let config={};//configuration:{ variables: {instanceName : InstName , instanceType: InstType}},
+   let config={};
     config.configuration={
       InstName : this.state.instanceName,
       InstType: this.state.instanceType
