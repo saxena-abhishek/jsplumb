@@ -417,19 +417,21 @@ class Main extends Component {
 
       const box1 = document.getElementById("diagram");
       for (var i = 0; i < this.givenNodes.length; i++) {
-        var control11 = document.createElement("div");
-        control11.draggable = true;
-        control11.classList.add("cln");
-        control11.id = this.givenNodes[i];
+        var redrawElement = document.createElement("div");
+       
+        redrawElement.classList.add("cln");
+        redrawElement.id = this.givenNodes[i];
 
         var text1 = document.createElement("span");
         text1.innerHTML = this.givenNodes[i];
-        control11.append(text1);
-        control11.append(" ");
+        redrawElement.append(text1);
+        redrawElement.append(" ");
 
-        box1.append(control11);
-        jsPlumb.jsPlumb.draggable(control11);
-        jsPlumb.jsPlumb.addEndpoint(control11, {
+        box1.append(redrawElement);
+        // redrawElement.draggable = true;
+      //  redrawElement.draggable=true;
+        jsPlumb.jsPlumb.draggable(redrawElement);
+        jsPlumb.jsPlumb.addEndpoint(redrawElement, {
           jtk: "Dot",
           paintStyle: {
             fill: "black",
@@ -443,7 +445,7 @@ class Main extends Component {
           maxConnections: -1,
         });
 
-        jsPlumb.jsPlumb.addEndpoint(control11, {
+        jsPlumb.jsPlumb.addEndpoint(redrawElement, {
           jtk: "Dot",
           paintStyle: {
             fill: "black",
@@ -455,6 +457,7 @@ class Main extends Component {
           connectionType: "black-connection",
           maxConnections: -1,
         });
+         
       }
       for (var i = 0; i < this.givenNodes.length; i++) {
         for (var j = 0; j < this.givenConnections.length; j++) {
