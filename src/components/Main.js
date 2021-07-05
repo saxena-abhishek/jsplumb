@@ -413,8 +413,7 @@ class Main extends Component {
         { source: "mysql1", target: "nginx1" },
         { source: "nginx1", target: "locust1" },
       ];
-      this.activeSource = "";
-      this.activeTarget = "";
+      
 
       const box1 = document.getElementById("diagram");
       for (var i = 0; i < this.givenNodes.length; i++) {
@@ -433,7 +432,7 @@ class Main extends Component {
         jsPlumb.jsPlumb.addEndpoint(control11, {
           jtk: "Dot",
           paintStyle: {
-            fill: "#0071c5",
+            fill: "black",
             outlineStroke: "white",
             backgroundColor: "white",
             outlineWidth: 1,
@@ -447,7 +446,7 @@ class Main extends Component {
         jsPlumb.jsPlumb.addEndpoint(control11, {
           jtk: "Dot",
           paintStyle: {
-            fill: "#0071c5",
+            fill: "black",
             outlineStroke: "white",
             outlineWidth: 1,
           },
@@ -468,6 +467,7 @@ console.log('source',s1,'target',t1)
               anchors: ["Right", "Left"],
               source: s1,
               target: t1,
+            
               overlays: [
                 "Arrow",
                 [
