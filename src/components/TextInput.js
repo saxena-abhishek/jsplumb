@@ -1,13 +1,33 @@
 import React, { Component } from 'react';
-
+import { connect } from "react-redux";
+import "../styles/jsplumbdemo.css";
 class TextInput extends Component {
     constructor(props) {
         super(props);
         this.state = {  }
     }
     render() { 
-        return ( "" );
+    
+        return ( <div style={{ padding: "10px 10px " }}> <div>{this.props.instanceNameLabel}</div>
+            <input
+              style={{backgroundColor:'white'}}
+              value={this.props.instanceName}
+              placeholder={this.props.rightPanelItems[0].label}
+              onChange={this.props.handleChangeName}
+            ></input></div>);
     }
 }
  
-export default TextInput;
+const mapStateToProps = (state, ownProps) => ({
+    // todo: state.todos[ownProps.id],
+    rightPanelItems:state.rightPanelItems
+  });
+  
+  const mapDispatchToProps = (dispatch) => {
+    return {
+      dispatch
+    };
+  };
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(TextInput);
+  

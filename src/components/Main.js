@@ -7,10 +7,14 @@ import SlidingPanel from "react-sliding-side-panel";
 import { sendLaunchStatus, sendDownloadStatus } from "../Action";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import TextInput from "./TextInput";
+import Dropdown from "./Dropdown";
+import Checkbox from "./Checkbox";
 class Main extends Component {
   constructor(props) {
     super(props);
-
+    this.onClose = this.onClose.bind(this);
+    this.fetchOption = this.fetchOption.bind(this);
     this.initialShow = this.initialShow.bind(this);
     this.onDragStart = this.onDragStart.bind(this);
     this.handleChangeName = this.handleChangeName.bind(this);
@@ -347,7 +351,14 @@ class Main extends Component {
       control.addEventListener("dragstart", (e) => this.onDragStart(e), false);
     }
   }
-
+  onClose() {
+    this.setState({
+      showPanel: false,
+      showDiv: false,
+      instanceName: "",
+      instanceType: "",
+    });
+  }
   removeNode(e, id) {
     let el = document.getElementById(id);
     jsPlumb.jsPlumb.removeAllEndpoints(el);
@@ -395,30 +406,19 @@ class Main extends Component {
       });
 
       jsPlumb.jsPlumb.bind("connection", (info) => {
-        /* if(this.connectionsList.has(info.sourceId)){
-          let ob=this.connectionsList.get(info.sourceId);
-          this.connectionsList.set(info.sourceId,[...ob,info.targetId]);
-      }else{
-          this.connectionsList.set(info.sourceId,[info.targetId]);
-      }*/
-        //  let i = that.nList.findIndex(item => item.name === info.targetId);
-        //   let li = that.nList.findIndex(item => item.name === info.sourceId);
-        //   that.nList[i].depth.push(info.sourceId);
-        //  // console.log(that.nList[i].depth);
-        //   that.nList[i].depth = (that.nList[i].depth).concat(that.nList[li].depth);
+       
       });
 
-      this.givenNodes = ["mysql1", "nginx1", "locust1"];
+      this.givenNodes = ["mysql", "nginx", "locust"];
       this.givenConnections = [
-        { source: "mysql1", target: "nginx1" },
-        { source: "nginx1", target: "locust1" },
+        { source: "mysql", target: "nginx" },
+        { source: "nginx", target: "locust" },
       ];
-      
 
       const box1 = document.getElementById("diagram");
       for (var i = 0; i < this.givenNodes.length; i++) {
         var redrawElement = document.createElement("div");
-       
+
         redrawElement.classList.add("cln");
         redrawElement.id = this.givenNodes[i];
 
@@ -429,7 +429,7 @@ class Main extends Component {
 
         box1.append(redrawElement);
         // redrawElement.draggable = true;
-      //  redrawElement.draggable=true;
+        //  redrawElement.draggable=true;
         jsPlumb.jsPlumb.draggable(redrawElement);
         jsPlumb.jsPlumb.addEndpoint(redrawElement, {
           jtk: "Dot",
@@ -457,20 +457,19 @@ class Main extends Component {
           connectionType: "black-connection",
           maxConnections: -1,
         });
-         
       }
       for (var i = 0; i < this.givenNodes.length; i++) {
         for (var j = 0; j < this.givenConnections.length; j++) {
           if (this.givenNodes[i] === this.givenConnections[j].source) {
             let s1 = document.getElementById(this.givenNodes[i]);
             let t1 = document.getElementById(this.givenConnections[j].target);
-console.log('source',s1,'target',t1)
+            console.log("source", s1, "target", t1);
 
             jsPlumb.jsPlumb.connect({
               anchors: ["Right", "Left"],
               source: s1,
               target: t1,
-            
+
               overlays: [
                 "Arrow",
                 [
@@ -487,8 +486,6 @@ console.log('source',s1,'target',t1)
                 ],
               ],
             });
-
-
           }
         }
       }
@@ -520,14 +517,12 @@ console.log('source',s1,'target',t1)
     isApiSuccess
       ? toast(
           <div style={{ backgroundColor: "#d4edda", color: "green" }}>
-            {" "}
             Deployment Initiated
           </div>,
           { position: toast.POSITION.TOP_CENTER }
         )
       : toast(
           <div style={{ backgroundColor: "#f8d7da", color: "red" }}>
-            {" "}
             Deployment Failed
           </div>,
           { position: toast.POSITION.TOP_CENTER }
@@ -561,7 +556,6 @@ console.log('source',s1,'target',t1)
     // jsPlumb.jsPlumb.select().setLabel(this.props.rps);
     let comp = this.state.showDiv ? (
       <div className="panel-container">
-        {" "}
         <div>
           <SlidingPanel
             type={"right"}
@@ -577,47 +571,39 @@ console.log('source',s1,'target',t1)
               }}
             >
               <div className="rightPanelHeader">
-                {" "}
                 {this.state.activeNodeName} Configuration
               </div>
-              {/* <div >ID : {this.state.id}</div> */}
-              <div style={{ padding: "10px 10px " }}>
-                <div>Instance Name</div>
-                <input
-                  style={{ backgroundColor: "white" }}
-                  value={this.state.instanceName}
-                  placeholder="Instance Name"
-                  onChange={this.handleChangeName}
-                ></input>
-              </div>
-              Instance Type{" "}
-              <form className="form-group" onSubmit={this.handleSubmit}>
-                <select
-                  value={this.state.instanceType}
-                  onChange={this.handleChangeType}
-                >
-                  <option>Instance Type</option>
-                  {this.fetchOption()}
-                </select>
-                <div style={{ padding: "10px 10px " }}>
-                  <button type="submit">Save</button>
-                  <button
-                    onClick={() =>
-                      this.setState({
-                        showPanel: false,
-                        showDiv: false,
-                        instanceName: "",
-                        instanceType: "",
-                      })
-                    }
-                  >
-                    Close
-                  </button>
-                </div>
-              </form>
+
+              {this.props.rightPanelItems.map((items) => {
+                switch (items.key) {
+                  case "collectLogs":
+                    return <Checkbox checkboxLabel={items.label} />;
+
+                  case "instanceName":
+                    return (
+                      <TextInput
+                        instanceNameLabel={items.label}
+                        instanceName={this.state.instanceName}
+                        handleChangeName={(e) => this.handleChangeName(e)}
+                      />
+                    );
+
+                  case "instanceType":
+                    return (
+                      <Dropdown
+                        instanceTypeLabel={items.label}
+                        instanceType={this.state.instanceType}
+                        handleChangeType={this.handleChangeType}
+                        fetchOption={this.fetchOption}
+                        onClose={this.onClose}
+                        handleSubmit={this.handleSubmit}
+                      />
+                    );
+                }
+              })}
             </div>
-          </SlidingPanel>{" "}
-        </div>{" "}
+          </SlidingPanel>
+        </div>
       </div>
     ) : (
       ""
@@ -652,6 +638,7 @@ const mapStateToProps = (state, ownProps) => ({
   nodeList: state.nodeList,
   launch: state.launch,
   download: state.download,
+  rightPanelItems: state.rightPanelItems,
 });
 
 const mapDispatchToProps = (dispatch) => {
