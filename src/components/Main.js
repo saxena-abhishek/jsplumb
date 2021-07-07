@@ -29,6 +29,8 @@ class Main extends Component {
     this.iType = [];
     this.numberrs = [1, 2, 3, 4, 5, 6];
     this.iName = [];
+    this.givenNodes =[];
+    this.givenConnections =[];
 
     this.state = {
       loading: false,
@@ -165,10 +167,13 @@ class Main extends Component {
     console.log("validated!");
   }
   onDragStart(event) {
+    console.log("drag start:"+event)
     event.dataTransfer.setData("text/plain", event.target.id);
   }
   onDragOver(event) {
+    console.log("drag over before:"+event)
     event.preventDefault();
+    console.log("drag over after:"+event)
   }
   onEdit(id, activeComponentId, activeNodeName, icon2, icon3) {
     this.setState({
@@ -385,7 +390,7 @@ class Main extends Component {
   componentDidMount() {
     this.initialShow();
     // this.reDraw();
-    // let that = this;
+     let that = this;
     let canvas = document.getElementById("diagram");
     jsPlumb.jsPlumb.ready(function () {
       jsPlumb.jsPlumb.setContainer(canvas);
@@ -418,17 +423,17 @@ class Main extends Component {
        
       });
 
-      this.givenNodes = ["mysql", "nginx", "locust"];
+      this.givenNodes = ["mysql0", "nginx0", "locust0"];
       this.givenConnections = [
-        { source: "mysql", target: "nginx" },
-        { source: "nginx", target: "locust" },
+        { source: "mysql0", target: "nginx0" },
+        { source: "nginx0", target: "locust0" },
       ];
 
       const box1 = document.getElementById("diagram");
-      for (var i = 0; i < this.givenNodes.length; i++) {
+      for (let i = 0; i < this.givenNodes.length; i++) {
         var redrawElement = document.createElement("div");
 
-        redrawElement.classList.add("cln");
+        redrawElement.classList.add("cln","control");
         redrawElement.id = this.givenNodes[i];
 
         var text1 = document.createElement("span");
@@ -467,8 +472,8 @@ class Main extends Component {
           maxConnections: -1,
         });
       }
-      for (var i = 0; i < this.givenNodes.length; i++) {
-        for (var j = 0; j < this.givenConnections.length; j++) {
+      for (let i = 0; i < this.givenNodes.length; i++) {
+        for (let j = 0; j < this.givenConnections.length; j++) {
           if (this.givenNodes[i] === this.givenConnections[j].source) {
             let s1 = document.getElementById(this.givenNodes[i]);
             let t1 = document.getElementById(this.givenConnections[j].target);
