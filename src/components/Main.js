@@ -9,6 +9,7 @@ class Main extends Component {
   
   constructor(props) {
     super(props);
+    this.closePanel=this.closePanel.bind(this)
     this.initialShow = this.initialShow.bind(this);
     this.onDragStart = this.onDragStart.bind(this);
     // this.saveNodeJson = this.saveNodeJson.bind(this);
@@ -30,7 +31,10 @@ class Main extends Component {
   onDragOver(event) {
     event.preventDefault();
   }
-
+  closePanel(){
+    console.log("clcked")
+    this.setState({showPanel:false,showDiv:false})
+  }
   onEdit(id,activeComponentId ,activeNodeName){
     
     this.setState({ showDiv: true, showPanel:true ,id: id ,activeComponentId:activeComponentId ,activeNodeName:activeNodeName});
@@ -200,7 +204,7 @@ class Main extends Component {
   render() {
     this.props.jsplumb.select().setLabel(this.props.rps);
     let comp = this.state.showDiv ?
-    <ConfigDiv id={this.state.id} activeComponentId={this.state.activeComponentId} activeNodeName={this.state.activeNodeName} showDiv={this.state.showDiv}/> : "";
+    <ConfigDiv id={this.state.id} activeComponentId={this.state.activeComponentId} activeNodeName={this.state.activeNodeName} showDiv={this.state.showDiv} closePanel={this.closePanel} /> : "";
 
     return (
       <div className="container-fluid" >
