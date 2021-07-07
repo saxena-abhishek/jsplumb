@@ -13,6 +13,7 @@ import Checkbox from "./Checkbox";
 class Main extends Component {
   constructor(props) {
     super(props);
+    this.fieldList=this.props.rightPanelItems;
     this.onClose = this.onClose.bind(this);
     this.fetchOption = this.fetchOption.bind(this);
     this.initialShow = this.initialShow.bind(this);
@@ -42,15 +43,23 @@ class Main extends Component {
       activeNodeName: "",
       launchStatus: false,
       postApiSuccess: false,
+      fieldList:this.props.rightPanelItems
     };
     //  this.connectionsList= new Map();
   }
 
   handleChangeType(event) {
     this.setState({ instanceType: event.target.value });
+    this.fieldList[1].value=this.state.instanceType
+    console.log(this.fieldList)
   }
-  handleChangeName(event) {
-    this.setState({ instanceName: event.target.value });
+  handleChangeName(e) {
+    console.log(this.props.id)
+    // this.setState({ instanceName: id.target.value });
+    this.fieldList[0].value=this.state.instanceName
+    // console.log(this.fieldList)
+  
+    
   }
 
   handleSubmit(event) {
@@ -577,11 +586,14 @@ class Main extends Component {
               {this.props.rightPanelItems.map((items) => {
                 switch (items.key) {
                   case "collectLogs":
-                    return <Checkbox checkboxLabel={items.label} />;
+                    return <Checkbox 
+                    checkboxLabel={items.label}
+                    id={items.key} />;
 
                   case "instanceName":
                     return (
                       <TextInput
+                      id={items.key}
                         instanceNameLabel={items.label}
                         instanceName={this.state.instanceName}
                         handleChangeName={(e) => this.handleChangeName(e)}
@@ -591,6 +603,7 @@ class Main extends Component {
                   case "instanceType":
                     return (
                       <Dropdown
+                      id={items.key}
                         instanceTypeLabel={items.label}
                         instanceType={this.state.instanceType}
                         handleChangeType={this.handleChangeType}

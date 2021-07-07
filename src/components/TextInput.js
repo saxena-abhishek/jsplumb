@@ -8,12 +8,17 @@ class TextInput extends Component {
     }
     render() { 
     
-        return ( <div style={{ padding: "10px 10px " }}> <div>{this.props.instanceNameLabel}</div>
+        return ( <div  style={{ padding: "10px 10px " }}> <div>{this.props.instanceNameLabel}</div>
             <input
+            key={this.props.id}
               style={{backgroundColor:'white'}}
               value={this.props.instanceName}
               placeholder={this.props.rightPanelItems[0].label}
-              onChange={this.props.handleChangeName}
+
+              onChange={(e)=>this.props.handleChangeName(e)}
+
+              // onChange={this.props.handleChangeName}
+              // <button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
             ></input></div>);
     }
 }
