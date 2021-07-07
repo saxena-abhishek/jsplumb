@@ -1,4 +1,4 @@
-.w {
+/*.w {
   position: absolute;
   width: 30px;
   height: 30px;
@@ -19,7 +19,7 @@
 background-color: black;
 opacity: 0.7;
 min-height: 100%;
-}
+}*/
 .content{
   background-color: white;
   min-height: 20%;
@@ -169,7 +169,7 @@ select{
   
 }
 
-.panel-container{
+.sliding-panel-container{
   width: 25%;
   position: absolute;
   right: 0px;

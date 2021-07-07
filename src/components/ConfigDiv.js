@@ -6,13 +6,10 @@ import {mapStateToProps,mapDispatchToProps} from './container';
  class ConfigDiv extends Component {
       constructor(props) {
           super(props);
-          this.iType=[];
           this.numberrs=[1,2,3,4,5,6]
-          this.iName=[]; 
-          this.state ={showPanel:props.showDiv,instanceName:"Enter",instanceVal:"",activeNodeName:props.activeNodeName,activeComponentId:props.activeComponentId,id:props.id};
+          this.state ={showPanel:props.showDiv,instanceName:"",instanceVal:"",activeNodeName:props.activeNodeName,activeComponentId:props.activeComponentId,id:props.id};
           this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    
+          this.handleSubmit = this.handleSubmit.bind(this);    
           //this.state = { showP:this.props.showPanel ,showD:this.props.showD }
       }
       handleChange(event) {
@@ -45,13 +42,15 @@ import {mapStateToProps,mapDispatchToProps} from './container';
         
   
       render() { 
+        console.log(this.state.showPanel);
         return(
-
-          <div className="panel-container" > <div ><SlidingPanel
+          // <div className="panel-container" > 
+          <SlidingPanel
     type={'right'}
     isOpen={this.state.showPanel}
     size={100}
   className="panel-content"
+  noBackdrop
   >
     <div style={{display:'flex',flexDirection:'column' ,textAlign:'center'}}>
      <div className="rightPanelHeader"> {this.state.activeNodeName} Configuration</div>
@@ -67,11 +66,11 @@ import {mapStateToProps,mapDispatchToProps} from './container';
         </select>
         <div style={{padding:'10px 10px '}}>
         <button type="submit">Save</button>
-        <button onClick={() => this.setState({showPanel:false,showDiv:false ,instanceName:'',instanceType:''})}>Close</button>
+        <button onClick={() => this.setState({showPanel:false,instanceName:'',instanceType:''})}>Close</button>
         </div>
       </form>      
     </div>
-  </SlidingPanel> </div> </div>
+  </SlidingPanel>
         )
       }
     }
