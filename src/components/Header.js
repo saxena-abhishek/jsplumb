@@ -4,11 +4,13 @@ import "../styles/header.css";
 import logo from '../intellogoo.png';   // <img src={process.env.PUBLIC_URL + '/intellogoo.png'} />
 import { connect } from 'react-redux';
 import {mapStateToProps,mapDispatchToProps} from './container'; 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = { rps: 0 };
+    this.state = { rps: 0 ,loading:false};
     this.traceConnections=this.traceConnections.bind(this);
   }
   slidechanger(e) {
@@ -21,16 +23,24 @@ class Header extends Component {
   }
 
   callApi(data) {
-    fetch("http://65.1.81.30:5000/ec2/deploy", {
-      method: "POST", 
+    console.log("called api")
+    fetch("http://65.1.81.30:5000/api/v1/terraform-manager/deploy", {
+      method: "POST",
       body: JSON.stringify(data),
-      headers: { }
+      headers: {},
     })
-      .then(response => response.json())
-      .then(json => console.log(json));
+      .then((response) => {
+        this.setState({ loading: false });
+        this.notify(true);
+      })
+      .catch((error) => {
+        this.setState({ loading: false });
+        this.notify(false);
+      });
   }
 
-  traceConnections() {    
+  traceConnections(download) {   
+    this.setState({ loading: true }) 
     var connections = this.props.jsplumb.getAllConnections();
     let that = this;
     let original = { workspace: "Anirban", project: "HCL_BO" };
@@ -52,12 +62,57 @@ class Header extends Component {
       original.components = this.props.nList;
     }
     console.log("format:" + JSON.stringify(original));
-    this.callApi(original);
+    if(download===true){
+      this.download(original);
+  }
+    else{this.callApi(original);}
   }
 
+  download(data) {
+    fetch("http://65.1.81.30:5000/files", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {},
+    })
+      .then((response) => response.blob())
+      .then((zipFile) => {
+        this.setState({ loading: false });
+        var blob = zipFile;
+        var link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = "terraform-scripts";
+        link.click();
+        // this.notify(true)
+      })
+      .catch((error) => {
+        console.log("Error: ", error);
+      });
+  }
+
+  notify=(isApiSuccess)=>{
+    console.log("called notify")
+    isApiSuccess
+      ? 
+      alert("success")
+      // toast(
+      //     <div style={{ backgroundColor: "#d4edda", color: "green" }}>
+      //       Deployment Initiated
+      //     </div>,
+      //     { position: toast.POSITION.TOP_CENTER }
+      //   )
+      :
+      //  toast(
+      //     <div style={{ backgroundColor: "#f8d7da", color: "red" }}>
+      //       Deployment Failed
+      //     </div>,
+      //     { position: toast.POSITION.TOP_CENTER }
+      //   );
+      alert("faliure")
+  };
   render() {
     return (
       <div style={{display:'flex' , flexDirection:'column'}}>
+          {this.state.loading ? <div class="loading"> Loading </div> : null}
       <div style={{flex:1 , borderBottomStyle:'groove', borderWidth: '1px' , color:'#0071c5' , fontSize:'22px'}}><img src={logo} alt="Logo" style={{width:'65px',top:'0px'}} />     Benchmark Topology</div>
       <div style={{ display: "flex", textAlign: "center",flex:3 , backgroundColor:'#E7E7E7'}}>
         <div style={{ display: "flex", flexDirection: "column", flex: 2 }}>
@@ -123,8 +178,8 @@ class Header extends Component {
             <div style={{ display: "flex" }}>
               <div style={{ flex: 1 }}></div>
               <div style={{ flex: 2 }}>
-                <button onClick={e=>this.traceConnections(e)}>Launch Benchmark</button>
-                <button>Cancel</button>
+                <button onClick={()=>this.traceConnections(false)}>Deploy</button>
+                <button onClick={()=>this.traceConnections(true)}>Download</button>
               </div>
             </div>
           </div>

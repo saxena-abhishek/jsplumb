@@ -20,10 +20,6 @@ class Main extends Component {
     this.state = { showDiv: false, id: '' ,showPanel:'',instanceType:'',instanceName:'',activeComponentId:'', activeNodeName:''};
   }
 
-
-  validate() {
-    console.log("validated!");
-  }
   onDragStart(event) {
     event.dataTransfer.setData('text/plain', event.target.id);
 
@@ -35,12 +31,29 @@ class Main extends Component {
     console.log("clcked")
     this.setState({showPanel:false,showDiv:false})
   }
-  onEdit(id,activeComponentId ,activeNodeName){
+  onEdit(id,activeComponentId ,activeNodeName ,icon2,icon3){
     
     this.setState({ showDiv: true, showPanel:true ,id: id ,activeComponentId:activeComponentId ,activeNodeName:activeNodeName});
     let i=this.props.nList.findIndex(node=>node.uniqueId===id);
     this.setState({instanceName:this.props.nList[i].configuration.InstName ,instanceType:this.props.nList[i].configuration.InstType})
-  }  
+    this.removeSelected(icon2, icon3);
+  }
+  
+  onSelect(icon2, icon3) {
+    icon2.classList.add("fa", "fa-times", "fa-lg");
+    icon3.classList.add("selected");
+    icon3.addEventListener(
+      "click",
+      (e) => this.removeSelected(icon2, icon3),
+      false
+    );
+  }
+
+  removeSelected(icon2, icon3) {
+    icon2.classList.remove("fa", "fa-times", "fa-lg");
+    icon3.classList.remove("selected");
+    icon3.addEventListener("click", (e) => this.onSelect(icon2, icon3), false);
+  }
 
   onDrop(event) {
     const id = event
@@ -60,7 +73,6 @@ class Main extends Component {
       cloneEl.setAttribute("style", "top:" + positionY + "px; left:" + positionX + "px;");
       var icon2 = document.createElement("i");
       icon2.type = "button";
-      icon2.classList.add("fa", "fa-times", "fa-lg");
       var icon3 = document.createElement("span");
       icon3.classList.add("node");
 
@@ -70,10 +82,21 @@ class Main extends Component {
       dropzone.appendChild(cloneEl);
       let control = document.getElementById(cloneEl.id);
       icon2.addEventListener("click", e => this.removeNode(e, control.id), false);
-      control.append(icon2);
-      icon3.addEventListener("dblclick", (e) => this.onEdit(cloneEl.id ,item.componentId,id), false);
+    
+      icon3.addEventListener(
+        "click",
+        (e) => this.onSelect(icon2, icon3),
+        false
+      );
+      icon3.addEventListener(
+        "dblclick",
+        (e) => this.onEdit(cloneEl.id, item.componentId, id, icon2, icon3),
+        false
+      );
     
       control.append(icon3);
+      control.append(icon2);
+      
 
       this.props.addNode({ uniqueId: cloneEl.id, componentId: item.componentId, configuration:{},connectedTo:[],connectedFrom:[] });
 //uniqueId: name, componentId: componentId,  configuration:{ variables: {instanceName : InstName , instanceType: InstType}}, connectedTo: , connectedFrom:  }
@@ -162,11 +185,10 @@ class Main extends Component {
       that.props.jsplumb.registerConnectionTypes({
         "black-connection": {
           paintStyle: { stroke: "#0071c5" },
-          hoverPaintStyle: { stroke: "red" },
-          // connector: ["StateMachine", {curviness:0.7}],              
+          hoverPaintStyle: { stroke: "red" },             
           overlays: [
             "Arrow",
-            ["Label", { label: "", location: 0.25, id: "myLabel", color: 'blue', cursor: 'pointer', cssClass: 'fa fa-times red-color', cssClassColor: 'red' }]
+            ["Label", { label: "", location: 0.25, id: "myLabel", color: 'blue', cursor: 'pointer', cssClassColor: 'red' }]
 
           ],
         }
@@ -216,7 +238,6 @@ class Main extends Component {
           <div style={{ flex: 7 }} >
             <div id="diagram" style={{ height: "90vh", position: 'relative' }} onDragOver={(e) => this.onDragOver(e)}
               onDrop={(event) => this.onDrop(event)}  ><div id="config-items">{comp}</div>
-              <button className="btn" onClick={this.validate}>Validate</button>
             </div>
           </div>
         </div>
