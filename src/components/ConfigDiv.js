@@ -7,11 +7,9 @@ class ConfigDiv extends Component {
      constructor(props) {
          super(props);
          this.numberrs=[1,2,3,4,5,6]
-         this.state ={showPanel:props.showDiv,instanceName:"",instanceVal:"",activeNodeName:props.activeNodeName,activeComponentId:props.activeComponentId,id:props.id};
+         this.state ={instanceName:props.nodeConfig.InstName,instanceVal:props.nodeConfig.InstType,activeNodeName:props.activeNodeName,activeComponentId:props.activeComponentId,id:props.id};
          this.handleChange = this.handleChange.bind(this);
-   this.handleSubmit = this.handleSubmit.bind(this);
-  
-         //this.state = { showP:this.props.showPanel ,showD:this.props.showD }
+         this.handleSubmit = this.handleSubmit.bind(this);
      }
      handleChange(event) {
        this.setState({[event.target.name]: event.target.value});
@@ -20,15 +18,11 @@ class ConfigDiv extends Component {
      handleSubmit(event) {
        event.preventDefault();
        this.saveConfig();
-       // this.setState({showPanel:false ,instanceName:'',instanceType:''})
      }
    
      fetchOption(){
        let i=this.state.activeComponentId;
-       return( <>{this.props.nodeList[i-1].configuration.instanceType.map((number,indx) =><option key={indx}>{number}</option>           
-      )}
-      </>
-      )
+       return( <>{this.props.nodeList[i-1].configuration.instanceType.map((number,indx) =><option key={indx}>{number}</option>)} </>) 
         }
 
      saveConfig(){
@@ -44,7 +38,6 @@ class ConfigDiv extends Component {
        
  
      render() { 
-       console.log(this.state.showPanel);
        return(
          // <div className="panel-container" > 
          <SlidingPanel
@@ -63,7 +56,7 @@ class ConfigDiv extends Component {
      </div>
      Instance Type < form  className="form-group" onSubmit={this.handleSubmit}>
        <select value={this.state.instanceType} name="instanceType" onChange={this.handleChange}>
-         <option>Instance Type</option>
+         <option key={""}>Instance Type</option>
        {this.fetchOption()}
        </select>
        <div style={{padding:'10px 10px '}}>

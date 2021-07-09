@@ -5,7 +5,8 @@ const initialState = {
     { componentId: 2, id: 'nginx', name: 'nginx', configuration: {instanceType: ['t2-micro', 't2-large']} ,vc:0},
     { componentId: 3, id: 'wordpress', name: 'wordpress', configuration: {instanceType: ['t2-micro', 't2-large']},vc:0},
     { componentId: 4, id: 'mysql', name: 'mysql' , configuration: {instanceType: ['t2-micro', 't2-large']},vc:0} ],
-    nList:[]
+    nList:[],
+    nodeConfig:{}
     
 }
 
@@ -29,6 +30,10 @@ const initialState = {
               return node.uniqueId !== action.id
             })
           });
+    case nodeConstants.FETCH_NODE_CONFIG://configuration:{ variables: {instanceName : InstName , instanceType: InstType}},
+          let i= state.nList.findIndex(node=> node.uniqueId===action.id);
+          //={"variables":action.config.configuration};
+          return Object.assign({}, state,{nodeConfig:state.nList[i].configuration})
     case nodeConstants.UPDATE_NODES://configuration:{ variables: {instanceName : InstName , instanceType: InstType}},
           let indx= state.nList.findIndex(node=> node.uniqueId===action.config.id);
           state.nList[indx].configuration={"variables":action.config.configuration};

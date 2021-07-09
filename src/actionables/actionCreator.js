@@ -27,6 +27,12 @@ export const actions = {
         id: id
        }
     },
+    fetchNodeConfig : function(id){
+      return {
+        type:nodeConstants.FETCH_NODE_CONFIG,
+        id:id
+      }
+    },
     updateNodeConfig : function(config){
       return {
         type:nodeConstants.UPDATE_NODES,

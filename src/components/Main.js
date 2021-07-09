@@ -38,8 +38,12 @@ class Main extends Component {
   onEdit(id,activeComponentId ,activeNodeName){
     
     this.setState({ showDiv: true, showPanel:true ,id: id ,activeComponentId:activeComponentId ,activeNodeName:activeNodeName});
-    let i=this.props.nList.findIndex(node=>node.uniqueId===id);
-    this.setState({instanceName:this.props.nList[i].configuration.InstName ,instanceType:this.props.nList[i].configuration.InstType})
+    let ob=this.props.fetchNodeConfig(this.state.id);
+    console.log(this.props.nodeConfig);
+    if(this.props.nList){
+      let i=this.props.nList.findIndex(node=>node.uniqueId===id);
+      this.setState({instanceName:this.props.nList[i].configuration.InstName ,instanceType:this.props.nList[i].configuration.InstType})
+    }
   }  
 
   onDrop(event) {
