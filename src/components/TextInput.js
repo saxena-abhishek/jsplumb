@@ -13,12 +13,9 @@ class TextInput extends Component {
             key={this.props.id}
               style={{backgroundColor:'white'}}
               value={this.props.instanceName}
-              placeholder={this.props.rightPanelItems[0].label}
+              placeholder={this.props.instanceTypeLabel}
 
-              onChange={(e)=>this.props.handleChangeName(e,this.props.id)}
-
-              // onChange={this.props.handleChangeName}
-              // <button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
+              onChange={(e)=>this.props.handleChange(e,this.props.id)}
             ></input></div>);
     }
 }

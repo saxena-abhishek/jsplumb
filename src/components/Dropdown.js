@@ -10,7 +10,7 @@ class Dropdown extends Component {
         <form className="form-group" onSubmit={this.props.handleSubmit}>
           <select
             value={this.props.instanceType}
-            onChange={this.props.handleChangeType}
+            onChange={(e)=>this.props.handleChange(e,this.props.id)}
           >
             <option> {this.props.instanceTypeLabel}</option>
             {this.props.fetchOption()}

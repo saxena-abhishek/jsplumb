@@ -18,8 +18,7 @@ class Main extends Component {
     this.fetchOption = this.fetchOption.bind(this);
     this.initialShow = this.initialShow.bind(this);
     this.onDragStart = this.onDragStart.bind(this);
-    this.handleChangeName = this.handleChangeName.bind(this);
-    this.handleChangeType = this.handleChangeType.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     // this.saveNodeJson = this.saveNodeJson.bind(this);
     this.traceConnections = this.traceConnections.bind(this);
@@ -31,7 +30,7 @@ class Main extends Component {
     this.iName = [];
     this.givenNodes =[];
     this.givenConnections =[];
-
+    
     this.state = {
       loading: false,
       nodeList: [],
@@ -50,21 +49,15 @@ class Main extends Component {
     //  this.connectionsList= new Map();
   }
 
-  handleChangeType(event) {
-    this.setState({ instanceType: event.target.value });
-    this.fieldList[1].value=this.state.instanceType
-    console.log(this.fieldList)
-  }
-  handleChangeName(e,id) {
-    console.log("event:"+e)
-    console.log("id:"+id)
-    //console.log(this.props.id)
-    // this.setState({ instanceName: id.target.value });
-    this.fieldList[0].value=this.state.instanceName
-    // console.log(this.fieldList)
-  
-    
-  }
+
+handleChange(e,id) {
+let field = this.fieldList.find((item) => item.key === id);
+field.value=e.target.value;
+this.setState({
+  fieldList: this.fieldList,
+});
+  console.log(this.fieldList)
+}
 
   handleSubmit(event) {
     event.preventDefault();
@@ -600,20 +593,20 @@ console.log("showDiv:"+this.state.showDiv)
                   case "instanceName":
                     return (
                       <TextInput
-                      id={items.key}
+                        id={items.key}
                         instanceNameLabel={items.label}
-                        instanceName={this.state.instanceName}
-                        handleChangeName={this.handleChangeName}
+                        instanceName={items.value}
+                        handleChange={this.handleChange}
                       />
                     );
 
                   case "instanceType":
                     return (
                       <Dropdown
-                      id={items.key}
+                        id={items.key}
                         instanceTypeLabel={items.label}
-                        instanceType={this.state.instanceType}
-                        handleChangeType={this.handleChangeType}
+                        instanceType={items.value}
+                        handleChange={this.handleChange}
                         fetchOption={this.fetchOption}
                         onClose={this.onClose}
                         handleSubmit={this.handleSubmit}
