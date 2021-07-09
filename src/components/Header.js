@@ -4,8 +4,9 @@ import "../styles/header.css";
 import logo from '../intellogoo.png';   // <img src={process.env.PUBLIC_URL + '/intellogoo.png'} />
 import { connect } from 'react-redux';
 import {mapStateToProps,mapDispatchToProps} from './container'; 
-import { toast } from "react-toastify";
+import { toast,ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 
 class Header extends Component {
   constructor(props) {
@@ -23,7 +24,8 @@ class Header extends Component {
   }
 
   callApi(data) {
-    console.log("called api")
+    console.log("called api");
+    
     fetch("http://65.1.81.30:5000/api/v1/terraform-manager/deploy", {
       method: "POST",
       body: JSON.stringify(data),
@@ -37,6 +39,7 @@ class Header extends Component {
         this.setState({ loading: false });
         this.notify(false);
       });
+      
   }
 
   traceConnections(download) {   
@@ -93,21 +96,21 @@ class Header extends Component {
     console.log("called notify")
     isApiSuccess
       ? 
-      alert("success")
-      // toast(
-      //     <div style={{ backgroundColor: "#d4edda", color: "green" }}>
-      //       Deployment Initiated
-      //     </div>,
-      //     { position: toast.POSITION.TOP_CENTER }
-      //   )
+     // alert("success")
+      toast(
+          <div style={{ backgroundColor: "#d4edda", color: "green" }}>
+            Deployment Initiated
+          </div>,
+          { position: toast.POSITION.TOP_CENTER }
+        )
       :
-      //  toast(
-      //     <div style={{ backgroundColor: "#f8d7da", color: "red" }}>
-      //       Deployment Failed
-      //     </div>,
-      //     { position: toast.POSITION.TOP_CENTER }
-      //   );
-      alert("faliure")
+       toast(
+          <div style={{ backgroundColor: "#f8d7da", color: "red" }}>
+            Deployment Failed
+          </div>,
+          { position: toast.POSITION.TOP_CENTER }
+        );
+      //alert("faliure")
   };
   render() {
     return (
@@ -180,6 +183,7 @@ class Header extends Component {
               <div style={{ flex: 2 }}>
                 <button onClick={()=>this.traceConnections(false)}>Deploy</button>
                 <button onClick={()=>this.traceConnections(true)}>Download</button>
+                <ToastContainer autoClose={2000} />
               </div>
             </div>
           </div>
