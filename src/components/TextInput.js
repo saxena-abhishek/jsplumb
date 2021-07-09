@@ -13,8 +13,7 @@ class TextInput extends Component {
             key={this.props.id}
               style={{backgroundColor:'white'}}
               value={this.props.instanceName}
-              placeholder={this.props.instanceTypeLabel}
-
+              placeholder={this.props.instanceNameLabel}
               onChange={(e)=>this.props.handleChange(e,this.props.id)}
             ></input></div>);
     }

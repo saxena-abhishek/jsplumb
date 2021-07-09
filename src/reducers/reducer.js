@@ -4,9 +4,11 @@ const initialState = {
     { componentId: 3, id: 'wordpress', name: 'wordpress', configuration: { instanceType: ['t2.micro', 't2.large'] }, vc: 0 },
     { componentId: 4, id: 'nginx', name: 'nginx', configuration: { instanceType: ['t2.micro', 't2.large'] }, vc: 0 },
 ],
-rightPanelItems:[{type: 'textbox', label: 'Instance Name', key: 'instanceName', isMandatory: false, maxLength: 50 },
-{type: 'select', label: 'Instance Type', key: 'instanceType', isMandatory: false, dataSource: "<array of itmes>" },
-{type: 'checkbox', label: 'Collect Logs', key: 'collectLogs', isMandatory: false }],
+rightPanelItems:[
+                    {type: 'textbox', label: 'Instance Name', key: 'instanceName', isMandatory: false, maxLength: 50 },
+                    {type: 'select', label: 'Instance Type', key: 'instanceType', isMandatory: false, dataSource: "<array of itmes>" },
+                    {type: 'checkbox', label: 'Collect Logs', key: 'collectLogs', isMandatory: false }
+                ],
 
 launch: false   
 }

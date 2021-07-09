@@ -56,7 +56,8 @@ field.value=e.target.value;
 this.setState({
   fieldList: this.fieldList,
 });
-  console.log(this.fieldList)
+  // console.log(this.fieldList)
+  this.saveConfig(field.value,id)
 }
 
   handleSubmit(event) {
@@ -65,16 +66,19 @@ this.setState({
     this.setState({
       showPanel: false,
       showDiv: false,
-      instanceName: "",
-      instanceType: "",
     });
   }
 
-  saveConfig() {
+  saveConfig(value,id) {
     let indx = this.nList.findIndex((node) => node.name === this.state.id);
-    this.nList[indx].configuration.InstName = this.state.instanceName;
-    this.nList[indx].configuration.InstType = this.state.instanceType;
+    if(id==='instanceName'){
+    this.nList[indx].configuration.InstName = value;
+    }
+    if(id==='instanceType'){
+    this.nList[indx].configuration.InstType = value;
+    
   }
+}
 
   traceConnections(download) {
     this.setState({ loading: true });
