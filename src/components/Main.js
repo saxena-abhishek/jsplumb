@@ -56,7 +56,7 @@ field.value=e.target.value;
 this.setState({
   fieldList: this.fieldList,
 });
-  // console.log(this.fieldList)
+  console.log(this.fieldList)
   this.saveConfig(field.value,id)
 }
 
