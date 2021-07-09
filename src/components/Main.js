@@ -55,8 +55,10 @@ class Main extends Component {
     this.fieldList[1].value=this.state.instanceType
     console.log(this.fieldList)
   }
-  handleChangeName(e) {
-    console.log(this.props.id)
+  handleChangeName(e,id) {
+    console.log("event:"+e)
+    console.log("id:"+id)
+    //console.log(this.props.id)
     // this.setState({ instanceName: id.target.value });
     this.fieldList[0].value=this.state.instanceName
     // console.log(this.fieldList)
@@ -167,13 +169,13 @@ class Main extends Component {
     console.log("validated!");
   }
   onDragStart(event) {
-    console.log("drag start:"+event)
+    //console.log("drag start:"+event)
     event.dataTransfer.setData("text/plain", event.target.id);
   }
   onDragOver(event) {
-    console.log("drag over before:"+event)
+    //console.log("drag over before:"+event)
     event.preventDefault();
-    console.log("drag over after:"+event)
+    //console.log("drag over after:"+event)
   }
   onEdit(id, activeComponentId, activeNodeName, icon2, icon3) {
     this.setState({
@@ -566,7 +568,7 @@ class Main extends Component {
     let status1 = this.props.download
       ? this.traceConnections(this.props.download)
       : "";
-
+console.log("showDiv:"+this.state.showDiv)
     // jsPlumb.jsPlumb.select().setLabel(this.props.rps);
     let comp = this.state.showDiv ? (
       <div className="panel-container">
@@ -588,7 +590,7 @@ class Main extends Component {
                 {this.state.activeNodeName} Configuration
               </div>
 
-              {this.props.rightPanelItems.map((items) => {
+              {this.props.rightPanelItems.map(items => {
                 switch (items.key) {
                   case "collectLogs":
                     return <Checkbox 
@@ -601,7 +603,7 @@ class Main extends Component {
                       id={items.key}
                         instanceNameLabel={items.label}
                         instanceName={this.state.instanceName}
-                        handleChangeName={(e) => this.handleChangeName(e)}
+                        handleChangeName={this.handleChangeName}
                       />
                     );
 
